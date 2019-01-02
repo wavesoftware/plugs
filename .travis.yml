@@ -1,0 +1,25 @@
+language: java
+sudo: false
+dist: trusty
+before_script: mvn dependency:go-offline
+script: mvn clean verify --fail-at-end
+notifications:
+  email:
+    on_failure: change
+matrix:
+  include:
+    # Quality testing
+    - jdk: oraclejdk8
+      env: JACOCO=true RELEASE_CHECKS=true
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
+    - jdk: oraclejdk8
+      env: JACOCO=true SONAR=publish
+      script: mvn clean verify sonar:sonar --fail-at-end
+    # Performance testing
+    - jdk: openjdk8
+      env: JACOCO=false
+    - jdk: oraclejdk9
+      env: JACOCO=false
+    - jdk: oraclejdk11
+      env: JACOCO=false
