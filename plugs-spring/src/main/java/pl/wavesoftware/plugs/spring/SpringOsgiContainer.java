@@ -16,13 +16,10 @@
 
 package pl.wavesoftware.plugs.spring;
 
-import io.vavr.Lazy;
-import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.EventListener;
+import pl.wavesoftware.plugs.core.PlugsOsgiContainer;
 import pl.wavesoftware.plugs.core.OsgiContainer;
 
 import java.util.function.Supplier;
@@ -32,48 +29,21 @@ import java.util.function.Supplier;
  * @since 0.1.0
  */
 final class SpringOsgiContainer implements OsgiContainer {
-  private static final Logger LOGGER =
-    LoggerFactory.getLogger(SpringOsgiContainer.class);
-  private final Lazy<Framework> frameworkLazy;
-  private final long stopTimeout;
+
+  private final OsgiContainer delegate;
 
   SpringOsgiContainer(Supplier<Framework> frameworkLazy, long stopTimeout) {
-    this.frameworkLazy = Lazy.of(() -> {
-      LOGGER.info("Starting Plugs OSGi container...");
-      Framework framework = frameworkLazy.get();
-      LOGGER.info(
-        "Plugs OSGi container stated and initialized: {}",
-        framework.getSymbolicName()
-      );
-      return framework;
-    });
-    this.stopTimeout = stopTimeout;
+    delegate = new PlugsOsgiContainer(frameworkLazy, stopTimeout);
   }
 
   @Override
   public Framework getFramework() {
-    return frameworkLazy.get();
+    return delegate.getFramework();
   }
 
   @Override
-  public void dispose() {
-    try {
-      Framework framework = getFramework();
-      LOGGER.info("Stopping Plugs OSGi container...");
-      framework.stop();
-      framework.waitForStop(stopTimeout);
-      LOGGER.info("Plugs OSGi container stopped.");
-    } catch (InterruptedException ex) {
-      LOGGER.error("Not enough time to stop OSGi container", ex);
-      Thread.currentThread().interrupt();
-    } catch (BundleException ex) {
-      throw new IllegalStateException(ex);
-    }
-  }
-
   @EventListener(ContextClosedEvent.class)
-  void onClosing(ContextClosedEvent event) {
-    dispose();
+  public void dispose() {
+    delegate.dispose();
   }
-
 }
