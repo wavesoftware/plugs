@@ -26,50 +26,21 @@
     <groupId>pl.wavesoftware.plugs</groupId>
     <version>0.1.0-SNAPSHOT</version>
   </parent>
-
-  <artifactId>plugs-spring</artifactId>
-  <name>Plugs :: Spring Module</name>
+  <artifactId>testing</artifactId>
+  <name>Plugs :: Testing</name>
 
   <dependencies>
     <dependency>
-      <groupId>pl.wavesoftware.plugs</groupId>
-      <artifactId>plugs-core</artifactId>
-      <version>${project.version}</version>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
     </dependency>
     <dependency>
-      <groupId>pl.wavesoftware.plugs</groupId>
-      <artifactId>plugs-felix</artifactId>
-      <version>${project.version}</version>
-      <scope>provided</scope>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-autoconfigure</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.vavr</groupId>
-      <artifactId>vavr</artifactId>
-    </dependency>
-
-    <!-- Test -->
-    <dependency>
-      <groupId>pl.wavesoftware.plugs</groupId>
-      <artifactId>testing</artifactId>
-      <version>${project.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-test</artifactId>
-      <scope>test</scope>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
     </dependency>
   </dependencies>
 </project>
