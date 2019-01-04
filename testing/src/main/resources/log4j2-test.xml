@@ -14,12 +14,16 @@
   ~ limitations under the License.
   -->
 
-<Configuration strict="true"
-               xmlns="http://logging.apache.org/log4j/2.0/config">
+<Configuration xmlns="http://logging.apache.org/log4j/2.0/config"
+               strict="true"
+               packages="pl.wavesoftware">
+  <Properties>
+    <Property
+      name="CONSOLE_LOG_PATTERN">%clr{%5p} %clr{%d{HH:mm:ss.SSS}}{faint} %clr{[%10.10t]}{yellow} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n%ex</Property>
+  </Properties>
   <Appenders>
-    <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout
-        pattern="%highlight{%5p} %d{HH:mm:ss.SSS} --- %yellow{[%15.15t]} %cyan{%-40.40c{1.}} : %m%n%ex" />
+    <Console name="Console" target="SYSTEM_OUT" follow="true">
+      <PatternLayout pattern="${sys:CONSOLE_LOG_PATTERN}" />
     </Console>
   </Appenders>
   <Loggers>

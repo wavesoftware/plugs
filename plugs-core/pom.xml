@@ -32,8 +32,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>jsr305</artifactId>
+      <groupId>pl.wavesoftware</groupId>
+      <artifactId>eid-exceptions</artifactId>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
@@ -50,6 +50,14 @@
     <dependency>
       <groupId>io.vavr</groupId>
       <artifactId>vavr</artifactId>
+    </dependency>
+
+    <!-- Tests -->
+    <dependency>
+      <groupId>pl.wavesoftware.plugs</groupId>
+      <artifactId>testing</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

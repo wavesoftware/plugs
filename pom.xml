@@ -56,10 +56,10 @@
   <modules>
     <module>plug-api</module>
     <module>plugs-core</module>
-    <module>integrations</module>
-    <module>examples</module>
-    <module>plugs-spring</module>
     <module>plugs-felix</module>
+    <module>plugs-spring</module>
+    <module>plugs-maven-plugin</module>
+    <module>examples</module>
     <module>testing</module>
   </modules>
 
@@ -309,6 +309,11 @@
         <groupId>io.vavr</groupId>
         <artifactId>vavr</artifactId>
         <version>0.9.2</version>
+      </dependency>
+      <dependency>
+        <groupId>pl.wavesoftware</groupId>
+        <artifactId>eid-exceptions</artifactId>
+        <version>2.0.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

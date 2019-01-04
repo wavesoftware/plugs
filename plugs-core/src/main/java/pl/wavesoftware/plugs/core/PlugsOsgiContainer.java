@@ -17,12 +17,16 @@
 package pl.wavesoftware.plugs.core;
 
 import io.vavr.Lazy;
-import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
+import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.helpers.MessageFormatter;
+import pl.wavesoftware.eid.utils.UnsafeProcedure;
 
+import java.time.Duration;
 import java.util.function.Supplier;
+
+import static pl.wavesoftware.eid.utils.EidExecutions.tryToExecute;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
@@ -30,17 +34,20 @@ import java.util.function.Supplier;
  */
 public final class PlugsOsgiContainer implements OsgiContainer {
 
-  private static final Logger LOGGER =
-    LoggerFactory.getLogger(PlugsOsgiContainer.class);
+  private final Logger logger;
+  private final Supplier<Framework> frameworkLazy;
+  private final Duration stopTimeout;
 
-  private final Lazy<Framework> frameworkLazy;
-  private final long stopTimeout;
-
-  public PlugsOsgiContainer(Supplier<Framework> frameworkLazy, long stopTimeout) {
+  public PlugsOsgiContainer(
+    ILoggerFactory loggerFactory,
+    Supplier<Framework> frameworkSupplier,
+    Duration stopTimeout
+  ) {
+    logger = loggerFactory.getLogger(PlugsOsgiContainer.class.getName());
     this.frameworkLazy = Lazy.of(() -> {
-      LOGGER.info("Starting Plugs OSGi container...");
-      Framework framework = frameworkLazy.get();
-      LOGGER.info(
+      logger.info("Starting Plugs OSGi container...");
+      Framework framework = frameworkSupplier.get();
+      logger.info(
         "Plugs OSGi container stated and initialized: {}",
         framework.getSymbolicName()
       );
@@ -58,15 +65,23 @@ public final class PlugsOsgiContainer implements OsgiContainer {
   public void dispose() {
     try {
       Framework framework = getFramework();
-      LOGGER.info("Stopping Plugs OSGi container...");
-      framework.stop();
-      framework.waitForStop(stopTimeout);
-      LOGGER.info("Plugs OSGi container stopped.");
+      logger.info("Stopping Plugs OSGi container...");
+      tryToExecute((UnsafeProcedure) framework::stop, "20190104:202359");
+      framework.waitForStop(getStopTimeoutAsMilliseconds());
+      logger.info("Plugs OSGi container stopped.");
     } catch (InterruptedException ex) {
-      LOGGER.error("Not enough time to stop OSGi container", ex);
+      logger.error(
+        MessageFormatter.format(
+          "Not enough time to stop OSGi container, timeout was: {}",
+          stopTimeout
+        ).getMessage(),
+        ex
+      );
       Thread.currentThread().interrupt();
-    } catch (BundleException ex) {
-      throw new IllegalStateException(ex);
     }
+  }
+
+  private long getStopTimeoutAsMilliseconds() {
+    return stopTimeout.toMillis();
   }
 }

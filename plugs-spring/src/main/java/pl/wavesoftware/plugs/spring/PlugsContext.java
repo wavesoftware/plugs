@@ -20,6 +20,8 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
+import org.slf4j.ILoggerFactory;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +30,8 @@ import pl.wavesoftware.plugs.core.OsgiContainer;
 import pl.wavesoftware.plugs.core.Plugs;
 import pl.wavesoftware.plugs.spring.annotation.Typed;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,20 +60,27 @@ public class PlugsContext {
   @Bean
   @Typed(Plugs.class)
   @ConditionalOnMissingBean
-  long stopTimeout() {
-    // 120 sec
-    return 1_000L * 120;
+  Duration stopTimeout() {
+    return Duration.of(30, ChronoUnit.MINUTES);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  ILoggerFactory loggerFactory() {
+    return LoggerFactory.getILoggerFactory();
   }
 
   @Bean
   OsgiContainer osgiContainer(
-    @Typed(Plugs.class) FrameworkFactory factory,
+    @Typed(Plugs.class) FrameworkFactory frameworkFactory,
     @Typed(Plugs.class) Map<String, String> configuration,
-    @Typed(Plugs.class) long stopTimeout,
-    @Typed(Plugs.class) List<FrameworkListener> listeners
+    @Typed(Plugs.class) Duration stopTimeout,
+    @Typed(Plugs.class) List<FrameworkListener> listeners,
+    ILoggerFactory loggerFactory
   ) {
     return new SpringOsgiContainer(
-      () -> getFramework(factory, configuration, listeners),
+      loggerFactory,
+      () -> getFramework(frameworkFactory, configuration, listeners),
       stopTimeout
     );
   }
