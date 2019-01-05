@@ -31,6 +31,6 @@ public final class AnsiComposite implements AnsiElement {
   public String toString() {
     return elements.stream()
       .map(AnsiElement::toString)
-      .collect(Collectors.joining(";"));
+      .collect(Collectors.joining(Constants.ENCODE_JOIN));
   }
 }

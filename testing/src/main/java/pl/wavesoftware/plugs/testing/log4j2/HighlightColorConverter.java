@@ -16,6 +16,8 @@
 
 package pl.wavesoftware.plugs.testing.log4j2;
 
+import io.vavr.collection.HashSet;
+import io.vavr.collection.Set;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.config.Configuration;
@@ -26,6 +28,8 @@ import org.apache.logging.log4j.core.pattern.LogEventPatternConverter;
 import org.apache.logging.log4j.core.pattern.PatternConverter;
 import org.apache.logging.log4j.core.pattern.PatternFormatter;
 import org.apache.logging.log4j.core.pattern.PatternParser;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import pl.wavesoftware.plugs.testing.ansi.AnsiBackground;
 import pl.wavesoftware.plugs.testing.ansi.AnsiColor;
 import pl.wavesoftware.plugs.testing.ansi.AnsiComposite;
@@ -52,6 +56,12 @@ import java.util.Map;
 public final class HighlightColorConverter extends LogEventPatternConverter {
 
   private static final Map<String, AnsiElement> ELEMENTS;
+  private static final int NO_ARGS_WITHOUT_STYLE = 1;
+  private static final int NO_ARGS_WITH_STYLE = 2;
+  private static final Set<Integer> VALID_NUMBER_OF_ARGS = HashSet.of(
+    NO_ARGS_WITHOUT_STYLE,
+    NO_ARGS_WITH_STYLE
+  );
 
   static {
     Map<String, AnsiElement> ansiElements = new HashMap<>();
@@ -98,15 +108,19 @@ public final class HighlightColorConverter extends LogEventPatternConverter {
   }
 
   /**
-   * Creates a new instance of the class. Required by Log4J2.
+   * Creates a new instance of the class. Required by Log4j.
    *
    * @param config  the configuration
    * @param options the options
    * @return a new instance, or {@code null} if the options are invalid
    */
-  @SuppressWarnings("unused")
-  public static HighlightColorConverter newInstance(Configuration config, String[] options) {
-    if (options.length < 1) {
+  @SuppressWarnings("WeakerAccess")
+  @API(status = Status.MAINTAINED)
+  public static HighlightColorConverter newInstance(
+    Configuration config,
+    String[] options
+  ) {
+    if (!VALID_NUMBER_OF_ARGS.contains(options.length)) {
       LOGGER.error("Incorrect number of options on style. "
         + "Expected at least 1, received {}", options.length);
       return null;
@@ -135,30 +149,29 @@ public final class HighlightColorConverter extends LogEventPatternConverter {
   }
 
   @Override
-  public void format(LogEvent event, StringBuilder toAppendTo) {
+  public void format(LogEvent event, StringBuilder stringBuilder) {
     StringBuilder buf = new StringBuilder();
     for (PatternFormatter formatter : this.formatters) {
       formatter.format(event, buf);
     }
     if (buf.length() > 0) {
-      AnsiElement element = this.styling;
-      if (element == null) {
+      AnsiElement ansiElement = this.styling;
+      if (ansiElement == null) {
         // Assume highlighting
-        element = LEVELS.get(event.getLevel().intLevel());
-        if (element == null) {
-          element = AnsiColor.BLUE;
-        }
+        ansiElement = LEVELS.getOrDefault(
+          event.getLevel().intLevel(), AnsiColor.BLUE
+        );
       }
-      appendAnsiString(toAppendTo, buf.toString(), element);
+      appendAnsiString(stringBuilder, buf.toString(), ansiElement);
     }
   }
 
   private static void appendAnsiString(
     StringBuilder toAppendTo,
-    String input,
-    AnsiElement element
+    String text,
+    AnsiElement ansiElement
   ) {
-    toAppendTo.append(AnsiOutput.toString(element, input));
+    toAppendTo.append(AnsiOutput.encode(ansiElement, text));
   }
 
 }

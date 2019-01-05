@@ -16,6 +16,7 @@
 
 package pl.wavesoftware.plugs.testing.ansi;
 
+import javax.annotation.Nullable;
 import java.util.Locale;
 
 import static pl.wavesoftware.eid.utils.EidPreconditions.checkNotNull;
@@ -29,13 +30,13 @@ import static pl.wavesoftware.eid.utils.EidPreconditions.checkNotNull;
  */
 public final class AnsiOutput {
 
-  private static final String ENCODE_JOIN = ";";
-  private static Enabled enabled = Enabled.ALWAYS;
+  private static Enabled enabled = Enabled.DETECT;
+  @Nullable
   private static Boolean consoleAvailable = true;
+  @Nullable
   private static Boolean ansiCapable;
-  private static final String ENCODE_START = "\033[";
-  private static final String ENCODE_END = "m";
-  private static final String RESET = "0;" + AnsiColor.DEFAULT;
+  private static boolean skipWindowsCheck = true;
+
   private static final String OPERATING_SYSTEM_NAME = System
     .getProperty("os.name")
     .toLowerCase(Locale.ENGLISH);
@@ -45,7 +46,17 @@ public final class AnsiOutput {
   }
 
   /**
+   * Sets if ANSI output should be skipped on windows os
+   *
+   * @param skipWindowsCheck true, if output should be skipped on windows
+   */
+  public static void setSkipWindowsCheck(boolean skipWindowsCheck) {
+    AnsiOutput.skipWindowsCheck = skipWindowsCheck;
+  }
+
+  /**
    * Sets if ANSI output is enabled.
+   *
    * @param enabled if ANSI is enabled, disabled or detected
    */
   public static void setEnabled(Enabled enabled) {
@@ -55,36 +66,22 @@ public final class AnsiOutput {
 
   /**
    * Sets if the System.console() is known to be available.
-   * @param consoleAvailable if the console is known to be available or {@code null} to
-   * use standard detection logic.
+   *
+   * @param consoleAvailable if the console is known to be available or
+   *                         {@code null} to use standard detection logic.
    */
-  public static void setConsoleAvailable(Boolean consoleAvailable) {
+  public static void setConsoleAvailable(@Nullable Boolean consoleAvailable) {
     AnsiOutput.consoleAvailable = consoleAvailable;
   }
 
-  static Enabled getEnabled() {
-    return AnsiOutput.enabled;
-  }
-
   /**
-   * Encode a single {@link AnsiElement} if output is enabled.
-   * @param element the element to encode
-   * @return the encoded element or an empty string
-   */
-  public static String encode(AnsiElement element) {
-    if (isEnabled()) {
-      return ENCODE_START + element + ENCODE_END;
-    }
-    return "";
-  }
-
-  /**
-   * Create a new ANSI string from the specified elements. Any {@link AnsiElement}s will
-   * be encoded as required.
+   * Create a new ANSI string from the specified elements. Any
+   * {@link AnsiElement}s will be encoded as required.
+   *
    * @param elements the elements to encode
    * @return a string of the encoded elements
    */
-  public static String toString(Object... elements) {
+  public static String encode(Object... elements) {
     StringBuilder sb = new StringBuilder();
     if (isEnabled()) {
       buildEnabled(sb, elements);
@@ -101,23 +98,23 @@ public final class AnsiOutput {
       if (element instanceof AnsiElement) {
         containsEncoding = true;
         if (!writingAnsi) {
-          sb.append(ENCODE_START);
+          sb.append(Constants.ENCODE_START);
           writingAnsi = true;
         } else {
-          sb.append(ENCODE_JOIN);
+          sb.append(Constants.ENCODE_JOIN);
         }
       } else {
         if (writingAnsi) {
-          sb.append(ENCODE_END);
+          sb.append(Constants.ENCODE_END);
           writingAnsi = false;
         }
       }
       sb.append(element);
     }
     if (containsEncoding) {
-      sb.append(writingAnsi ? ENCODE_JOIN : ENCODE_START);
-      sb.append(RESET);
-      sb.append(ENCODE_END);
+      sb.append(writingAnsi ? Constants.ENCODE_JOIN : Constants.ENCODE_START);
+      sb.append(Constants.RESET);
+      sb.append(Constants.ENCODE_END);
     }
   }
 
@@ -144,18 +141,18 @@ public final class AnsiOutput {
       || ((consoleAvailable == null) && (System.console() == null))) {
       return false;
     }
-    return !(OPERATING_SYSTEM_NAME.contains("win"));
+    return skipWindowsCheck || !(OPERATING_SYSTEM_NAME.contains("win"));
   }
 
   /**
-   * Possible values to pass to {@link AnsiOutput#setEnabled}. Determines when to output
-   * ANSI escape sequences for coloring application output.
+   * Possible values to pass to {@link AnsiOutput#setEnabled}. Determines when
+   * to output ANSI escape sequences for coloring application output.
    */
   public enum Enabled {
 
     /**
-     * Try to detect whether ANSI coloring capabilities are available. The default
-     * value for {@link AnsiOutput}.
+     * Try to detect whether ANSI coloring capabilities are available. The
+     * default value for {@link AnsiOutput}.
      */
     DETECT,
 
@@ -168,7 +165,5 @@ public final class AnsiOutput {
      * Disable ANSI-colored output.
      */
     NEVER
-
   }
-
 }

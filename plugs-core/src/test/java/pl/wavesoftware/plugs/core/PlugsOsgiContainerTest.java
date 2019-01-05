@@ -54,14 +54,26 @@ class PlugsOsgiContainerTest {
   @Mock
   private FrameworkListener listener;
 
+  @Mock
+  private FrameworkOperation frameworkOperation;
+
   private final TestLoggerFactory loggerFactory = new TestLoggerFactory(
     new Settings().printingEnabled(false)
   );
 
   @AfterEach
   void after() {
-    Mockito.verifyNoMoreInteractions(framework, listener);
+    Mockito.verifyNoMoreInteractions(framework, listener, frameworkOperation);
     Mockito.validateMockitoUsage();
+  }
+
+  @Test
+  void fromBasic() {
+    // given
+    OsgiContainer container = new PlugsOsgiContainer(frameworkOperation);
+
+    // when
+    assertThat(container).isNotNull();
   }
 
   @Test
