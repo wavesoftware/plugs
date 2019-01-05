@@ -24,6 +24,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.launch.Framework;
 import slf4jtest.LogLevel;
 import slf4jtest.LogMessage;
@@ -32,7 +33,7 @@ import slf4jtest.TestLoggerFactory;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.function.Supplier;
+import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
@@ -50,20 +51,23 @@ class PlugsOsgiContainerTest {
   @Mock
   private Framework framework;
 
+  @Mock
+  private FrameworkListener listener;
+
   private final TestLoggerFactory loggerFactory = new TestLoggerFactory(
     new Settings().printingEnabled(false)
   );
 
   @AfterEach
   void after() {
-    Mockito.verifyNoMoreInteractions(framework);
+    Mockito.verifyNoMoreInteractions(framework, listener);
     Mockito.validateMockitoUsage();
   }
 
   @Test
-  void getFramework() {
+  void getFramework() throws BundleException {
     // given
-    OsgiContainer container = createContainer();
+    OsgiContainer container = createContainer(State.CREATED);
 
     // when
     Framework result = container.getFramework();
@@ -76,17 +80,35 @@ class PlugsOsgiContainerTest {
       .extracting(Framework::getSymbolicName)
       .isEqualTo(OSGI_NAME);
     verify(framework, atLeastOnce()).getSymbolicName();
+    verify(framework).init(listener);
+    verify(framework).start();
   }
 
   @Test
-  void dispose() throws BundleException, InterruptedException {
+  void disposeOnNonCreated() {
     // given
-    OsgiContainer container = createContainer();
+    OsgiContainer container = createContainer(State.NON_CREATED);
 
     // when
     container.dispose();
 
     // then
+    assertThat(loggerFactory.lines()).isEmpty();
+  }
+
+  @Test
+  void disposeOnCreated() throws BundleException, InterruptedException {
+    // given
+    OsgiContainer container = createContainer(State.CREATED);
+    container.getFramework();
+
+    // when
+    container.dispose();
+
+    // then
+    verify(framework, atLeastOnce()).getSymbolicName();
+    verify(framework).init(listener);
+    verify(framework).start();
     verify(framework).stop();
     verify(framework).waitForStop(120000L);
   }
@@ -94,7 +116,8 @@ class PlugsOsgiContainerTest {
   @Test
   void disposeWithoutEnoughTime() throws InterruptedException, BundleException {
     // given
-    OsgiContainer container = createContainer();
+    OsgiContainer container = createContainer(State.CREATED);
+    container.getFramework();
     when(framework.waitForStop(anyLong())).thenThrow(
       new InterruptedException("20190104:202726")
     );
@@ -104,6 +127,8 @@ class PlugsOsgiContainerTest {
 
     // then
     verify(framework).stop();
+    verify(framework).init(listener);
+    verify(framework).start();
     assertThat(loggerFactory.lines())
       .extracting(log -> log.level, PlugsOsgiContainerTest::takeFirst2Lines)
       .contains(
@@ -116,21 +141,40 @@ class PlugsOsgiContainerTest {
   }
 
   private static String takeFirst2Lines(LogMessage message) {
-    return List.of(message.text.split(System.lineSeparator()))
-      .take(1)
+    return List.of(message.text.split("\n"))
+      .take(2)
       .intersperse("\n")
       .foldLeft(new StringBuilder(), StringBuilder::append)
       .toString();
   }
 
-  private OsgiContainer createContainer() {
-    Supplier<Framework> frameworkSupplier = () -> framework;
-    when(framework.getSymbolicName()).thenReturn(OSGI_NAME);
+  private OsgiContainer createContainer(State state) {
+    if (state == State.CREATED) {
+      when(framework.getSymbolicName()).thenReturn(OSGI_NAME);
+    }
     Duration stopTimeout = Duration.of(2, ChronoUnit.MINUTES);
-    return new PlugsOsgiContainer(
-      loggerFactory,
-      frameworkSupplier,
+    FrameworkConfiguration configuration = new DefaultFrameworkConfiguration(
+      new Properties()
+    );
+    FrameworkOperation frameworkOperation = new DefaultFrameworkOperation(
+      new AbstractFrameworkProducer() {
+        @Override
+        protected Framework doProvide(FrameworkConfiguration configuration) {
+          return framework;
+        }
+      },
+      configuration,
+      List.of(listener),
       stopTimeout
     );
+    return new PlugsOsgiContainer(
+      frameworkOperation,
+      loggerFactory
+    );
+  }
+
+  private enum State {
+    CREATED,
+    NON_CREATED
   }
 }

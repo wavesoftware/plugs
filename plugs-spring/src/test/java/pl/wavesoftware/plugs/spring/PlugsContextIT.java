@@ -18,9 +18,12 @@ package pl.wavesoftware.plugs.spring;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.launch.Framework;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import pl.wavesoftware.plugs.core.OsgiContainer;
 
@@ -31,11 +34,17 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 0.1.0
  */
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = PlugsTestContext.class)
+@ContextHierarchy({
+  @ContextConfiguration(classes = FrameworkEventCollectingContext.class),
+  @ContextConfiguration(classes = PlugsTestContext.class)
+})
 class PlugsContextIT {
 
   @Autowired
   private OsgiContainer container;
+
+  @Autowired
+  private Collector<FrameworkEvent> eventCollector;
 
   @Test
   void osgiContainer() {
@@ -45,5 +54,7 @@ class PlugsContextIT {
     // then
     String name = framework.getSymbolicName();
     assertThat(name).isEqualTo("org.apache.felix.framework");
+    assertThat(framework.getState()).isEqualTo(Bundle.ACTIVE);
+    assertThat(eventCollector.getCollected()).isEmpty();
   }
 }

@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.core;
+package pl.wavesoftware.plugs.spring;
+
+import io.vavr.collection.Traversable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * A disposable object
- *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
- * @since 0.1.0
+ * @since 2019-01-05
  */
-public interface Disposable {
-  /**
-   * Disposes a object.
-   */
-  void dispose();
+public final class Collector<T> {
+  private final List<T> collected = new ArrayList<>();
+
+  public void collect(T object) {
+    collected.add(object);
+  }
+
+  public Traversable<T> getCollected() {
+    return io.vavr.collection.List.ofAll(collected);
+  }
 }

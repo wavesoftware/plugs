@@ -14,17 +14,30 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.core;
+package pl.wavesoftware.plugs.spring;
+
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import pl.wavesoftware.plugs.core.Plugs;
+import pl.wavesoftware.plugs.spring.annotation.Typed;
 
 /**
- * A disposable object
- *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public interface Disposable {
-  /**
-   * Disposes a object.
-   */
-  void dispose();
+@Configuration
+class FrameworkEventCollectingContext {
+
+  @Bean
+  Collector<FrameworkEvent> frameworkListenerObjectCollector() {
+    return new Collector<>();
+  }
+
+  @Bean
+  @Typed(Plugs.class)
+  FrameworkListener frameworkListener(Collector<FrameworkEvent> collector) {
+    return collector::collect;
+  }
 }

@@ -17,6 +17,8 @@
 package pl.wavesoftware.plugs.core;
 
 /**
+ * A marker to be used to reference a Plugs library contents
+ *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */

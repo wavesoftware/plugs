@@ -16,15 +16,29 @@
 
 package pl.wavesoftware.plugs.core;
 
+import io.vavr.collection.Traversable;
+import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.launch.Framework;
+
 /**
- * A disposable object
+ * A producer for a framework.
  *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public interface Disposable {
+public interface FrameworkProducer {
+
   /**
-   * Disposes a object.
+   * Provide new initialized framework based on a configuration of that
+   * framework
+   *
+   * @param configuration a configuration of provided framework
+   * @param listeners     a traversable of framework listeners to use on
+   *                      initialization
+   * @return a created initialized framework
    */
-  void dispose();
+  Framework provide(
+    FrameworkConfiguration configuration,
+    Traversable<FrameworkListener> listeners
+  );
 }

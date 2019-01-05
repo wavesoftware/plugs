@@ -39,5 +39,13 @@
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.framework</artifactId>
     </dependency>
+
+    <!-- Test -->
+    <dependency>
+      <groupId>pl.wavesoftware.plugs</groupId>
+      <artifactId>testing</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>

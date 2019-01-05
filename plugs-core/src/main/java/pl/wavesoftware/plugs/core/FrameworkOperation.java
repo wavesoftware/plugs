@@ -16,15 +16,44 @@
 
 package pl.wavesoftware.plugs.core;
 
+import io.vavr.collection.Traversable;
+import org.osgi.framework.FrameworkListener;
+
+import java.time.Duration;
+
 /**
- * A disposable object
+ * Represents a configuration for framework, both to initialize and to tear
+ * down.
  *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public interface Disposable {
+public interface FrameworkOperation {
   /**
-   * Disposes a object.
+   * A framework producer
+   *
+   * @return framework producer
    */
-  void dispose();
+  FrameworkProducer getProducer();
+
+  /**
+   * Framework configuration
+   *
+   * @return framework configuration
+   */
+  FrameworkConfiguration getConfiguration();
+
+  /**
+   * Gets a traversable of a listeners
+   *
+   * @return a traversable
+   */
+  Traversable<FrameworkListener> getListeners();
+
+  /**
+   * A stop time out.
+   *
+   * @return a stop time out
+   */
+  Duration getStopTimeout();
 }

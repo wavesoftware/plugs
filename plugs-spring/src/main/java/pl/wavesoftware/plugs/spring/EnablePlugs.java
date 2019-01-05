@@ -16,6 +16,7 @@
 
 package pl.wavesoftware.plugs.spring;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.Documented;
@@ -25,6 +26,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Use this annotation to enable Plugs OSGi container on one of your project's
+ * {@link Configuration} annotated classes.
+ *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */

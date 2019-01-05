@@ -18,17 +18,19 @@
                strict="true">
   <Properties>
     <Property
-      name="CONSOLE_LOG_PATTERN">%hl{%5p} %hl{%d{HH:mm:ss.SSS}}{faint} %hl{[%10.10t]}{yellow} %hl{%-40.40c{1.}}{cyan} %hl{:}{faint} %m%n%ex</Property>
+      name="CONSOLE_LOG_PATTERN">%hl{%5p} %hl{[%10.10t]}{yellow} %hl{%-40.40c{1.}}{cyan} %hl{:}{faint} %m%n%ex</Property>
   </Properties>
   <Appenders>
-    <Console name="Console" target="SYSTEM_OUT" follow="true">
-      <PatternLayout pattern="${sys:CONSOLE_LOG_PATTERN}" />
-    </Console>
+    <Appender type="Collector" name="PseudoConsole">
+      <Layout type="PatternLayout">
+        <Pattern>${sys:CONSOLE_LOG_PATTERN}</Pattern>
+      </Layout>
+    </Appender>
   </Appenders>
   <Loggers>
     <Logger name="pl.wavesoftware" level="debug" />
     <Root level="info">
-      <AppenderRef ref="Console" />
+      <AppenderRef ref="PseudoConsole" />
     </Root>
   </Loggers>
 </Configuration>

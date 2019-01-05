@@ -27,25 +27,22 @@ import static pl.wavesoftware.eid.utils.EidPreconditions.checkNotNull;
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public abstract class AnsiOutput {
+public final class AnsiOutput {
 
   private static final String ENCODE_JOIN = ";";
-
   private static Enabled enabled = Enabled.ALWAYS;
-
   private static Boolean consoleAvailable = true;
-
   private static Boolean ansiCapable;
-
+  private static final String ENCODE_START = "\033[";
+  private static final String ENCODE_END = "m";
+  private static final String RESET = "0;" + AnsiColor.DEFAULT;
   private static final String OPERATING_SYSTEM_NAME = System
     .getProperty("os.name")
     .toLowerCase(Locale.ENGLISH);
 
-  private static final String ENCODE_START = "\033[";
-
-  private static final String ENCODE_END = "m";
-
-  private static final String RESET = "0;" + AnsiColor.DEFAULT;
+  private AnsiOutput() {
+    // nothing here
+  }
 
   /**
    * Sets if ANSI output is enabled.
@@ -143,17 +140,11 @@ public abstract class AnsiOutput {
   }
 
   private static boolean detectIfAnsiCapable() {
-    try {
-      if (Boolean.FALSE.equals(consoleAvailable)) {
-        return false;
-      }
-      if ((consoleAvailable == null) && (System.console() == null)) {
-        return false;
-      }
-      return !(OPERATING_SYSTEM_NAME.contains("win"));
-    } catch (Throwable ex) {
+    if (Boolean.FALSE.equals(consoleAvailable)
+      || ((consoleAvailable == null) && (System.console() == null))) {
       return false;
     }
+    return !(OPERATING_SYSTEM_NAME.contains("win"));
   }
 
   /**

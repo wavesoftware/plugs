@@ -16,15 +16,19 @@
 
 package pl.wavesoftware.plugs.core;
 
+import io.vavr.collection.Map;
+
 /**
- * A disposable object
+ * Configuration of framework to be used while creating it.
  *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public interface Disposable {
+public interface FrameworkConfiguration {
   /**
-   * Disposes a object.
+   * Gets configuration as map
+   *
+   * @return a map of configuration of a framework
    */
-  void dispose();
+  Map<String, Object> asMap();
 }

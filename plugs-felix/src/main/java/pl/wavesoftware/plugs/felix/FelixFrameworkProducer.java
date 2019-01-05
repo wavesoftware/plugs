@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.core;
+package pl.wavesoftware.plugs.felix;
+
+import org.apache.felix.framework.FrameworkFactory;
+import org.osgi.framework.launch.Framework;
+import pl.wavesoftware.plugs.core.AbstractFrameworkProducer;
+import pl.wavesoftware.plugs.core.FrameworkConfiguration;
 
 /**
- * A disposable object
+ * An Apache Felix framework producer.
  *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public interface Disposable {
-  /**
-   * Disposes a object.
-   */
-  void dispose();
+public final class FelixFrameworkProducer extends AbstractFrameworkProducer {
+
+  private final FrameworkFactory factory = new FrameworkFactory();
+
+  @Override
+  protected Framework doProvide(FrameworkConfiguration configuration) {
+    return factory.newFramework(configuration.asMap().toJavaMap());
+  }
 }

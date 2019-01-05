@@ -33,6 +33,7 @@ import pl.wavesoftware.plugs.testing.ansi.AnsiElement;
 import pl.wavesoftware.plugs.testing.ansi.AnsiOutput;
 import pl.wavesoftware.plugs.testing.ansi.AnsiStyle;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -46,15 +47,16 @@ import java.util.Map;
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-@Plugin(name = "color", category = PatternConverter.CATEGORY)
-@ConverterKeys({"clr", "color"})
-public final class ColorConverter extends LogEventPatternConverter {
+@Plugin(name = "hightlight-color", category = PatternConverter.CATEGORY)
+@ConverterKeys("hl")
+public final class HighlightColorConverter extends LogEventPatternConverter {
 
   private static final Map<String, AnsiElement> ELEMENTS;
 
   static {
     Map<String, AnsiElement> ansiElements = new HashMap<>();
     ansiElements.put("faint", AnsiColor.WHITE);
+    ansiElements.put("black", AnsiColor.BLACK);
     ansiElements.put("red", AnsiColor.RED);
     ansiElements.put("green", AnsiColor.GREEN);
     ansiElements.put("yellow", AnsiColor.YELLOW);
@@ -83,11 +85,15 @@ public final class ColorConverter extends LogEventPatternConverter {
 
   private final List<PatternFormatter> formatters;
 
+  @Nullable
   private final AnsiElement styling;
 
-  private ColorConverter(List<PatternFormatter> formatters, AnsiElement styling) {
+  private HighlightColorConverter(
+    List<PatternFormatter> formatters,
+    @Nullable AnsiElement styling
+  ) {
     super("style", "style");
-    this.formatters = formatters;
+    this.formatters = Collections.unmodifiableList(formatters);
     this.styling = styling;
   }
 
@@ -98,7 +104,8 @@ public final class ColorConverter extends LogEventPatternConverter {
    * @param options the options
    * @return a new instance, or {@code null} if the options are invalid
    */
-  public static ColorConverter newInstance(Configuration config, String[] options) {
+  @SuppressWarnings("unused")
+  public static HighlightColorConverter newInstance(Configuration config, String[] options) {
     if (options.length < 1) {
       LOGGER.error("Incorrect number of options on style. "
         + "Expected at least 1, received {}", options.length);
@@ -110,8 +117,11 @@ public final class ColorConverter extends LogEventPatternConverter {
     }
     PatternParser parser = PatternLayout.createPatternParser(config);
     List<PatternFormatter> formatters = parser.parse(options[0]);
-    AnsiElement element = (options.length != 1) ? ELEMENTS.get(options[1]) : null;
-    return new ColorConverter(formatters, element);
+    AnsiElement element = null;
+    if (options.length != 1) {
+      element = ELEMENTS.get(options[1]);
+    }
+    return new HighlightColorConverter(formatters, element);
   }
 
   @Override
@@ -135,13 +145,15 @@ public final class ColorConverter extends LogEventPatternConverter {
       if (element == null) {
         // Assume highlighting
         element = LEVELS.get(event.getLevel().intLevel());
-        element = (element != null) ? element : AnsiColor.GREEN;
+        if (element == null) {
+          element = AnsiColor.BLUE;
+        }
       }
       appendAnsiString(toAppendTo, buf.toString(), element);
     }
   }
 
-  private void appendAnsiString(
+  private static void appendAnsiString(
     StringBuilder toAppendTo,
     String input,
     AnsiElement element

@@ -16,86 +16,80 @@
 
 package pl.wavesoftware.plugs.spring;
 
-import org.osgi.framework.BundleException;
+import io.vavr.collection.LinkedHashSet;
 import org.osgi.framework.FrameworkListener;
-import org.osgi.framework.launch.Framework;
-import org.osgi.framework.launch.FrameworkFactory;
-import org.slf4j.ILoggerFactory;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import pl.wavesoftware.plugs.core.DefaultFrameworkConfiguration;
+import pl.wavesoftware.plugs.core.DefaultFrameworkOperation;
+import pl.wavesoftware.plugs.core.FrameworkConfiguration;
+import pl.wavesoftware.plugs.core.FrameworkOperation;
+import pl.wavesoftware.plugs.core.FrameworkProducer;
 import pl.wavesoftware.plugs.core.OsgiContainer;
 import pl.wavesoftware.plugs.core.Plugs;
+import pl.wavesoftware.plugs.felix.FelixFrameworkProducer;
 import pl.wavesoftware.plugs.spring.annotation.Typed;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 
 /**
+ * A Spring configuration context to be used in users configuration with
+ * {@link Import} or with {@link EnablePlugs} annotation.
+ *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
+ * @see EnablePlugs
+ * @see Import
  */
 @Configuration
 public class PlugsContext {
 
+  private static final int DEFAULT_STOP_TIMOUT_IN_MINUTES = 10;
+
   @Bean
-  @ConditionalOnClass(org.apache.felix.framework.FrameworkFactory.class)
-  @Typed(Plugs.class)
-  FrameworkFactory felixFrameworkFactory() {
-    return new org.apache.felix.framework.FrameworkFactory();
+  @ConditionalOnClass(FelixFrameworkProducer.class)
+  FrameworkProducer felixFrameworkFactory() {
+    return new FelixFrameworkProducer();
   }
 
   @Bean
-  @Typed(Plugs.class)
   @ConditionalOnMissingBean
-  Map<String, String> defaultConfiguration() {
-    return new HashMap<>();
+  FrameworkConfiguration defaultConfiguration() {
+    return new DefaultFrameworkConfiguration();
   }
 
   @Bean
   @Typed(Plugs.class)
   @ConditionalOnMissingBean
   Duration stopTimeout() {
-    return Duration.of(30, ChronoUnit.MINUTES);
+    return Duration.of(DEFAULT_STOP_TIMOUT_IN_MINUTES, ChronoUnit.MINUTES);
   }
 
   @Bean
   @ConditionalOnMissingBean
-  ILoggerFactory loggerFactory() {
-    return LoggerFactory.getILoggerFactory();
-  }
-
-  @Bean
-  OsgiContainer osgiContainer(
-    @Typed(Plugs.class) FrameworkFactory frameworkFactory,
-    @Typed(Plugs.class) Map<String, String> configuration,
+  FrameworkOperation frameworkOperation(
+    FrameworkProducer frameworkProducer,
+    FrameworkConfiguration configuration,
     @Typed(Plugs.class) Duration stopTimeout,
-    @Typed(Plugs.class) List<FrameworkListener> listeners,
-    ILoggerFactory loggerFactory
+    @Typed(Plugs.class) Collection<FrameworkListener> listeners
   ) {
-    return new SpringOsgiContainer(
-      loggerFactory,
-      () -> getFramework(frameworkFactory, configuration, listeners),
+    return new DefaultFrameworkOperation(
+      frameworkProducer,
+      configuration,
+      LinkedHashSet.ofAll(listeners),
       stopTimeout
     );
   }
 
-  private Framework getFramework(
-    FrameworkFactory factory,
-    Map<String, String> configuration,
-    List<FrameworkListener> listeners
+  @Bean
+  OsgiContainer osgiContainer(
+    FrameworkOperation operation
   ) {
-    Framework framework = factory.newFramework(configuration);
-    try {
-      framework.init(listeners.toArray(new FrameworkListener[0]));
-    } catch (BundleException ex) {
-      throw new IllegalStateException(ex);
-    }
-    return framework;
+    return new SpringOsgiContainer(operation);
   }
 }

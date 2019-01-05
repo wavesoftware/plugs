@@ -17,14 +17,11 @@
 package pl.wavesoftware.plugs.spring;
 
 import org.osgi.framework.launch.Framework;
-import org.slf4j.ILoggerFactory;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.EventListener;
-import pl.wavesoftware.plugs.core.PlugsOsgiContainer;
+import pl.wavesoftware.plugs.core.FrameworkOperation;
 import pl.wavesoftware.plugs.core.OsgiContainer;
-
-import java.time.Duration;
-import java.util.function.Supplier;
+import pl.wavesoftware.plugs.core.PlugsOsgiContainer;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
@@ -34,14 +31,8 @@ final class SpringOsgiContainer implements OsgiContainer {
 
   private final OsgiContainer delegate;
 
-  SpringOsgiContainer(
-    ILoggerFactory loggerFactory,
-    Supplier<Framework> frameworkLazy,
-    Duration stopTimeout
-  ) {
-    delegate = new PlugsOsgiContainer(
-      loggerFactory, frameworkLazy, stopTimeout
-    );
+  SpringOsgiContainer(FrameworkOperation operation) {
+    delegate = new PlugsOsgiContainer(operation);
   }
 
   @Override

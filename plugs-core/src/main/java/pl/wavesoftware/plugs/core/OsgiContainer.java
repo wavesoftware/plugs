@@ -19,6 +19,8 @@ package pl.wavesoftware.plugs.core;
 import org.osgi.framework.launch.Framework;
 
 /**
+ * A Plugs OSGi container representation
+ *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */

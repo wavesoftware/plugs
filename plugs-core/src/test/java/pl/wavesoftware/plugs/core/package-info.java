@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.core;
-
 /**
- * A disposable object
- *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public interface Disposable {
-  /**
-   * Disposes a object.
-   */
-  void dispose();
-}
+@ParametersAreNonnullByDefault
+package pl.wavesoftware.plugs.core;
+
+import javax.annotation.ParametersAreNonnullByDefault;

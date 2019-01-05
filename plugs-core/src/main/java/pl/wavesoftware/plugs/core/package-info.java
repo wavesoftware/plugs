@@ -18,4 +18,7 @@
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 2019-01-03
  */
+@ParametersAreNonnullByDefault
 package pl.wavesoftware.plugs.core;
+
+import javax.annotation.ParametersAreNonnullByDefault;
