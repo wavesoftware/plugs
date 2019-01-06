@@ -27,12 +27,6 @@
     <version>0.1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>pl.wavesoftware.plugs.integrations</groupId>
-  <artifactId>integrations-parent</artifactId>
-  <packaging>pom</packaging>
-  <name>Plugs :: Integrations Parent</name>
-
-  <modules>
-    <module>plugs-maven-plugin</module>
-  </modules>
+  <artifactId>plugs-maven-plugin</artifactId>
+  <name>Plugs :: Plugs Maven Plugin</name>
 </project>

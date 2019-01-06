@@ -24,7 +24,7 @@
   <artifactId>plugs-parent</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>Plugs Parent</name>
+  <name>Plugs</name>
   <description>
     A safe, Java plugin system with easy management, and usage.
   </description>
@@ -56,9 +56,9 @@
   <modules>
     <module>plug-api</module>
     <module>plugs-core</module>
-    <module>integrations</module>
-    <module>examples</module>
     <module>plugs-spring</module>
+    <module>plugs-maven-plugin</module>
+    <module>examples</module>
   </modules>
 
   <scm>
