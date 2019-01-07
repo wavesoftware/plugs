@@ -37,6 +37,11 @@ public final class AnsiOutput {
   private static Boolean ansiCapable;
   private static boolean skipWindowsCheck = true;
 
+  private static final String ENCODE_JOIN = ";";
+  private static final String ENCODE_START = "\033[";
+  private static final String ENCODE_END = "m";
+  private static final String RESET = "0;" + AnsiColor.DEFAULT;
+
   private static final String OPERATING_SYSTEM_NAME = System
     .getProperty("os.name")
     .toLowerCase(Locale.ENGLISH);
@@ -98,23 +103,23 @@ public final class AnsiOutput {
       if (element instanceof AnsiElement) {
         containsEncoding = true;
         if (!writingAnsi) {
-          sb.append(Constants.ENCODE_START);
+          sb.append(ENCODE_START);
           writingAnsi = true;
         } else {
-          sb.append(Constants.ENCODE_JOIN);
+          sb.append(ENCODE_JOIN);
         }
       } else {
         if (writingAnsi) {
-          sb.append(Constants.ENCODE_END);
+          sb.append(ENCODE_END);
           writingAnsi = false;
         }
       }
       sb.append(element);
     }
     if (containsEncoding) {
-      sb.append(writingAnsi ? Constants.ENCODE_JOIN : Constants.ENCODE_START);
-      sb.append(Constants.RESET);
-      sb.append(Constants.ENCODE_END);
+      sb.append(writingAnsi ? ENCODE_JOIN : ENCODE_START);
+      sb.append(RESET);
+      sb.append(ENCODE_END);
     }
   }
 

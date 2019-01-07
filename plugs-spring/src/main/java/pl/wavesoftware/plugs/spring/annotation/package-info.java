@@ -14,20 +14,11 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.testing.ansi;
-
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-final class Constants {
+@ParametersAreNonnullByDefault
+package pl.wavesoftware.plugs.spring.annotation;
 
-  static final String ENCODE_JOIN = ";";
-  static final String ENCODE_START = "\033[";
-  static final String ENCODE_END = "m";
-  static final String RESET = "0;" + AnsiColor.DEFAULT;
-
-  private Constants() {
-    // only static fields
-  }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

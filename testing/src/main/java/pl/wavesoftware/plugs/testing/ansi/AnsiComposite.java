@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
  * @since 0.1.0
  */
 public final class AnsiComposite implements AnsiElement {
+  private static final CharSequence ENCODE_JOIN = ";";
+
   private final List<AnsiElement> elements;
 
   private AnsiComposite(AnsiElement... elements) {
@@ -31,6 +33,6 @@ public final class AnsiComposite implements AnsiElement {
   public String toString() {
     return elements.stream()
       .map(AnsiElement::toString)
-      .collect(Collectors.joining(Constants.ENCODE_JOIN));
+      .collect(Collectors.joining(ENCODE_JOIN));
   }
 }
