@@ -49,7 +49,9 @@ import java.util.Map;
  * color styling will be picked based on the logging level.
  *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
+ * @author Vladimir Tsanev (Spring-Boot project)
  * @since 0.1.0
+ * @see org.springframework.boot.logging.log4j2.ColorConverter
  */
 @Plugin(name = "hightlight-color", category = PatternConverter.CATEGORY)
 @ConverterKeys("hl")

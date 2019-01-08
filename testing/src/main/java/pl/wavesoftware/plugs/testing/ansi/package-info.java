@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * This package is heavily inspired by Spring Boot implementation.
+ *
+ * @see org.springframework.boot.ansi
+ */
 @ParametersAreNonnullByDefault
 package pl.wavesoftware.plugs.testing.ansi;
 
