@@ -1,8 +1,8 @@
 language: java
 sudo: false
 dist: trusty
-before_script: mvn dependency:go-offline
-script: mvn clean verify --fail-at-end -V -U
+install: mvn install dependency:go-offline -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+script: mvn clean verify --fail-at-end -U -V
 notifications:
   email:
     on_failure: change
@@ -15,7 +15,7 @@ matrix:
         - bash <(curl -s https://codecov.io/bash)
     - jdk: oraclejdk8
       env: JACOCO=true SONAR=publish
-      script: mvn clean verify sonar:sonar --fail-at-end
+      script: mvn clean verify sonar:sonar --fail-at-end -U -V
     # Performance testing
     - jdk: openjdk8
       env: JACOCO=false

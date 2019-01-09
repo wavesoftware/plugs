@@ -1,0 +1,26 @@
+'architecture101
+@startuml
+
+interface plug
+
+node "ACME app" {
+  [powerstrip-api] -- provider
+  [powerstrip-api] --- installer
+  provider )- [powerstrip-felix]
+  installer )- [plugs-maven-installer]
+  [powerstrip-api] ----- plug
+}
+
+database "Maven Repo" {
+  plug )- [coyote-module]
+  plug )- [bunny-module]
+}
+
+[plugs-maven-installer] ...> [coyote-module] : installs bundle
+[plugs-maven-installer] ...> [bunny-module] : installs bundle
+
+[powerstrip-felix] ...> [coyote-module] : runs bundle
+[powerstrip-felix] ...> [bunny-module] : runs bundle
+
+@enduml
+'architecture101
