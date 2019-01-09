@@ -80,7 +80,7 @@ A Plugs library **promise** to bring a plugin style system that have:
 
 ## The Architecture
 
-![Plugs Architecture](https://www.plantuml.com/plantuml/svg/XPAx2i8m58RtynG7DuVq0Hn44KSNL-aGpQa4qYJauWNntKrQMcfjSVw__t92DZvm5sAj0AGEv2f-8RGgNW6q4OIBxUwmHsxj0b-0UBBcJiu79otZLfR865fdRbAGcvOPIfqwb6g0ZiKb-u8hKl9H9g27Mo8DyQpcDzAiLygPeZmb3ty321xucViq_v2zU2HhsWCoqKHVpDC4OhKHKL4vLCvHwsSlfBIP6LWKnNeSXAlk18yfI2ZwO_zgct33xpFD5Rke1wKphd7Vq0GRqYB_XGy0)
+![Plugs Architecture](https://g.gravizo.com/source/svg/%27architecture101?https%3A%2F%2Fraw.githubusercontent.com%2Fwavesoftware%2Fplugs%2Ffeature%2F14-design-doc%2Fdocs%2Farchitecture.puml)
 
 Above diagram showcases a sample setup with Plugs library. In example ACME 
 app there are tree Plugs components deployed:

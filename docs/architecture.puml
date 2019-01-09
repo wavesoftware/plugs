@@ -1,3 +1,4 @@
+'architecture101
 @startuml
 
 interface plug
@@ -22,3 +23,4 @@ database "Maven Repo" {
 [powerstrip-felix] ...> [bunny-module] : runs bundle
 
 @enduml
+'architecture101
