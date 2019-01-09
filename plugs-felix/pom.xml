@@ -26,33 +26,21 @@
     <groupId>pl.wavesoftware.plugs</groupId>
     <version>0.1.0-SNAPSHOT</version>
   </parent>
-  <artifactId>plugs-core</artifactId>
-
-  <name>Plugs :: Plugs Core</name>
+  <artifactId>plugs-felix</artifactId>
+  <name>Plugs :: Felix</name>
 
   <dependencies>
     <dependency>
-      <groupId>pl.wavesoftware</groupId>
-      <artifactId>eid-exceptions</artifactId>
+      <groupId>pl.wavesoftware.plugs</groupId>
+      <artifactId>plugs-core</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>osgi.core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>osgi.annotation</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.vavr</groupId>
-      <artifactId>vavr</artifactId>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.framework</artifactId>
     </dependency>
 
-    <!-- Tests -->
+    <!-- Test -->
     <dependency>
       <groupId>pl.wavesoftware.plugs</groupId>
       <artifactId>testing</artifactId>

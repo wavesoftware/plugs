@@ -480,3 +480,4 @@ fabric.properties
 .idea/httpRequests
 
 /gradle/wrapper/gradle-wrapper.jar
+felix-cache

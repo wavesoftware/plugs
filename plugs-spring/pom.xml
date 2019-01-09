@@ -29,4 +29,39 @@
 
   <artifactId>plugs-spring</artifactId>
   <name>Plugs :: Spring Module</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>pl.wavesoftware.plugs</groupId>
+      <artifactId>plugs-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>pl.wavesoftware.plugs</groupId>
+      <artifactId>plugs-felix</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-autoconfigure</artifactId>
+    </dependency>
+
+    <!-- Test -->
+    <dependency>
+      <groupId>pl.wavesoftware.plugs</groupId>
+      <artifactId>testing</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>
