@@ -8,8 +8,8 @@ ways of how to achieve that:
 
  * Use some kind of plugin system, for example:
  
-   * Java EE deployments (war, ear) on Java EE servers (JBoss, WebSphere, 
-   WebLogic)
+   * Java EE (EE4J) deployments (war, ear) on Java EE servers (JBoss, 
+     WebSphere, WebLogic)
    * OSGi bundles on OSGi systems like Felix, Equinox, or Karaf
    * and many more
    
@@ -64,20 +64,44 @@ system for JVM world. It has been thought out to take the best parts of the
 technologies described above without, hopefully, any of drawbacks.
 
 A Plugs library consists of two main parts. Server part, codenamed 
-*powerstrip*, and plugin (client) part, named *plug*.
+*"powerstrip"*, and plugin (client) part, named *"plug"*.
 
 A Plugs library **promise** to bring a plugin style system that have:
 
- * Isolated classpath using OSGi container like: Felix, Equinox, etc. 
- * Easy integration of server part, as a drop in library, for any technology 
+ * Isolated classpath using OSGi containers like: Felix, Equinox, etc. 
+ * Easy integration of server part, as a drop-in library, for any technology 
    like Java EE Server, Spring, Guice, Dagger2, or any other.
  * Easy Plug module Maven generator (Gradle, SBT also), that takes all jar 
-   dependencies and bundle them in Uberjar like OSGi module. Provided scope 
-   became OSGi imports.
+   dependencies and bundle them in Uberjar OSGi module. Provided scope 
+   dependencies became OSGi imports.
  * Easy to use Plugs installers, that download, configure and enable plugs, 
-   from code manifests. Installers are backed by Maven, YUM, and other 
-   providers. 
+   from code manifests at runtime. Installers are backed by Maven, YUM, and 
+   other providers.
 
 ## The Architecture
 
-TBD
+![Plugs Architecture](https://www.plantuml.com/plantuml/svg/XPAx2i8m58RtynG7DuVq0Hn44KSNL-aGpQa4qYJauWNntKrQMcfjSVw__t92DZvm5sAj0AGEv2f-8RGgNW6q4OIBxUwmHsxj0b-0UBBcJiu79otZLfR865fdRbAGcvOPIfqwb6g0ZiKb-u8hKl9H9g27Mo8DyQpcDzAiLygPeZmb3ty321xucViq_v2zU2HhsWCoqKHVpDC4OhKHKL4vLCvHwsSlfBIP6LWKnNeSXAlk18yfI2ZwO_zgct33xpFD5Rke1wKphd7Vq0GRqYB_XGy0)
+
+Above diagram showcases a sample setup with Plugs library. In example ACME 
+app there are tree Plugs components deployed:
+
+ * **powerstrip-api** - an API for Plugs server (contains configuration, and 
+   setup)
+ * **powerstrip-felix** - a implementation of powerstrip-api with Apache Felix
+ * **plugs-maven-installer** - a installer that searches, download and 
+   install plug modules, based on user code
+
+In this example we use `plugs-maven-installer` so there is also a Maven 
+repository deployed, with published plugs modules as artifacts (this 
+repository can be repote or local). In this example there are two modules:
+
+ * coyote-module
+ * bunny-module
+ 
+Both modules can use any jar dependencies, they like. It is possible even to 
+use 
+different versions of the same libraries, as each Plug module is separated in 
+its own classpath.
+
+Powerstrip API can be used to dynamically install, update, and remove Plug 
+modules at runtime.
