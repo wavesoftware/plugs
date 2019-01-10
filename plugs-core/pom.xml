@@ -32,6 +32,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.apiguardian</groupId>
+      <artifactId>apiguardian-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>pl.wavesoftware</groupId>
       <artifactId>eid-exceptions</artifactId>
     </dependency>
