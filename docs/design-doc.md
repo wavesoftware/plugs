@@ -37,7 +37,7 @@ Summing up a few of the most popular opinions about approaches to architecture:
    plugins, which makes the whole system extremely complex.
  * SOA implemented with SOAP and ESB, brings standardization of inter-process 
    communication with SOAP protocol and automation of code generation and 
-   most of ESB solutions can wire services with SAOP protocol and other RPCs.
+    most of ESB solutions can wire services with SOAP protocol and other RPCs.
    Separate processes of course can mean separated classpath, unless done 
    with some Java EE servers. Unfortunately SOA, SOAP, and especially ESB, 
    became bloated and are hard to maintain as configuration and deployment is
