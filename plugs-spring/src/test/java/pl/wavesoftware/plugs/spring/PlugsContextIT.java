@@ -22,6 +22,10 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.launch.Framework;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -46,6 +50,12 @@ class PlugsContextIT {
   @Autowired
   private Collector<FrameworkEvent> eventCollector;
 
+  @Autowired
+  private ApplicationEventPublisher publisher;
+
+  @Autowired
+  private ApplicationContext applicationContext;
+
   @Test
   void osgiContainer() {
     // when
@@ -56,5 +66,12 @@ class PlugsContextIT {
     assertThat(name).isEqualTo("org.apache.felix.framework");
     assertThat(framework.getState()).isEqualTo(Bundle.ACTIVE);
     assertThat(eventCollector.getCollected()).isEmpty();
+  }
+
+  @Test
+  @DirtiesContext
+  void refreshContext() {
+    // when
+    publisher.publishEvent(new ContextClosedEvent(applicationContext));
   }
 }
