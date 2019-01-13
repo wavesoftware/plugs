@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.maven.generator;
+package pl.wavesoftware.maven.junit5;
 
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.plugin.testing.MojoRule;
@@ -32,7 +32,8 @@ import java.lang.reflect.Parameter;
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-final class MojoRuleExtension implements BeforeAllCallback, ParameterResolver {
+public final class MojoRuleExtension
+  implements BeforeAllCallback, ParameterResolver {
 
   private static final Namespace MOJO_NS = Namespace.create(Mojo.class);
 

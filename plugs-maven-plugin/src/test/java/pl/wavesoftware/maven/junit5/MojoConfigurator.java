@@ -14,18 +14,37 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.maven.generator;
+package pl.wavesoftware.maven.junit5;
 
-import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugin.MojoExecution;
+import org.apache.maven.plugin.testing.MojoRule;
 
 import java.nio.file.Path;
 
 /**
+ * A configurator for a mojo to be tested
+ *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public interface MojoBuilder<T extends AbstractMojo> {
-  MojoBuilder<T> withPomDirectory(Path pomDirectory);
-  MojoBuilder<T> withUsingResources(boolean setting);
-  T build(String goal);
+public interface MojoConfigurator {
+
+  /**
+   * Creates a new Maven session
+   *
+   * @param rule         a mojo rule
+   * @param pomDirectory a directory of a pom file
+   * @return a new Maven session
+   */
+  MavenSession getMavenSession(MojoRule rule, Path pomDirectory) throws Exception;
+
+  /**
+   * Creates a new Mojo execution
+   *
+   * @param rule a mojo rule
+   * @param goal a goal to load mojo for
+   * @return a new Mojo execution
+   */
+  MojoExecution getMojoExecution(MojoRule rule, String goal);
 }

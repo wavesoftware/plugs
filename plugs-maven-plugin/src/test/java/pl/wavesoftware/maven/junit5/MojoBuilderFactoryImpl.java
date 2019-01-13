@@ -14,37 +14,33 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.maven.generator;
+package pl.wavesoftware.maven.junit5;
 
-import org.apache.maven.execution.MavenSession;
-import org.apache.maven.plugin.MojoExecution;
+import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.testing.MojoRule;
 
-import java.nio.file.Path;
-
 /**
- * A configurator for a mojo to be tested
- *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public interface MojoConfigurator {
+final class MojoBuilderFactoryImpl implements MojoBuilderFactory {
 
-  /**
-   * Creates a new Maven session
-   *
-   * @param rule         a mojo rule
-   * @param pomDirectory a directory of a pom file
-   * @return a new Maven session
-   */
-  MavenSession getMavenSession(MojoRule rule, Path pomDirectory) throws Exception;
+  private final MojoRule rule;
 
-  /**
-   * Creates a new Mojo execution
-   *
-   * @param rule a mojo rule
-   * @param goal a goal to load mojo for
-   * @return a new Mojo execution
-   */
-  MojoExecution getMojoExecution(MojoRule rule, String goal);
+  private MojoConfigurator configurator = new DefaultMojoConfigurator();
+
+  MojoBuilderFactoryImpl(MojoRule rule) {
+    this.rule = rule;
+  }
+
+  @Override
+  public MojoBuilderFactory configurator(MojoConfigurator configurator) {
+    this.configurator = configurator;
+    return this;
+  }
+
+  @Override
+  public <T extends AbstractMojo> MojoBuilder<T> builder(Class<T> mojoType) {
+    return new MojoBuilderImpl<>(rule, mojoType, configurator);
+  }
 }

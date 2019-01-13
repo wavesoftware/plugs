@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.maven.generator;
+package pl.wavesoftware.maven.junit5;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;

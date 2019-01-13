@@ -14,33 +14,40 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.maven.generator;
+package pl.wavesoftware.maven.junit5;
 
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.testing.MojoRule;
+
+import java.nio.file.Path;
 
 /**
+ * Builds mojo while configuring it with builder like interface
+ *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-final class MojoBuilderFactoryImpl implements MojoBuilderFactory {
+public interface MojoBuilder<T extends AbstractMojo> {
+  /**
+   * Sets a POM directory to be used
+   *
+   * @param pomDirectory a pom directory
+   * @return self reference
+   */
+  MojoBuilder<T> withPomDirectory(Path pomDirectory);
 
-  private final MojoRule rule;
+  /**
+   * Sets wherever to use Java resources of file system path
+   *
+   * @param setting a setting of resources location
+   * @return self reference
+   */
+  MojoBuilder<T> withUsingResources(boolean setting);
 
-  private MojoConfigurator configurator = new DefaultMojoConfigurator();
-
-  MojoBuilderFactoryImpl(MojoRule rule) {
-    this.rule = rule;
-  }
-
-  @Override
-  public MojoBuilderFactory configurator(MojoConfigurator configurator) {
-    this.configurator = configurator;
-    return this;
-  }
-
-  @Override
-  public <T extends AbstractMojo> MojoBuilder<T> builder(Class<T> mojoType) {
-    return new MojoBuilderImpl<>(rule, mojoType, configurator);
-  }
+  /**
+   * Builds a Mojo for a given goal
+   *
+   * @param goal a goal to retrieve mojo for
+   * @return a mojo
+   */
+  T build(String goal);
 }

@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.maven.generator;
-
-import org.apache.maven.plugin.AbstractMojo;
-
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public interface MojoBuilderFactory {
-  MojoBuilderFactory configurator(MojoConfigurator configurator);
-  <T extends AbstractMojo> MojoBuilder<T> builder(Class<T> mojoType);
-}
+@ParametersAreNonnullByDefault
+package pl.wavesoftware.maven.junit5;
+
+import javax.annotation.ParametersAreNonnullByDefault;
