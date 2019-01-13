@@ -14,32 +14,20 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.maven.junit5;
+package pl.wavesoftware.plugs.maven.generator.model;
 
-import org.apache.maven.execution.MavenSession;
-import org.apache.maven.plugin.MojoExecution;
-import org.apache.maven.plugin.testing.MojoRule;
 import org.apache.maven.project.MavenProject;
 
-import java.nio.file.Path;
+import java.io.File;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-final class DefaultMojoConfigurator implements MojoConfigurator {
-  @Override
-  public MavenSession getMavenSession(MojoRule rule, Path pomDirectory) throws Exception {
-    // setup with pom
-    MavenProject project = rule.readMavenProject(pomDirectory.toFile());
-
-    // Generate session
-    return rule.newMavenSession(project);
-  }
-
-  @Override
-  public MojoExecution getMojoExecution(MojoRule rule, String goal) {
-    // Generate ExecutionConfiguration and Mojo for testing
-    return rule.newMojoExecution(goal);
-  }
+public interface ExecutionConfiguration {
+  String getFinalName();
+  String getClassifier();
+  boolean shouldAttach();
+  File getOutputDirectory();
+  MavenProject getMavenProject();
 }

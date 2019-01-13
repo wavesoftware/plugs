@@ -14,22 +14,24 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.maven.generator;
+package pl.wavesoftware.plugs.maven.generator.model;
 
-import org.apiguardian.api.API;
-
-import javax.inject.Named;
+import java.io.File;
+import java.io.IOException;
 
 /**
+ * Callback interface used to iterate {@link Libraries}.
+ *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
+ * @author Phillip Webb (Spring Boot project)
  * @since 0.1.0
  */
-@API(status = API.Status.EXPERIMENTAL)
-@Named
-final class DefaultWorker implements Worker {
-
-  @Override
-  public String toString() {
-    return "default";
-  }
+@FunctionalInterface
+public interface LibraryCallback {
+  /**
+   * Callback for a single library backed by a {@link File}.
+   * @param library the library
+   * @throws IOException if the operation fails
+   */
+  void library(Library library) throws IOException;
 }

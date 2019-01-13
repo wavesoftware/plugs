@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.maven.generator;
+package pl.wavesoftware.plugs.maven.generator.packager;
 
-import org.apiguardian.api.API;
+import pl.wavesoftware.plugs.maven.generator.filter.Filter;
+import pl.wavesoftware.plugs.maven.generator.model.ExecutionConfiguration;
+
+import javax.inject.Named;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-@API(status = API.Status.EXPERIMENTAL)
-interface Worker {
+@Named
+final class PlugPackagerFactoryImpl implements PlugPackagerFactory {
+  @Override
+  public PlugPackager create(ExecutionConfiguration configuration, Filter filter) {
+    return new PlugPackagerImpl(configuration, filter);
+  }
 }

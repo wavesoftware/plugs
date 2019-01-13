@@ -64,6 +64,6 @@ class PackagePlugMojoTest {
 
     // when & then
     assertThatCode(mojo::execute).doesNotThrowAnyException();
-    verify(log).debug(eq("Worker is: default"));
+    verify(log).debug(eq("Packager is: default, project: simpliest-0.1.0"));
   }
 }
