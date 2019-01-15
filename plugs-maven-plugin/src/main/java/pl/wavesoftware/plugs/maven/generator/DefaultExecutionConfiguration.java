@@ -16,6 +16,7 @@
 
 package pl.wavesoftware.plugs.maven.generator;
 
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import pl.wavesoftware.plugs.maven.generator.model.ExecutionConfiguration;
 
@@ -28,6 +29,7 @@ import java.io.File;
 final class DefaultExecutionConfiguration
   implements ExecutionConfiguration {
 
+  private final Log log;
   private final MavenProject project;
   private final String classifier;
   private final boolean attach;
@@ -35,17 +37,24 @@ final class DefaultExecutionConfiguration
   private final String finalName;
 
   DefaultExecutionConfiguration(
+    Log log,
     MavenProject project,
     String classifier,
     boolean attach,
     File outputDirectory,
     String finalName
   ) {
+    this.log = log;
     this.project = project;
     this.classifier = classifier;
     this.attach = attach;
     this.outputDirectory = outputDirectory;
     this.finalName = finalName;
+  }
+
+  @Override
+  public Log getLog() {
+    return log;
   }
 
   @Override

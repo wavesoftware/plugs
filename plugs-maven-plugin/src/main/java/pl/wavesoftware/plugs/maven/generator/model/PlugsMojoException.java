@@ -30,6 +30,8 @@ import java.util.Optional;
  * @since 0.1.0
  */
 public final class PlugsMojoException extends MojoExecutionException {
+  private static final long serialVersionUID = 20190115004728L;
+
   @Nullable
   private final ArrayList<BuildFailure> failures;
 

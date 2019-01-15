@@ -14,24 +14,21 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.maven.generator.model;
+package pl.wavesoftware.plugs.maven.generator.packager;
 
-import java.io.IOException;
+import org.apache.commons.compress.archivers.jar.JarArchiveEntry;
 
 /**
- * Encapsulates information about libraries that may be packed into the archive.
+ * An {@code EntryTransformer} that returns the entry unchanged.
  *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
- * @author Phillip Webb (Spring Boot project)
  * @since 0.1.0
  */
-@FunctionalInterface
-public interface Libraries {
+final class IdentityEntryTransformer implements EntryTransformer {
 
-  /**
-   * Iterate all relevant libraries.
-   * @param callback a callback for each relevant library.
-   * @throws IOException if the operation fails
-   */
-  void doWithLibraries(LibraryCallback callback) throws IOException;
+  @Override
+  public JarArchiveEntry transform(JarArchiveEntry jarEntry) {
+    return jarEntry;
+  }
+
 }

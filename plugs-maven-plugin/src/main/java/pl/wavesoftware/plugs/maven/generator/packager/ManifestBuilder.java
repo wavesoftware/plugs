@@ -14,24 +14,16 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.maven.generator.model;
+package pl.wavesoftware.plugs.maven.generator.packager;
 
 import java.io.IOException;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 
 /**
- * Encapsulates information about libraries that may be packed into the archive.
- *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
- * @author Phillip Webb (Spring Boot project)
  * @since 0.1.0
  */
-@FunctionalInterface
-public interface Libraries {
-
-  /**
-   * Iterate all relevant libraries.
-   * @param callback a callback for each relevant library.
-   * @throws IOException if the operation fails
-   */
-  void doWithLibraries(LibraryCallback callback) throws IOException;
+interface ManifestBuilder {
+  Manifest buildManifest(JarFile sourceJar) throws IOException;
 }

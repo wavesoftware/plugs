@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.maven.generator.model;
-
-import java.io.IOException;
+package pl.wavesoftware.plugs.maven.generator.packager;
 
 /**
- * Encapsulates information about libraries that may be packed into the archive.
- *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
- * @author Phillip Webb (Spring Boot project)
  * @since 0.1.0
  */
-@FunctionalInterface
-public interface Libraries {
+final class NeverUnpackHandler implements UnpackHandler {
 
-  /**
-   * Iterate all relevant libraries.
-   * @param callback a callback for each relevant library.
-   * @throws IOException if the operation fails
-   */
-  void doWithLibraries(LibraryCallback callback) throws IOException;
+  @Override
+  public boolean requiresUnpack(String name) {
+    return false;
+  }
+
+  @Override
+  public String sha256Hash(String name) {
+    throw new UnsupportedOperationException();
+  }
+
 }

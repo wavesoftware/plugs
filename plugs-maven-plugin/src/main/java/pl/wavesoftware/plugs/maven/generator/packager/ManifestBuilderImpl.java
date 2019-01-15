@@ -16,31 +16,33 @@
 
 package pl.wavesoftware.plugs.maven.generator.packager;
 
-import pl.wavesoftware.plugs.maven.generator.filter.Filter;
-import pl.wavesoftware.plugs.maven.generator.model.ExecutionConfiguration;
-
-import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.IOException;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
+
+import static pl.wavesoftware.plugs.maven.generator.packager.Constants.PLUGS_VERSION_ATTRIBUTE;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
 @Named
-final class PlugPackagerFactoryImpl implements PlugPackagerFactory {
-
-  private final ManifestBuilder manifestBuilder;
-
-  @Inject
-  PlugPackagerFactoryImpl(ManifestBuilder manifestBuilder) {
-    this.manifestBuilder = manifestBuilder;
-  }
-
+final class ManifestBuilderImpl implements ManifestBuilder {
   @Override
-  public PlugPackager create(
-    ExecutionConfiguration configuration,
-    Filter filter
-  ) {
-    return new PlugPackagerImpl(configuration, filter, manifestBuilder);
+  public Manifest buildManifest(JarFile source) throws IOException {
+    Manifest manifest = source.getManifest();
+    if (manifest == null) {
+      manifest = new Manifest();
+      manifest.getMainAttributes()
+        .putValue("Manifest-Version", "1.0");
+    }
+    manifest = new Manifest(manifest);
+    String plugsVersion = getClass().getPackage().getImplementationVersion();
+    manifest.getMainAttributes().putValue(
+      PLUGS_VERSION_ATTRIBUTE,
+      plugsVersion
+    );
+    return manifest;
   }
 }

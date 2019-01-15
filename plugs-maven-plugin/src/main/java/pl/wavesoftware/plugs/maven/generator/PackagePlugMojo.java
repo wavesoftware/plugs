@@ -51,7 +51,7 @@ import java.util.List;
   requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME,
   requiresDependencyCollection = ResolutionScope.COMPILE_PLUS_RUNTIME
 )
-public final class PackagePlugMojo extends AbstractMojo {
+final class PackagePlugMojo extends AbstractMojo {
 
   @SuppressWarnings("WeakerAccess")
   @API(status = Status.STABLE)
@@ -184,7 +184,7 @@ public final class PackagePlugMojo extends AbstractMojo {
     if (packager.needsRepackaging()) {
       buildAndReport(packager, configuration);
     } else {
-      getLog().info("Plug package " + finalName + " is up-to-date.");
+      getLog().info("Plug package " + packager.getTargetFile() + " is up-to-date.");
     }
   }
 
@@ -194,10 +194,10 @@ public final class PackagePlugMojo extends AbstractMojo {
   ) throws PlugsMojoException {
     try {
       packager.repackageAsPlug();
-      getLog().info("Building of " + finalName + " was successful.");
+      getLog().info("Building of " + packager.getTargetFile() + " was successful.");
       attachIfNeeded(packager, configuration);
     } catch (PlugsMojoException ex) {
-      getLog().error("Building of " + finalName + " has failed.");
+      getLog().error("Building of " + packager.getTargetFile() + " has failed.");
       ex.getFailures().ifPresent(failures -> {
         getLog().error("Reasons of failure:");
         for (BuildFailure failure : failures) {
@@ -226,6 +226,7 @@ public final class PackagePlugMojo extends AbstractMojo {
 
   private ExecutionConfiguration getConfiguration() {
     return new DefaultExecutionConfiguration(
+      getLog(),
       project,
       classifier,
       attach,

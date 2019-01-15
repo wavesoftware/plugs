@@ -16,6 +16,7 @@
 
 package pl.wavesoftware.plugs.maven.generator.model;
 
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
@@ -25,6 +26,7 @@ import java.io.File;
  * @since 0.1.0
  */
 public interface ExecutionConfiguration {
+  Log getLog();
   String getFinalName();
   String getClassifier();
   boolean shouldAttach();

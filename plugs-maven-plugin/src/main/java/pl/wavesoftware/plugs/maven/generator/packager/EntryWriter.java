@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.maven.generator.model;
+package pl.wavesoftware.plugs.maven.generator.packager;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
- * Encapsulates information about libraries that may be packed into the archive.
+ * Interface used to write jar entry date.
  *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
- * @author Phillip Webb (Spring Boot project)
  * @since 0.1.0
  */
-@FunctionalInterface
-public interface Libraries {
-
+interface EntryWriter {
   /**
-   * Iterate all relevant libraries.
-   * @param callback a callback for each relevant library.
-   * @throws IOException if the operation fails
+   * Write entry data to the specified output stream.
+   * @param outputStream the destination for the data
+   * @throws IOException in case of I/O errors
    */
-  void doWithLibraries(LibraryCallback callback) throws IOException;
+  void write(OutputStream outputStream) throws IOException;
+
 }
