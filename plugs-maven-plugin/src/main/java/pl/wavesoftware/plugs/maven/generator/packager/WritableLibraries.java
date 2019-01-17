@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static pl.wavesoftware.plugs.maven.generator.packager.Constants.LIBRARY_DESTINATION;
 import static pl.wavesoftware.plugs.maven.generator.packager.FileUtils.isZip;
 
 /**
@@ -30,8 +31,6 @@ import static pl.wavesoftware.plugs.maven.generator.packager.FileUtils.isZip;
  * @since 0.1.0
  */
 final class WritableLibraries implements UnpackHandler {
-
-  private static final String LIBRARY_DESTINATION = "PLUGS-INF/lib/";
 
   private final Map<String, Library> libraryEntryNames = new LinkedHashMap<>();
 

@@ -17,11 +17,15 @@
 package pl.wavesoftware.plugs.maven.generator.packager;
 
 import io.vavr.Lazy;
+import io.vavr.collection.HashSet;
 import org.apache.maven.artifact.Artifact;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.wavesoftware.plugs.maven.generator.filter.Filter;
 import pl.wavesoftware.plugs.maven.generator.model.ArtifactsLibraries;
 import pl.wavesoftware.plugs.maven.generator.model.ExecutionConfiguration;
 import pl.wavesoftware.plugs.maven.generator.model.Libraries;
+import pl.wavesoftware.plugs.maven.generator.model.Library;
 import pl.wavesoftware.plugs.maven.generator.model.PlugsMojoException;
 
 import javax.annotation.Nullable;
@@ -40,7 +44,10 @@ import static pl.wavesoftware.plugs.maven.generator.packager.Constants.PLUGS_VER
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-final class PlugPackagerImpl implements PlugPackager {
+final class PackagerImpl implements Packager {
+
+  private static final Logger LOGGER =
+    LoggerFactory.getLogger(PackagerImpl.class);
 
   private final ExecutionConfiguration configuration;
   private final Filter filter;
@@ -48,7 +55,7 @@ final class PlugPackagerImpl implements PlugPackager {
   private final Lazy<File> lazyTargetFile;
   private final Lazy<Artifact> lazySourceArtifact;
 
-  PlugPackagerImpl(
+  PackagerImpl(
     ExecutionConfiguration configuration,
     Filter filter,
     ManifestBuilder manifestBuilder
@@ -66,7 +73,7 @@ final class PlugPackagerImpl implements PlugPackager {
   }
 
   @Override
-  public void repackageAsPlug() throws PlugsMojoException {
+  public void repackage() throws PlugsMojoException {
     Artifact source = getSourceArtifact();
     File target = getTargetFile();
     Set<Artifact> artifacts = filter.filterDependencies(
@@ -79,7 +86,7 @@ final class PlugPackagerImpl implements PlugPackager {
     );
 
     try {
-      repackage(source.getFile(), target, libraries);
+      repackage(source, target, libraries);
     } catch (IOException ex) {
       throw new PlugsMojoException(ex.getMessage(), ex);
     }
@@ -102,6 +109,7 @@ final class PlugPackagerImpl implements PlugPackager {
     }
     try (JarFile jarFile = new JarFile(targetFile)) {
       Manifest manifest = jarFile.getManifest();
+      LOGGER.warn("Better decision of noop is needed, based on source hash.");
       return manifest != null
         && manifest.getMainAttributes()
         .getValue(PLUGS_VERSION_ATTRIBUTE) != null;
@@ -109,27 +117,30 @@ final class PlugPackagerImpl implements PlugPackager {
   }
 
   private void repackage(
-    File source,
+    Artifact source,
     File destination,
     Libraries libraries
   ) throws IOException {
     destination = destination.getAbsoluteFile();
-    Files.delete(destination.toPath());
-    try (JarFile jarFileSource = new JarFile(source)) {
-      repackage(jarFileSource, destination, libraries);
-    }
-  }
-
-  private void repackage(
-    JarFile sourceJar,
-    File destination,
-    Libraries libraries
-  ) throws IOException {
+    Files.deleteIfExists(destination.toPath());
     WritableLibraries writeableLibraries = new WritableLibraries(libraries);
+    LibrariesCollector collector = new LibrariesCollector();
     try (JarWriter writer = new JarWriter(destination)) {
-      writer.writeManifest(manifestBuilder.buildManifest(sourceJar));
-      writer.writeEntries(sourceJar, writeableLibraries);
+      writer.addListener(
+        LibraryHasBeenWritten.class,
+        event -> collector.collect(event.getLibrary())
+      );
       writeableLibraries.write(writer);
+      LOGGER.warn("Write source artifact compiled sources");
+
+      LOGGER.warn("Create real imports, from provided scope");
+      HashSet<Library> imports = HashSet.empty();
+      Manifest manifest = manifestBuilder.buildManifest(
+        source,
+        collector.getCollected(),
+        imports
+      );
+      writer.writeManifest(manifest);
     }
   }
 

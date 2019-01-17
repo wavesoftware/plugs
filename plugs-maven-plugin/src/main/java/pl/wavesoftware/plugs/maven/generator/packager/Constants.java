@@ -22,6 +22,7 @@ package pl.wavesoftware.plugs.maven.generator.packager;
  */
 final class Constants {
   static final String PLUGS_VERSION_ATTRIBUTE = "Plugs-Version";
+  static final String LIBRARY_DESTINATION = "PLUGS-INF/lib/";
 
   private Constants() {
     // non reachable

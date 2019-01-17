@@ -81,4 +81,9 @@ interface ArchiveWriter {
     EntryTransformer entryTransformer,
     UnpackHandler unpackHandler
   ) throws IOException;
+
+  <E extends ArchiveWriterEvent> void addListener(
+    Class<E> eventType,
+    ArchiveWriterListener<E> listener
+  );
 }

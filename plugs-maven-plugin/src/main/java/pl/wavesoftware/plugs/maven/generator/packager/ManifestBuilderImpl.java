@@ -16,9 +16,14 @@
 
 package pl.wavesoftware.plugs.maven.generator.packager;
 
+import io.vavr.collection.Set;
+import org.apache.maven.artifact.Artifact;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import pl.wavesoftware.plugs.maven.generator.model.Library;
+
 import javax.inject.Named;
-import java.io.IOException;
-import java.util.jar.JarFile;
+import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 import static pl.wavesoftware.plugs.maven.generator.packager.Constants.PLUGS_VERSION_ATTRIBUTE;
@@ -29,20 +34,28 @@ import static pl.wavesoftware.plugs.maven.generator.packager.Constants.PLUGS_VER
  */
 @Named
 final class ManifestBuilderImpl implements ManifestBuilder {
+
+  private static final Logger LOGGER =
+    LoggerFactory.getLogger(ManifestBuilderImpl.class);
+
   @Override
-  public Manifest buildManifest(JarFile source) throws IOException {
-    Manifest manifest = source.getManifest();
-    if (manifest == null) {
-      manifest = new Manifest();
-      manifest.getMainAttributes()
-        .putValue("Manifest-Version", "1.0");
-    }
-    manifest = new Manifest(manifest);
+  public Manifest buildManifest(
+    Artifact artifact,
+    Set<Library> dependencies,
+    Set<Library> imports
+  ) {
+    Manifest manifest = new Manifest();
+    Attributes attributes = manifest.getMainAttributes();
     String plugsVersion = getClass().getPackage().getImplementationVersion();
-    manifest.getMainAttributes().putValue(
-      PLUGS_VERSION_ATTRIBUTE,
-      plugsVersion
-    );
+
+    attributes.putValue("Manifest-Version", "1.0");
+    attributes.putValue(PLUGS_VERSION_ATTRIBUTE, plugsVersion);
+
+    LOGGER.warn("Define dependencies");
+    LOGGER.warn("Define imports");
+    LOGGER.warn("Define sources");
+    LOGGER.warn("Define name & version");
+
     return manifest;
   }
 }

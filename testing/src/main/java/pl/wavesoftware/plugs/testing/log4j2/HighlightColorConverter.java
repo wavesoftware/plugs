@@ -67,7 +67,7 @@ public final class HighlightColorConverter extends LogEventPatternConverter {
 
   static {
     Map<String, AnsiElement> ansiElements = new HashMap<>();
-    ansiElements.put("faint", AnsiColor.WHITE);
+    ansiElements.put("faint", AnsiComposite.of(AnsiColor.WHITE, AnsiStyle.FAINT));
     ansiElements.put("black", AnsiColor.BLACK);
     ansiElements.put("red", AnsiColor.RED);
     ansiElements.put("green", AnsiColor.GREEN);

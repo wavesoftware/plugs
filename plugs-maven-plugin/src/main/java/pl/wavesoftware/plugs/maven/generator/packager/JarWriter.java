@@ -16,6 +16,8 @@
 
 package pl.wavesoftware.plugs.maven.generator.packager;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import org.apache.commons.compress.archivers.jar.JarArchiveEntry;
 import org.apache.commons.compress.archivers.jar.JarArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.UnixStat;
@@ -59,6 +61,10 @@ final class JarWriter implements ArchiveWriter, AutoCloseable {
 
   private final JarArchiveOutputStream jarOutput;
   private final Set<String> writtenEntries = new HashSet<>();
+  private final Multimap<
+    Class<? extends ArchiveWriterEvent>,
+    ArchiveWriterListener<?>
+    > listeners = HashMultimap.create();
 
   /**
    * Create a new {@link JarWriter} instance.
@@ -67,7 +73,7 @@ final class JarWriter implements ArchiveWriter, AutoCloseable {
    * @throws IOException           if the file cannot be opened
    * @throws FileNotFoundException if the file cannot be found
    */
-  public JarWriter(File file) throws IOException {
+  JarWriter(File file) throws IOException {
     FileOutputStream fileOutputStream = new FileOutputStream(file);
     this.jarOutput = new JarArchiveOutputStream(fileOutputStream);
     this.jarOutput.setEncoding(StandardCharsets.UTF_8.displayName());
@@ -102,6 +108,13 @@ final class JarWriter implements ArchiveWriter, AutoCloseable {
       new InputStreamEntryWriter(new FileInputStream(file), true),
       new LibraryUnpackHandler(library)
     );
+    LibraryHasBeenWritten event = new LibraryHasBeenWritten(library);
+    for (ArchiveWriterListener<?> listener : listeners.get(LibraryHasBeenWritten.class)) {
+      @SuppressWarnings("unchecked")
+      ArchiveWriterListener<LibraryHasBeenWritten> libraryListener =
+        (ArchiveWriterListener<LibraryHasBeenWritten>) listener;
+      libraryListener.handle(event);
+    }
   }
 
   @Override
@@ -135,7 +148,16 @@ final class JarWriter implements ArchiveWriter, AutoCloseable {
     }
   }
 
-  private void setUpEntry(JarFile jarFile, JarArchiveEntry entry) throws IOException {
+  @Override
+  public <E extends ArchiveWriterEvent> void addListener(
+    Class<E> eventType,
+    ArchiveWriterListener<E> listener
+  ) {
+    listeners.put(eventType, listener);
+  }
+
+  private static void setUpEntry(JarFile jarFile, JarArchiveEntry entry)
+    throws IOException {
     try (ZipHeaderPeekInputStream inputStream = new ZipHeaderPeekInputStream(
       jarFile.getInputStream(entry))) {
       if (inputStream.hasZipHeader() && entry.getMethod() != ZipEntry.STORED) {

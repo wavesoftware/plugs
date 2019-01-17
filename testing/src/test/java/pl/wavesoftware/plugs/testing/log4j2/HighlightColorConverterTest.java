@@ -71,12 +71,12 @@ class HighlightColorConverterTest {
         .hasSize(EXPECTED_SIZE)
         .extracting(CollectorManager.CollectedEvent::getFormattedMessage)
         .containsExactly(
-          "\u001B[32m INFO\u001B[0;39m \u001B[33m[      main]" +
-            "\u001B[0;39m \u001B[36mp.w.p.t.l.HighlightColorConverterTest" +
-            "   \u001B[0;39m \u001B[37m:\u001B[0;39m info\n",
-          "\u001B[31;1mERROR\u001B[0;39m \u001B[33m[      main]" +
-            "\u001B[0;39m \u001B[36mp.w.p.t.l.HighlightColorConverterTest" +
-            "   \u001B[0;39m \u001B[37m:\u001B[0;39m error\n"
+          "\u001B[32m INFO\u001B[0;39m \u001B[33m[      main]\u001B[0;39m " +
+            "\u001B[36mp.w.p.t.l.HighlightColorConverterTest   " +
+            "\u001B[0;39m \u001B[37;2m:\u001B[0;39m info\n",
+          "\u001B[31;1mERROR\u001B[0;39m \u001B[33m[      main]\u001B[0;39m " +
+            "\u001B[36mp.w.p.t.l.HighlightColorConverterTest   " +
+            "\u001B[0;39m \u001B[37;2m:\u001B[0;39m error\n"
         );
     }
   }

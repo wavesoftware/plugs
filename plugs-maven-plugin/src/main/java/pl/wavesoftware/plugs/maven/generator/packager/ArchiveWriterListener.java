@@ -16,31 +16,18 @@
 
 package pl.wavesoftware.plugs.maven.generator.packager;
 
-import io.vavr.collection.Set;
-import org.apache.maven.artifact.Artifact;
-import pl.wavesoftware.plugs.maven.generator.model.Library;
-
-import java.util.jar.Manifest;
-
 /**
- * A builder that builds a OSGi manifest for a Plug
+ * A listener for specific archive writer event
  *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-interface ManifestBuilder {
+interface ArchiveWriterListener<E extends ArchiveWriterEvent> {
 
   /**
-   * Builds a OSGi manifest of a Jar based on artifact information
+   * Handles an raised event
    *
-   * @param artifact     an artifact
-   * @param dependencies dependencies of an artifact that ware embedded in Jar
-   * @param imports      a imports to be declared
-   * @return a OSGi manifest for a Plug
+   * @param event an event that was raised
    */
-  Manifest buildManifest(
-    Artifact artifact,
-    Set<Library> dependencies,
-    Set<Library> imports
-  );
+  void handle(E event);
 }

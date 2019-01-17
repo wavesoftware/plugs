@@ -18,7 +18,7 @@
                strict="true">
   <Properties>
     <Property
-      name="CONSOLE_LOG_PATTERN">%hl{%5p} %hl{%d{HH:mm:ss.SSS}}{faint} %hl{[%10.10t]}{yellow} %hl{%-40.40c{1.}}{cyan} %hl{:}{faint} %m%n%ex</Property>
+      name="CONSOLE_LOG_PATTERN">%hl{%5p} %hl{%d{HH:mm:ss.SSS}}{faint} %hl{[%10.10t]}{yellow} %hl{%-40.40c{1.}}{cyan} %hl{:}{faint} %m%n%hl{%ex}</Property>
   </Properties>
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT" follow="true">

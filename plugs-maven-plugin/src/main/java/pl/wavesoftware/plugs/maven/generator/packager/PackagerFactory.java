@@ -20,9 +20,20 @@ import pl.wavesoftware.plugs.maven.generator.filter.Filter;
 import pl.wavesoftware.plugs.maven.generator.model.ExecutionConfiguration;
 
 /**
+ * A packager factory to produce instances of {@link Packager}.
+ *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
+ * @see Packager
  * @since 0.1.0
  */
-public interface PlugPackagerFactory {
-  PlugPackager create(ExecutionConfiguration configuration, Filter filter);
+public interface PackagerFactory {
+
+  /**
+   * Creates a packages from execution configuration and filter of dependencies.
+   *
+   * @param configuration a configuration of execution
+   * @param filter        a filter for dependencies
+   * @return a created packager instance
+   */
+  Packager create(ExecutionConfiguration configuration, Filter filter);
 }

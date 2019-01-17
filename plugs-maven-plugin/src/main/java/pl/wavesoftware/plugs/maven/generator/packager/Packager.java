@@ -22,13 +22,21 @@ import pl.wavesoftware.plugs.maven.generator.model.PlugsMojoException;
 import java.io.File;
 
 /**
- * A Plugs packager that repackage jar as a plug module. All dependencies will
- * be embedded as a internal dependencies.
+ * <p>
+ * A Plugs packager that package jar as a plug module.
+ *
+ * <p>
+ * Code will be embedded in standard jar location. All dependencies will be
+ * embedded as a internal dependencies. Dependencies in provided scope will
+ * become imports in bundle manifest.
+ * <p>
+ * All that above means that Plug module is usable as a standard Jar, but
+ * have extra parts that makes it usable as a OSGi bundle.
  *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public interface PlugPackager {
+public interface Packager {
   /**
    * Checks where repackage action is required
    *
@@ -41,7 +49,7 @@ public interface PlugPackager {
    *
    * @throws PlugsMojoException if something goes wrong in repackage process
    */
-  void repackageAsPlug() throws PlugsMojoException;
+  void repackage() throws PlugsMojoException;
 
   /**
    * Gets a source artifact that will be a base for re-packaging as a Plug

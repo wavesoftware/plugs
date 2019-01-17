@@ -17,6 +17,7 @@
 package pl.wavesoftware.plugs.maven.generator;
 
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -32,8 +33,8 @@ import pl.wavesoftware.plugs.maven.generator.model.Exclude;
 import pl.wavesoftware.plugs.maven.generator.model.ExecutionConfiguration;
 import pl.wavesoftware.plugs.maven.generator.model.Include;
 import pl.wavesoftware.plugs.maven.generator.model.PlugsMojoException;
-import pl.wavesoftware.plugs.maven.generator.packager.PlugPackager;
-import pl.wavesoftware.plugs.maven.generator.packager.PlugPackagerFactory;
+import pl.wavesoftware.plugs.maven.generator.packager.Packager;
+import pl.wavesoftware.plugs.maven.generator.packager.PackagerFactory;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -60,7 +61,7 @@ final class PackagePlugMojo extends AbstractMojo {
   /**
    * The package factory
    */
-  private final PlugPackagerFactory packagerFactory;
+  private final PackagerFactory packagerFactory;
 
   /**
    * The filter factory
@@ -155,7 +156,7 @@ final class PackagePlugMojo extends AbstractMojo {
 
   @Inject
   PackagePlugMojo(
-    PlugPackagerFactory packagerFactory,
+    PackagerFactory packagerFactory,
     FilterFactory filterFactory,
     MavenProjectHelper projectHelper
   ) {
@@ -165,7 +166,7 @@ final class PackagePlugMojo extends AbstractMojo {
   }
 
   @Override
-  public void execute() throws PlugsMojoException {
+  public void execute() throws MojoExecutionException {
     if ("pom".equals(project.getPackaging())) {
       getLog().debug(GOAL + " goal could not be applied to pom project.");
       return;
@@ -177,10 +178,10 @@ final class PackagePlugMojo extends AbstractMojo {
     build();
   }
 
-  private void build() throws PlugsMojoException {
+  private void build() throws MojoExecutionException {
     Filter filter = filterFactory.create(includes, excludes);
     ExecutionConfiguration configuration = getConfiguration();
-    PlugPackager packager = packagerFactory.create(configuration, filter);
+    Packager packager = packagerFactory.create(configuration, filter);
     if (packager.needsRepackaging()) {
       buildAndReport(packager, configuration);
     } else {
@@ -189,11 +190,11 @@ final class PackagePlugMojo extends AbstractMojo {
   }
 
   private void buildAndReport(
-    PlugPackager packager,
+    Packager packager,
     ExecutionConfiguration configuration
-  ) throws PlugsMojoException {
+  ) throws MojoExecutionException {
     try {
-      packager.repackageAsPlug();
+      packager.repackage();
       getLog().info("Building of " + packager.getTargetFile() + " was successful.");
       attachIfNeeded(packager, configuration);
     } catch (PlugsMojoException ex) {
@@ -209,7 +210,7 @@ final class PackagePlugMojo extends AbstractMojo {
   }
 
   private void attachIfNeeded(
-    PlugPackager packager,
+    Packager packager,
     ExecutionConfiguration configuration
   ) {
     if (configuration.shouldAttach()) {

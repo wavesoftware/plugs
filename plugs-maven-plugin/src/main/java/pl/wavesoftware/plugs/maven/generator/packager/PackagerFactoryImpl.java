@@ -27,20 +27,20 @@ import javax.inject.Named;
  * @since 0.1.0
  */
 @Named
-final class PlugPackagerFactoryImpl implements PlugPackagerFactory {
+final class PackagerFactoryImpl implements PackagerFactory {
 
   private final ManifestBuilder manifestBuilder;
 
   @Inject
-  PlugPackagerFactoryImpl(ManifestBuilder manifestBuilder) {
+  PackagerFactoryImpl(ManifestBuilder manifestBuilder) {
     this.manifestBuilder = manifestBuilder;
   }
 
   @Override
-  public PlugPackager create(
+  public Packager create(
     ExecutionConfiguration configuration,
     Filter filter
   ) {
-    return new PlugPackagerImpl(configuration, filter, manifestBuilder);
+    return new PackagerImpl(configuration, filter, manifestBuilder);
   }
 }
