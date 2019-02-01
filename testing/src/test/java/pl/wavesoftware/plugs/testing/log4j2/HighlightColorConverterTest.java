@@ -34,6 +34,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.wavesoftware.plugs.testing.log4j2.CollectorManager.CollectedEvent;
 
 import java.util.stream.Stream;
 
@@ -69,7 +70,7 @@ class HighlightColorConverterTest {
       // then
       assertThat(manager.getCollected())
         .hasSize(EXPECTED_SIZE)
-        .extracting(CollectorManager.CollectedEvent::getFormattedMessage)
+        .extracting(this::formattedMessageOf)
         .containsExactly(
           "\u001B[32m INFO\u001B[0;39m \u001B[33m[      main]\u001B[0;39m " +
             "\u001B[36mp.w.p.t.l.HighlightColorConverterTest   " +
@@ -78,6 +79,10 @@ class HighlightColorConverterTest {
             "\u001B[36mp.w.p.t.l.HighlightColorConverterTest   " +
             "\u001B[0;39m \u001B[37;2m:\u001B[0;39m error\n"
         );
+    }
+
+    private String formattedMessageOf(CollectedEvent event) {
+      return event.getFormattedMessage().replace("\r\n", "\n");
     }
   }
 

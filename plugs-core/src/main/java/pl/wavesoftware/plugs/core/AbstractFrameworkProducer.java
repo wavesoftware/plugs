@@ -47,7 +47,7 @@ public abstract class AbstractFrameworkProducer implements FrameworkProducer {
     Framework framework
   ) {
     tryToExecute(
-      () -> framework.init(listeners.toJavaArray(FrameworkListener.class)),
+      () -> framework.init(listeners.toJavaArray(FrameworkListener[]::new)),
       "20190105:114131"
     );
   }
