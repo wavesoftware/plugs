@@ -148,6 +148,11 @@ final class DefaultPackager implements Packager {
       "Can't remove previously created target file: {}",
       destination
     );
+    Path parentPath = destination.getParent();
+    tring(() -> Files.createDirectories(parentPath)).or(
+      "Can't create directory for destination: {}",
+      parentPath
+    );
     WritableLibraries writeableLibraries =
       tring(() -> new WritableLibraries(libraries)).or(
         "Can't read all provided libraries"
