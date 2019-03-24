@@ -86,14 +86,19 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven.resolver</groupId>
-      <artifactId>maven-resolver-connector-basic</artifactId>
-      <scope>provided</scope>
+      <groupId>org.eclipse.aether</groupId>
+      <artifactId>aether-connector-basic</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven.resolver</groupId>
-      <artifactId>maven-resolver-transport-http</artifactId>
-      <scope>provided</scope>
+      <groupId>org.eclipse.aether</groupId>
+      <artifactId>aether-transport-wagon</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-http</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <dependency>

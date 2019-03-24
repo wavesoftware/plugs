@@ -20,16 +20,7 @@
   <artifactId>simpliest</artifactId>
   <version>0.1.0</version>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>pl.wavesoftware.plugs</groupId>
-        <artifactId>plugs-maven-plugin</artifactId>
-        <version>@version@</version>
-        <configuration>
-          <classifier>xxxx</classifier>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+  <properties>
+    <plugs.classifier>plg</plugs.classifier>
+  </properties>
 </project>

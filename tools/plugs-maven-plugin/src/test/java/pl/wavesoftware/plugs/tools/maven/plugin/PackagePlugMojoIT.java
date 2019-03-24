@@ -98,7 +98,7 @@ class PackagePlugMojoIT {
     verify(log).isInfoEnabled();
     verify(log).info(contains("Building plug: "));
     verify(log).debug(contains(
-      "simpliest-0.1.0-plug.jar was successful."
+      "simpliest-0.1.0-plg.jar was successful."
     ));
     verify(log).debug(contains("Artifact attached to the build"));
   }
