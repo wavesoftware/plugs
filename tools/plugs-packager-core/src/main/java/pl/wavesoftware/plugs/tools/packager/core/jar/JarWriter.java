@@ -118,12 +118,12 @@ public final class JarWriter implements ArchiveWriter, AutoCloseable {
 
   @Override
   public void writeEntries(JarFile jarFile) throws IOException {
-    this.writeEntries(jarFile, new IdentityEntryTransformer(), NEVER_UNPACK);
+    this.writeEntries(jarFile, new SkipManifestMfTransformer(), NEVER_UNPACK);
   }
 
   @Override
   public void writeEntries(JarFile jarFile, UnpackHandler unpackHandler) throws IOException {
-    this.writeEntries(jarFile, new IdentityEntryTransformer(), unpackHandler);
+    this.writeEntries(jarFile, new SkipManifestMfTransformer(), unpackHandler);
   }
 
   @Override
@@ -233,9 +233,11 @@ public final class JarWriter implements ArchiveWriter, AutoCloseable {
     UnpackHandler unpackHandler
   ) throws IOException {
     String parent = entry.getName();
+    boolean isDirectory = false;
     if (parent.endsWith("/")) {
       parent = parent.substring(0, parent.length() - 1);
       entry.setUnixMode(UnixStat.DIR_FLAG | UnixStat.DEFAULT_DIR_PERM);
+      isDirectory = true;
     } else {
       entry.setUnixMode(UnixStat.FILE_FLAG | UnixStat.DEFAULT_FILE_PERM);
     }
@@ -253,6 +255,13 @@ public final class JarWriter implements ArchiveWriter, AutoCloseable {
         entryWriter.write(this.jarOutput);
       }
       this.jarOutput.closeArchiveEntry();
+    } else {
+      if (!isDirectory) {
+        LOGGER.warn(
+          "Skipping resource, as it was already written: {}",
+          entry.getName()
+        );
+      }
     }
   }
 

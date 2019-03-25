@@ -31,6 +31,7 @@
 
   <properties>
     <project.rootdir>${project.basedir}/..</project.rootdir>
+    <unpack-manifestmf.skip>false</unpack-manifestmf.skip>
   </properties>
 
   <dependencies>

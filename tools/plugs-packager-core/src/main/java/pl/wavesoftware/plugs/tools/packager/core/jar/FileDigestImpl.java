@@ -37,7 +37,6 @@ final class FileDigestImpl implements FileDigest {
     CRC32 digest = new CRC32();
     digest.update(path.toAbsolutePath().toString().getBytes(UTF_8));
     digest.update(Long.toHexString(Files.size(path)).getBytes(UTF_8));
-    digest.update(Files.getLastModifiedTime(path).toString().getBytes(UTF_8));
     return Long.toHexString(Math.abs(digest.getValue()));
   }
 }

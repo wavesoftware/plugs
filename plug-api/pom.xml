@@ -32,5 +32,26 @@
 
   <properties>
     <project.rootdir>${project.basedir}/..</project.rootdir>
+    <unpack-manifestmf.skip>false</unpack-manifestmf.skip>
   </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>pl.wavesoftware</groupId>
+      <artifactId>eid-exceptions</artifactId>
+    </dependency>
+
+    <!-- Tests -->
+    <dependency>
+      <groupId>pl.wavesoftware.plugs</groupId>
+      <artifactId>testing</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.zafarkhaja</groupId>
+      <artifactId>java-semver</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>

@@ -19,16 +19,17 @@ package pl.wavesoftware.plugs.tools.packager.core.jar;
 import org.apache.commons.compress.archivers.jar.JarArchiveEntry;
 
 import javax.annotation.Nullable;
-import java.util.jar.JarEntry;
 
-/**
- * An {@code EntryTransformer} enables the transformation of {@link JarEntry jar
- * entries} during the writing process.
- *
- * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
- * @since 0.1.0
- */
-interface EntryTransformer {
+final class SkipManifestMfTransformer implements EntryTransformer {
+
+  private final EntryTransformer delegate = new IdentityEntryTransformer();
+
+  @Override
   @Nullable
-  JarArchiveEntry transform(JarArchiveEntry jarEntry);
+  public JarArchiveEntry transform(JarArchiveEntry jarEntry) {
+    if (jarEntry.getName().equals("META-INF/MANIFEST.MF")) {
+      return null;
+    }
+    return delegate.transform(jarEntry);
+  }
 }

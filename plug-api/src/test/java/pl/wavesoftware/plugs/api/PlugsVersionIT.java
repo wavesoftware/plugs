@@ -14,21 +14,28 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.tools.packager.core.jar;
+package pl.wavesoftware.plugs.api;
 
-import org.apache.commons.compress.archivers.jar.JarArchiveEntry;
+import com.github.zafarkhaja.semver.Version;
+import org.junit.jupiter.api.Test;
 
-import javax.annotation.Nullable;
-import java.util.jar.JarEntry;
+import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * An {@code EntryTransformer} enables the transformation of {@link JarEntry jar
- * entries} during the writing process.
- *
- * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
- * @since 0.1.0
- */
-interface EntryTransformer {
-  @Nullable
-  JarArchiveEntry transform(JarArchiveEntry jarEntry);
+class PlugsVersionIT {
+
+  private static final Version BASE = Version.forIntegers(0, 0, 0);
+
+  @Test
+  void getVersion() {
+    Version version = Version.valueOf(PlugsVersion.getVersion());
+
+    assertThat(version.greaterThanOrEqualTo(BASE)).isTrue();
+  }
+
+  @Test
+  void manually() {
+    Version version = Version.valueOf(PlugsVersion.manuallyRead());
+
+    assertThat(version.greaterThanOrEqualTo(BASE)).isTrue();
+  }
 }

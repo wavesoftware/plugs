@@ -18,6 +18,7 @@ package pl.wavesoftware.plugs.tools.packager.core.manifest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.wavesoftware.plugs.api.PlugsVersion;
 import pl.wavesoftware.plugs.tools.packager.core.jar.FileDigest;
 import pl.wavesoftware.plugs.tools.packager.core.model.Project;
 import pl.wavesoftware.plugs.tools.packager.core.model.RepackageFailed;
@@ -67,7 +68,7 @@ final class ManifestBuilderImpl implements ManifestBuilder {
     }
     manifest = new Manifest(manifest);
     Attributes attributes = manifest.getMainAttributes();
-    String plugsVersion = getClass().getPackage().getImplementationVersion();
+    String plugsVersion = PlugsVersion.getVersion();
     CharSequence hash = tring(() -> digest.digest(sourcePath)).or(
       "Can't calculate digest from source jar: {}",
       sourcePath
