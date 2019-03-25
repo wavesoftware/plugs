@@ -53,10 +53,6 @@
     </developer>
   </developers>
 
-  <prerequisites>
-    <maven>3.3</maven>
-  </prerequisites>
-
   <modules>
     <module>plug-api</module>
     <module>plugs-core</module>
@@ -97,10 +93,13 @@
   </distributionManagement>
 
   <properties>
+    <project.rootdir>${project.basedir}</project.rootdir>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <sonar.working.directory>${project.build.directory}/sonar</sonar.working.directory>
     <sonar.host.url>https://sonar.wavesoftware.pl</sonar.host.url>
+    <sonar.jacoco.dataPath>${project.rootdir}/target/jacoco.exec</sonar.jacoco.dataPath>
+    <sonar.jacoco.itDataPath>${project.rootdir}/target/jacoco-it.exec</sonar.jacoco.itDataPath>
     <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
     <java.source.version>8</java.source.version>
     <sonar.java.source>${java.source.version}</sonar.java.source>
@@ -216,16 +215,41 @@
               <id>jacoco-initialize</id>
               <goals>
                 <goal>prepare-agent</goal>
+              </goals>
+              <configuration>
+                <append>true</append>
+                <destFile>${sonar.jacoco.dataPath}</destFile>
+              </configuration>
+            </execution>
+            <execution>
+              <id>jacoco-initialize-it</id>
+              <goals>
                 <goal>prepare-agent-integration</goal>
               </goals>
+              <configuration>
+                <append>true</append>
+                <destFile>${sonar.jacoco.itDataPath}</destFile>
+              </configuration>
             </execution>
             <execution>
               <id>jacoco-site</id>
-              <phase>post-integration-test</phase>
+              <phase>test</phase>
               <goals>
                 <goal>report</goal>
+              </goals>
+              <configuration>
+                <dataFile>${sonar.jacoco.dataPath}</dataFile>
+              </configuration>
+            </execution>
+            <execution>
+              <id>jacoco-site-it</id>
+              <phase>post-integration-test</phase>
+              <goals>
                 <goal>report-integration</goal>
               </goals>
+              <configuration>
+                <dataFile>${sonar.jacoco.itDataPath}</dataFile>
+              </configuration>
             </execution>
           </executions>
           <configuration>

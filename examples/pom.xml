@@ -32,4 +32,8 @@
   <packaging>pom</packaging>
 
   <name>Plugs :: Examples Parent</name>
+
+  <properties>
+    <project.rootdir>${project.basedir}/../..</project.rootdir>
+  </properties>
 </project>

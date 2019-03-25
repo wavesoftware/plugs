@@ -29,6 +29,10 @@
   <artifactId>plugs-felix</artifactId>
   <name>Plugs :: Felix</name>
 
+  <properties>
+    <project.rootdir>${project.basedir}/..</project.rootdir>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>pl.wavesoftware.plugs</groupId>

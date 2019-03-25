@@ -32,6 +32,10 @@
   <packaging>pom</packaging>
   <name>Plugs :: Tools Parent</name>
 
+  <properties>
+    <project.rootdir>${project.basedir}/../..</project.rootdir>
+  </properties>
+
   <modules>
     <module>plugs-packager-core</module>
     <module>plugs-maven-plugin</module>

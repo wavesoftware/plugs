@@ -30,6 +30,10 @@
 
   <name>Plugs :: Plugs Core</name>
 
+  <properties>
+    <project.rootdir>${project.basedir}/..</project.rootdir>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.apiguardian</groupId>

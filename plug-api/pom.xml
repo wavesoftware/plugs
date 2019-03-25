@@ -29,4 +29,8 @@
   <artifactId>plug-api</artifactId>
 
   <name>Plugs :: Plug API</name>
+
+  <properties>
+    <project.rootdir>${project.basedir}/..</project.rootdir>
+  </properties>
 </project>

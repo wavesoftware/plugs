@@ -31,6 +31,10 @@
   <packaging>maven-plugin</packaging>
   <name>Plugs :: Tools :: Plugs Maven Plugin</name>
 
+  <prerequisites>
+    <maven>3.3</maven>
+  </prerequisites>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
