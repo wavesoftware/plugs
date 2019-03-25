@@ -100,6 +100,7 @@
     <sonar.host.url>https://sonar.wavesoftware.pl</sonar.host.url>
     <sonar.jacoco.dataPath>${project.rootdir}/target/jacoco.exec</sonar.jacoco.dataPath>
     <sonar.jacoco.itDataPath>${project.rootdir}/target/jacoco-it.exec</sonar.jacoco.itDataPath>
+    <sonar.jacoco.reportPaths>${project.rootdir}/target/jacoco.exec,${project.rootdir}/target/jacoco-it.exec</sonar.jacoco.reportPaths>
     <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
     <java.source.version>8</java.source.version>
     <sonar.java.source>${java.source.version}</sonar.java.source>

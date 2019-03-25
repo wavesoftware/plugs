@@ -20,97 +20,157 @@ import org.apache.maven.cli.logging.Slf4jLogger;
 import org.apache.maven.monitor.logging.DefaultLog;
 import org.apache.maven.plugin.logging.Log;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
-import pl.wavesoftware.maven.testing.junit5.MavenInvoker;
-import pl.wavesoftware.maven.testing.junit5.MavenInvokerExtension;
-import pl.wavesoftware.maven.testing.junit5.MavenProjectCustomizer;
-import pl.wavesoftware.maven.testing.junit5.MojoExtension;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import pl.wavesoftware.maven.testing.junit5.MojoFactory;
 
-import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
-import static pl.wavesoftware.eid.utils.EidExecutions.tryToExecute;
-import static pl.wavesoftware.eid.utils.EidPreconditions.checkNotNull;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-@ExtendWith({
-  MojoExtension.class,
-  MavenInvokerExtension.class,
-  MockitoExtension.class
-})
 class PackagePlugMojoIT {
 
-  private final Path pomDirectory = Paths.get("simpliest");
-  private final MavenProjectCustomizer customizer = project -> {
-    File destination = fromTargetClasses(pomDirectory)
-      .resolve("target")
-      .resolve(project.getBuild().getFinalName() + "." + project.getPackaging())
-      .toFile();
-    project.getArtifact().setFile(destination);
-  };
-
-  @Spy
-  private Log log = new DefaultLog(new Slf4jLogger(
+  private static final Log DEFAULT_LOG = new DefaultLog(new Slf4jLogger(
     LoggerFactory.getLogger(PackagePlugMojoIT.class)
   ));
 
-  @BeforeEach
-  void before(MavenInvoker invoker) {
-    invoker
-      .forDirectory(fromTargetClasses(pomDirectory))
-      .execute("clean", "compile", "jar:jar");
+  @Nested
+  @ExtendWith(MockitoExtension.class)
+  class Simpliest extends BaseMavenTestCase {
+    @Spy
+    private Log log = DEFAULT_LOG;
+
+    Simpliest() {
+      super(Paths.get("simpliest"));
+    }
+
+    @AfterEach
+    void after() {
+      Mockito.verifyNoMoreInteractions(log);
+      Mockito.validateMockitoUsage();
+    }
+
+    @Test
+    @DisplayName("Execute mojo on simpliest project")
+    void execute(MojoFactory factory) {
+      // given
+      PackagePlugMojo mojo = factory
+        .customizer(getCustomizer())
+        .builder(PackagePlugMojo.class)
+        .withPomDirectory(getPomDirectory())
+        .build(PackagePlugMojo.GOAL);
+      mojo.setLog(log);
+
+      // when & then
+      assertThatCode(mojo::execute).doesNotThrowAnyException();
+      verify(log, atLeastOnce()).isDebugEnabled();
+      verify(log).isInfoEnabled();
+      verify(log).info(contains("Building plug: "));
+      verify(log).debug(contains(
+        "simpliest-0.1.0-plg.jar was successful."
+      ));
+      verify(log).debug(contains("Artifact attached to the build"));
+      Resource resource = new ClassPathResource(
+        "/simpliest/target/simpliest-0.1.0-plg.jar"
+      );
+      assertThat(resource.exists()).isTrue();
+    }
   }
 
-  @AfterEach
-  void after() {
-    Mockito.verifyNoMoreInteractions(log);
-    Mockito.validateMockitoUsage();
+  @Nested
+  class Pom extends BaseMavenTestCase {
+
+    Pom() {
+      super(Paths.get("pom"));
+    }
+
+    @Test
+    @DisplayName("Execute mojo on pom project")
+    void execute(MojoFactory factory) {
+      // given
+      PackagePlugMojo mojo = factory
+        .customizer(getCustomizer())
+        .builder(PackagePlugMojo.class)
+        .withPomDirectory(getPomDirectory())
+        .build(PackagePlugMojo.GOAL);
+      mojo.setLog(DEFAULT_LOG);
+
+      // when & then
+      assertThatCode(mojo::execute).doesNotThrowAnyException();
+      Resource resource = new ClassPathResource(
+        "/pom/target/a-pom-0.1.0-plug.jar"
+      );
+      assertThat(resource.exists()).isFalse();
+    }
   }
 
-  @Test
-  void execute(MojoFactory factory) {
-    // given
-    PackagePlugMojo mojo = factory
-      .customizer(customizer)
-      .builder(PackagePlugMojo.class)
-      .withPomDirectory(pomDirectory)
-      .build(PackagePlugMojo.GOAL);
-    mojo.setLog(log);
+  @Nested
+  class Skipped extends BaseMavenTestCase {
 
-    // when & then
-    assertThatCode(mojo::execute).doesNotThrowAnyException();
-    verify(log, atLeastOnce()).isDebugEnabled();
-    verify(log).isInfoEnabled();
-    verify(log).info(contains("Building plug: "));
-    verify(log).debug(contains(
-      "simpliest-0.1.0-plg.jar was successful."
-    ));
-    verify(log).debug(contains("Artifact attached to the build"));
+    Skipped() {
+      super(Paths.get("skipped"));
+    }
+
+    @Test
+    @DisplayName("Execute mojo on skipped project")
+    void execute(MojoFactory factory) {
+      // given
+      PackagePlugMojo mojo = factory
+        .customizer(getCustomizer())
+        .builder(PackagePlugMojo.class)
+        .withPomDirectory(getPomDirectory())
+        .build(PackagePlugMojo.GOAL);
+      mojo.setLog(DEFAULT_LOG);
+
+      // when & then
+      assertThatCode(mojo::execute).doesNotThrowAnyException();
+      Resource resource = new ClassPathResource(
+        "/skipped/target/skipped-0.1.0-plug.jar"
+      );
+      assertThat(resource.exists()).isFalse();
+    }
   }
 
-  private static Path fromTargetClasses(Path pomDirectory) {
-    Path testClasses = tryToExecute(() ->
-      new File(checkNotNull(
-        PackagePlugMojoIT.class.getClassLoader().getResource("."),
-        "20190117:004601"
-      ).toURI()).toPath(),
-      "20190201:003826"
-    );
-    return testClasses.resolve(pomDirectory);
+  @Nested
+  class CodeWithDependencies extends BaseMavenTestCase {
+    CodeWithDependencies() {
+      super(Paths.get("code-with-deps"));
+    }
+
+    @Test
+    @DisplayName("Execute mojo on code-with-deps project")
+    void execute(MojoFactory factory) {
+      // given
+      PackagePlugMojo mojo = factory
+        .customizer(getCustomizer())
+        .builder(PackagePlugMojo.class)
+        .withPomDirectory(getPomDirectory())
+        .build(PackagePlugMojo.GOAL);
+      mojo.setLog(DEFAULT_LOG);
+
+      // when & then
+      assertThatCode(mojo::execute).doesNotThrowAnyException();
+      Resource resource = new ClassPathResource(
+        "/code-with-deps/target/code-with-deps-0.1.0-plug.jar"
+      );
+      assertThat(resource.exists()).isTrue();
+    }
   }
+
 }
