@@ -20,17 +20,14 @@ import io.vavr.collection.HashMap;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.Map;
 import io.vavr.collection.Set;
-import io.vavr.collection.Traversable;
 import io.vavr.control.Option;
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.model.Dependency;
 import org.slf4j.Logger;
 import pl.wavesoftware.plugs.tools.packager.core.model.Libraries;
 import pl.wavesoftware.plugs.tools.packager.core.model.Library;
 import pl.wavesoftware.plugs.tools.packager.core.model.LibraryCallback;
 import pl.wavesoftware.plugs.tools.packager.core.model.LibraryScope;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 
 /**
@@ -51,17 +48,13 @@ public final class MavenLibraries implements Libraries {
       .put(Artifact.SCOPE_SYSTEM, LibraryScope.PROVIDED);
 
   private final Set<Artifact> artifacts;
-  @Nullable
-  private final Traversable<Dependency> unpacks;
   private final Logger logger;
 
   public MavenLibraries(
     Set<Artifact> artifacts,
-    @Nullable Traversable<Dependency> unpacks,
     Logger logger
   ) {
     this.artifacts = artifacts;
-    this.unpacks = unpacks;
     this.logger = logger;
   }
 
@@ -82,23 +75,10 @@ public final class MavenLibraries implements Libraries {
         callback.library(new Library(
           name.toString(),
           artifact.getFile(),
-          scopeOption.get(),
-          isUnpackRequired(artifact)
+          scopeOption.get()
         ));
       }
     }
-  }
-
-  private boolean isUnpackRequired(Artifact artifact) {
-    if (this.unpacks != null) {
-      for (Dependency unpack : this.unpacks) {
-        if (artifact.getGroupId().equals(unpack.getGroupId())
-          && artifact.getArtifactId().equals(unpack.getArtifactId())) {
-          return true;
-        }
-      }
-    }
-    return false;
   }
 
   private static Set<String> getDuplicates(Set<Artifact> artifacts) {

@@ -20,8 +20,7 @@ package pl.wavesoftware.plugs.tools.packager.core.model;
  * A block of code to be executed
  */
 @FunctionalInterface
-public
-interface CodeBlock {
+public interface CodeBlock {
   /**
    * A simple execute command
    */

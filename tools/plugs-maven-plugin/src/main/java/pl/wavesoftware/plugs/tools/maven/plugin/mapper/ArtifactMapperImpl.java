@@ -16,8 +16,11 @@
 
 package pl.wavesoftware.plugs.tools.maven.plugin.mapper;
 
+import org.apache.maven.model.Dependency;
+import org.apache.maven.repository.RepositorySystem;
 import pl.wavesoftware.plugs.tools.packager.core.model.Artifact;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
@@ -26,6 +29,14 @@ import javax.inject.Named;
  */
 @Named
 final class ArtifactMapperImpl implements ArtifactMapper {
+
+  private final RepositorySystem repositorySystem;
+
+  @Inject
+  ArtifactMapperImpl(RepositorySystem repositorySystem) {
+    this.repositorySystem = repositorySystem;
+  }
+
   @Override
   public Artifact generalize(org.apache.maven.artifact.Artifact artifact) {
     return new MavenArtifact(artifact);
@@ -36,8 +47,16 @@ final class ArtifactMapperImpl implements ArtifactMapper {
     if (artifact instanceof MavenArtifact) {
       return ((MavenArtifact) artifact).getDelegate();
     }
+    if (artifact instanceof MavenDependency) {
+      return ((MavenDependency) artifact).asArtifact();
+    }
     throw new UnsupportedOperationException(
       "Not supported artifact type: " + artifact.getClass()
     );
+  }
+
+  @Override
+  public Artifact map(Dependency dependency) {
+    return new MavenDependency(repositorySystem, dependency);
   }
 }

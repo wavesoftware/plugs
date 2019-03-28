@@ -167,7 +167,7 @@ final class DefaultPackager implements Packager {
         "Can't write libraries to a destination jar, {}",
         destination
       );
-      tring(() -> writer.writeEntries(sourceJar, writeableLibraries)).or(
+      tring(() -> writer.writeEntries(sourceJar)).or(
         "Can't rewrite source jar into destination jar: {}",
         destination
       );

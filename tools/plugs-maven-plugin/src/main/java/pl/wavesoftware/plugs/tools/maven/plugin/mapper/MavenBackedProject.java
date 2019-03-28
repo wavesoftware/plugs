@@ -19,6 +19,7 @@ package pl.wavesoftware.plugs.tools.maven.plugin.mapper;
 import io.vavr.Lazy;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.Set;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import pl.wavesoftware.plugs.tools.packager.core.model.Artifact;
 import pl.wavesoftware.plugs.tools.packager.core.model.Project;
@@ -88,19 +89,19 @@ final class MavenBackedProject implements Project {
 
   private Set<Artifact> calculateDependencies() {
     return HashSet
-      .ofAll(mavenProject.getArtifacts())
+      .ofAll(mavenProject.getDependencies())
       .reject(MavenBackedProject::hasProvidedScope)
-      .map(artifactMapper::generalize);
+      .map(artifactMapper::map);
   }
 
   private Set<Artifact> calculateImports() {
     return HashSet
-      .ofAll(mavenProject.getArtifacts())
+      .ofAll(mavenProject.getDependencies())
       .filter(MavenBackedProject::hasProvidedScope)
-      .map(artifactMapper::generalize);
+      .map(artifactMapper::map);
   }
 
-  private static boolean hasProvidedScope(org.apache.maven.artifact.Artifact artifact) {
-    return artifact.getScope().equals(org.apache.maven.artifact.Artifact.SCOPE_SYSTEM);
+  private static boolean hasProvidedScope(Dependency dependency) {
+    return dependency.getScope().equals(org.apache.maven.artifact.Artifact.SCOPE_PROVIDED);
   }
 }

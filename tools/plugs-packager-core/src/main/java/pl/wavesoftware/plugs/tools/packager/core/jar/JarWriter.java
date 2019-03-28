@@ -26,8 +26,6 @@ import pl.wavesoftware.plugs.tools.packager.core.model.Library;
 
 import javax.annotation.Nullable;
 import javax.annotation.WillClose;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -58,7 +56,6 @@ import java.util.zip.ZipEntry;
 public final class JarWriter implements ArchiveWriter, AutoCloseable {
   private static final Logger LOGGER =
     LoggerFactory.getLogger(JarWriter.class);
-  private static final UnpackHandler NEVER_UNPACK = new NeverUnpackHandler();
 
   private final JarArchiveOutputStream jarOutput;
   private final Set<String> writtenEntries = new HashSet<>();
@@ -104,8 +101,7 @@ public final class JarWriter implements ArchiveWriter, AutoCloseable {
     new CrcAndSize(file).setupStoredEntry(entry);
     writeEntry(
       entry,
-      new InputStreamEntryWriter(new FileInputStream(file), true),
-      new LibraryUnpackHandler(library)
+      new InputStreamEntryWriter(new FileInputStream(file), true)
     );
     LibraryHasBeenWritten event = new LibraryHasBeenWritten(library);
     for (ArchiveWriterListener<?> listener : listeners.get(LibraryHasBeenWritten.class)) {
@@ -118,19 +114,13 @@ public final class JarWriter implements ArchiveWriter, AutoCloseable {
 
   @Override
   public void writeEntries(JarFile jarFile) throws IOException {
-    this.writeEntries(jarFile, new SkipManifestMfTransformer(), NEVER_UNPACK);
-  }
-
-  @Override
-  public void writeEntries(JarFile jarFile, UnpackHandler unpackHandler) throws IOException {
-    this.writeEntries(jarFile, new SkipManifestMfTransformer(), unpackHandler);
+    this.writeEntries(jarFile, new SkipManifestMfTransformer());
   }
 
   @Override
   public void writeEntries(
     JarFile jarFile,
-    EntryTransformer entryTransformer,
-    UnpackHandler unpackHandler
+    EntryTransformer entryTransformer
   ) throws IOException {
     Enumeration<JarEntry> entries = jarFile.entries();
     while (entries.hasMoreElements()) {
@@ -141,7 +131,7 @@ public final class JarWriter implements ArchiveWriter, AutoCloseable {
         EntryWriter entryWriter = new InputStreamEntryWriter(inputStream, true);
         JarArchiveEntry transformedEntry = entryTransformer.transform(entry);
         if (transformedEntry != null) {
-          writeEntry(transformedEntry, entryWriter, unpackHandler);
+          writeEntry(transformedEntry, entryWriter);
         }
       }
     }
@@ -211,26 +201,17 @@ public final class JarWriter implements ArchiveWriter, AutoCloseable {
     this.jarOutput.close();
   }
 
-  private void writeEntry(
-    JarArchiveEntry entry,
-    EntryWriter entryWriter
-  ) throws IOException {
-    writeEntry(entry, entryWriter, NEVER_UNPACK);
-  }
-
   /**
    * Perform the actual write of a {@link JarEntry}. All other write methods delegate to
    * this one.
    *
    * @param entry         the entry to write
    * @param entryWriter   the entry writer or {@code null} if there is no content
-   * @param unpackHandler handles possible unpacking for the entry
    * @throws IOException in case of I/O errors
    */
   private void writeEntry(
     JarArchiveEntry entry,
-    @Nullable EntryWriter entryWriter,
-    UnpackHandler unpackHandler
+    @Nullable EntryWriter entryWriter
   ) throws IOException {
     String parent = entry.getName();
     boolean isDirectory = false;
@@ -244,12 +225,11 @@ public final class JarWriter implements ArchiveWriter, AutoCloseable {
     if (parent.lastIndexOf('/') != -1) {
       parent = parent.substring(0, parent.lastIndexOf('/') + 1);
       if (!parent.isEmpty()) {
-        writeEntry(new JarArchiveEntry(parent), null, unpackHandler);
+        writeEntry(new JarArchiveEntry(parent), null);
       }
     }
 
     if (this.writtenEntries.add(entry.getName())) {
-      entryWriter = addUnpackCommentIfNecessary(entry, entryWriter, unpackHandler);
       this.jarOutput.putArchiveEntry(entry);
       if (entryWriter != null) {
         entryWriter.write(this.jarOutput);
@@ -263,23 +243,6 @@ public final class JarWriter implements ArchiveWriter, AutoCloseable {
         );
       }
     }
-  }
-
-  private static EntryWriter addUnpackCommentIfNecessary(
-    JarArchiveEntry entry,
-    @Nullable EntryWriter entryWriter,
-    UnpackHandler unpackHandler
-  ) throws IOException {
-    if (entryWriter == null || !unpackHandler.requiresUnpack(entry.getName())) {
-      return entryWriter;
-    }
-    ByteArrayOutputStream output = new ByteArrayOutputStream();
-    entryWriter.write(output);
-    entry.setComment("UNPACK:" + unpackHandler.sha256Hash(entry.getName()));
-    return new InputStreamEntryWriter(
-      new ByteArrayInputStream(output.toByteArray()),
-      true
-    );
   }
 
 }

@@ -16,6 +16,7 @@
 
 package pl.wavesoftware.plugs.tools.maven.plugin.mapper;
 
+import org.apache.maven.model.Dependency;
 import pl.wavesoftware.plugs.tools.packager.core.model.Artifact;
 
 /**
@@ -25,4 +26,5 @@ import pl.wavesoftware.plugs.tools.packager.core.model.Artifact;
 public interface ArtifactMapper {
   Artifact generalize(org.apache.maven.artifact.Artifact artifact);
   org.apache.maven.artifact.Artifact mavenize(Artifact artifact);
+  Artifact map(Dependency dependency);
 }

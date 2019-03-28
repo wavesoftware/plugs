@@ -44,7 +44,6 @@ final class MavenLibrariesFactory implements LibrariesFactory {
   public Libraries create(Set<Artifact> artifacts, Logger logger) {
     return new MavenLibraries(
       artifacts.map(artifactMapper::mavenize),
-      null,
       logger
     );
   }

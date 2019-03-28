@@ -73,13 +73,7 @@ interface ArchiveWriter {
 
   void writeEntries(
     JarFile jarFile,
-    UnpackHandler unpackHandler
-  ) throws IOException;
-
-  void writeEntries(
-    JarFile jarFile,
-    EntryTransformer entryTransformer,
-    UnpackHandler unpackHandler
+    EntryTransformer entryTransformer
   ) throws IOException;
 
   <E extends ArchiveWriterEvent> void addListener(

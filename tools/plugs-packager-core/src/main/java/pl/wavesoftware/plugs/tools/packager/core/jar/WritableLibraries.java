@@ -32,7 +32,7 @@ import static pl.wavesoftware.plugs.tools.packager.core.jar.FileUtils.isZip;
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public final class WritableLibraries implements UnpackHandler {
+public final class WritableLibraries {
 
   private final Map<String, Library> libraryEntryNames = new LinkedHashMap<>();
 
@@ -50,22 +50,6 @@ public final class WritableLibraries implements UnpackHandler {
         }
       }
     });
-  }
-
-  @Override
-  public boolean requiresUnpack(String name) {
-    Library library = this.libraryEntryNames.get(name);
-    return library != null && library.isUnpackRequired();
-  }
-
-  @Override
-  public String sha256Hash(String name) throws IOException {
-    Library library = this.libraryEntryNames.get(name);
-    if (library == null) {
-      throw new IllegalArgumentException(
-        "No library found for entry name '" + name + "'");
-    }
-    return FileUtils.sha256Hash(library.getFile());
   }
 
   public void write(JarWriter writer) throws IOException {

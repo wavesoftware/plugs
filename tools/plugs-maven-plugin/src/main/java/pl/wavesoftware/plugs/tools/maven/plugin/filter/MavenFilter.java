@@ -42,10 +42,9 @@ final class MavenFilter implements Filter {
   public Set<Artifact> filterDependencies(Set<Artifact> dependencies)
     throws RepackageFailed {
     try {
-      Set<Artifact> delta = HashSet.ofAll(
+      return HashSet.ofAll(
         filters.filter(dependencies.map(artifactMapper::mavenize).toJavaSet())
       ).map(artifactMapper::generalize);
-      return dependencies.retainAll(delta);
     } catch (ArtifactFilterException ex) {
       throw new RepackageFailed(
         "Can't filter Maven dependencies using provided filters",
