@@ -56,4 +56,11 @@ final class MavenArtifact implements Artifact {
   public ArtifactType type() {
     return ArtifactType.fromPackging(getDelegate().getType());
   }
+
+  @Override
+  public String toString() {
+    return "MavenArtifact{" +
+      name() + "@" + version() +
+      '}';
+  }
 }

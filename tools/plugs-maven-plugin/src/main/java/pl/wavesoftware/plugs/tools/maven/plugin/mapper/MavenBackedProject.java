@@ -19,8 +19,10 @@ package pl.wavesoftware.plugs.tools.maven.plugin.mapper;
 import io.vavr.Lazy;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.Set;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
+import pl.wavesoftware.plugs.tools.maven.plugin.model.ResolvableDependency;
 import pl.wavesoftware.plugs.tools.packager.core.model.Artifact;
 import pl.wavesoftware.plugs.tools.packager.core.model.Project;
 
@@ -33,6 +35,7 @@ import java.nio.file.Path;
 final class MavenBackedProject implements Project {
   private final ArtifactMapper artifactMapper;
   private final MavenProject mavenProject;
+  private final MavenSession mavenSession;
   private final Path path;
   private final String finalName;
   private final String classifier;
@@ -43,18 +46,25 @@ final class MavenBackedProject implements Project {
   MavenBackedProject(
     ArtifactMapper artifactMapper,
     MavenProject mavenProject,
+    MavenSession mavenSession,
     Path path,
     String finalName,
     String classifier
   ) {
     this.artifactMapper = artifactMapper;
     this.mavenProject = mavenProject;
+    this.mavenSession = mavenSession;
     this.path = path;
     this.finalName = finalName;
     this.classifier = classifier;
 
     dependenciesLazy = Lazy.of(this::calculateDependencies);
     importsLazy = Lazy.of(this::calculateImports);
+  }
+
+  @Override
+  public Path buildFilePath() {
+    return mavenProject.getBasedir().toPath().resolve("pom.xml");
   }
 
   @Override
@@ -91,14 +101,20 @@ final class MavenBackedProject implements Project {
     return HashSet
       .ofAll(mavenProject.getDependencies())
       .reject(MavenBackedProject::hasProvidedScope)
-      .map(artifactMapper::map);
+      .map(this::asResolvable)
+      .flatMap(artifactMapper::map);
   }
 
   private Set<Artifact> calculateImports() {
     return HashSet
       .ofAll(mavenProject.getDependencies())
       .filter(MavenBackedProject::hasProvidedScope)
-      .map(artifactMapper::map);
+      .map(this::asResolvable)
+      .flatMap(artifactMapper::map);
+  }
+
+  private ResolvableDependency asResolvable(Dependency dependency) {
+    return new ResolvableDependency(dependency, mavenProject, mavenSession);
   }
 
   private static boolean hasProvidedScope(Dependency dependency) {

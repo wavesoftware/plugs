@@ -53,7 +53,7 @@ final class DefaultPackagerFactory implements PackagerFactory {
     Filter filter
   ) {
     RepackagingIsRequired condition = conditionFactory.create(
-      configuration.coordinates()
+      configuration.coordinates(), configuration.project()
     );
     return new DefaultPackager(
       configuration,

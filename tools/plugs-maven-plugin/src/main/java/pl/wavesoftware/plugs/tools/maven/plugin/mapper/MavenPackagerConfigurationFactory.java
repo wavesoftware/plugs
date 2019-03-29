@@ -16,6 +16,7 @@
 
 package pl.wavesoftware.plugs.tools.maven.plugin.mapper;
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
 import org.slf4j.Logger;
 import pl.wavesoftware.plugs.tools.packager.core.model.PackagerConfiguration;
@@ -41,6 +42,7 @@ final class MavenPackagerConfigurationFactory implements PackagerConfigurationFa
   @Override
   public PackagerConfiguration create(
     MavenProject project,
+    MavenSession session,
     Logger logger,
     String classifier,
     boolean attach,
@@ -51,6 +53,7 @@ final class MavenPackagerConfigurationFactory implements PackagerConfigurationFa
       artifactMapper,
       logger,
       project,
+      session,
       classifier,
       attach,
       outputDirectory,

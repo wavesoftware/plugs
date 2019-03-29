@@ -17,6 +17,7 @@
 package pl.wavesoftware.plugs.tools.packager.core;
 
 import pl.wavesoftware.plugs.tools.packager.core.model.PackagerCoordinates;
+import pl.wavesoftware.plugs.tools.packager.core.model.Project;
 import pl.wavesoftware.plugs.tools.packager.core.model.RepackagingIsRequired;
 
 /**
@@ -30,7 +31,8 @@ public interface RepackagingIsRequiredFactory {
    * Create a condition that is true if packaging is required.
    *
    * @param coordinates a coordinates of operation
+   * @param project     a project
    * @return a condition
    */
-  RepackagingIsRequired create(PackagerCoordinates coordinates);
+  RepackagingIsRequired create(PackagerCoordinates coordinates, Project project);
 }

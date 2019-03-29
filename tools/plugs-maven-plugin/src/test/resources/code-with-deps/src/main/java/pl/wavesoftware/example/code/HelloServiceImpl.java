@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.tools.maven.plugin.mapper;
+package pl.wavesoftware.example.code;
 
-import io.vavr.collection.Traversable;
-import pl.wavesoftware.plugs.tools.maven.plugin.model.ResolvableDependency;
-import pl.wavesoftware.plugs.tools.packager.core.model.Artifact;
+import org.springframework.stereotype.Service;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public interface ArtifactMapper {
-  Artifact generalize(org.apache.maven.artifact.Artifact artifact);
-  org.apache.maven.artifact.Artifact mavenize(Artifact artifact);
-  Traversable<Artifact> map(ResolvableDependency dependency);
+@Service
+final class HelloServiceImpl implements HelloService {
+  public String hello() {
+    return "Hello from Plug!";
+  }
 }

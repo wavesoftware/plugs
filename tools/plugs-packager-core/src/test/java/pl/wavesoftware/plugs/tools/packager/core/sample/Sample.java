@@ -14,24 +14,16 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.tools.packager.core.jar;
+package pl.wavesoftware.plugs.tools.packager.core.sample;
 
-import java.io.IOException;
-import java.nio.file.Path;
+import java.util.function.Supplier;
 
 /**
- * A calculator of a digest of a file
- *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public interface FileDigest {
-  /**
-   * Digest a path to a file
-   *
-   * @param path a path to digest
-   * @return a digest
-   * @throws IOException if cant be read
-   */
-  CharSequence digest(Path path) throws IOException;
+public interface Sample<T> extends Supplier<T> {
+  default T getSample() {
+    return get();
+  }
 }

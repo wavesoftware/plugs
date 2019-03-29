@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.tools.maven.plugin.mapper;
-
-import io.vavr.collection.Traversable;
-import pl.wavesoftware.plugs.tools.maven.plugin.model.ResolvableDependency;
-import pl.wavesoftware.plugs.tools.packager.core.model.Artifact;
-
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public interface ArtifactMapper {
-  Artifact generalize(org.apache.maven.artifact.Artifact artifact);
-  org.apache.maven.artifact.Artifact mavenize(Artifact artifact);
-  Traversable<Artifact> map(ResolvableDependency dependency);
-}
+@ParametersAreNonnullByDefault
+package pl.wavesoftware.example.code;
+
+import javax.annotation.ParametersAreNonnullByDefault;

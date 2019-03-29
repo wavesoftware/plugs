@@ -29,6 +29,13 @@ import java.nio.file.Path;
 public interface Project {
 
   /**
+   * A build file path. For ex.: pom.xml
+   *
+   * @return a build file path
+   */
+  Path buildFilePath();
+
+  /**
    * A main artifact of a project
    *
    * @return a main artifact

@@ -18,6 +18,7 @@ package pl.wavesoftware.maven.testing.junit5;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.LegacySupport;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.testing.MojoRule;
 
@@ -72,6 +73,8 @@ final class MojoBuilderImpl<T extends AbstractMojo>
         mojoRule,
         goal
       );
+      LegacySupport legacySupport = mojoRule.lookup(LegacySupport.class);
+      legacySupport.setSession(session);
       org.apache.maven.plugin.Mojo mojo =
         mojoRule.lookupConfiguredMojo(session, execution);
       return type.cast(mojo);

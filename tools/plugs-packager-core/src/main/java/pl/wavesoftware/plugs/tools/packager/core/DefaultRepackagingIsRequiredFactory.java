@@ -16,8 +16,9 @@
 
 package pl.wavesoftware.plugs.tools.packager.core;
 
-import pl.wavesoftware.plugs.tools.packager.core.jar.FileDigest;
+import pl.wavesoftware.plugs.tools.packager.core.digest.ProjectDigest;
 import pl.wavesoftware.plugs.tools.packager.core.model.PackagerCoordinates;
+import pl.wavesoftware.plugs.tools.packager.core.model.Project;
 import pl.wavesoftware.plugs.tools.packager.core.model.RepackagingIsRequired;
 
 import javax.inject.Inject;
@@ -31,16 +32,18 @@ import javax.inject.Named;
 final class DefaultRepackagingIsRequiredFactory
   implements RepackagingIsRequiredFactory {
 
-  private final FileDigest digest;
+  private final ProjectDigest digest;
 
   @Inject
-  DefaultRepackagingIsRequiredFactory(FileDigest digest) {
+  DefaultRepackagingIsRequiredFactory(ProjectDigest digest) {
     this.digest = digest;
   }
 
   @Override
-  public RepackagingIsRequired create(PackagerCoordinates coordinates) {
-    return new DefaultRepackagingIsRequired(coordinates, digest);
+  public RepackagingIsRequired create(
+    PackagerCoordinates coordinates, Project project
+  ) {
+    return new DefaultRepackagingIsRequired(coordinates, project, digest);
   }
 
 }

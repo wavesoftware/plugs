@@ -65,6 +65,14 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
     </dependency>
+
+    <!-- Tests -->
+    <dependency>
+      <groupId>pl.wavesoftware.plugs</groupId>
+      <artifactId>testing</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
 </project>

@@ -16,6 +16,7 @@
 
 package pl.wavesoftware.plugs.tools.maven.plugin.mapper;
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
 import org.slf4j.Logger;
 import pl.wavesoftware.plugs.tools.packager.core.model.PackagerConfiguration;
@@ -33,6 +34,7 @@ public interface PackagerConfigurationFactory {
    * Creates a configuration
    *
    * @param project         a maven project
+   * @param session         a maven session
    * @param logger          a logger
    * @param classifier      classifier of plug to create
    * @param attach          should created plug be attached to reactor
@@ -42,6 +44,7 @@ public interface PackagerConfigurationFactory {
    */
   PackagerConfiguration create(
     MavenProject project,
+    MavenSession session,
     Logger logger,
     String classifier,
     boolean attach,

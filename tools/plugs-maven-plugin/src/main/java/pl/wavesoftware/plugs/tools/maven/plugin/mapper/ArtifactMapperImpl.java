@@ -16,8 +16,15 @@
 
 package pl.wavesoftware.plugs.tools.maven.plugin.mapper;
 
-import org.apache.maven.model.Dependency;
+import io.vavr.collection.HashSet;
+import io.vavr.collection.Traversable;
+import org.apache.maven.artifact.repository.DefaultRepositoryRequest;
+import org.apache.maven.artifact.repository.RepositoryRequest;
+import org.apache.maven.artifact.resolver.ArtifactResolutionRequest;
+import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
+import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.repository.RepositorySystem;
+import pl.wavesoftware.plugs.tools.maven.plugin.model.ResolvableDependency;
 import pl.wavesoftware.plugs.tools.packager.core.model.Artifact;
 
 import javax.inject.Inject;
@@ -31,10 +38,15 @@ import javax.inject.Named;
 final class ArtifactMapperImpl implements ArtifactMapper {
 
   private final RepositorySystem repositorySystem;
+  private final ArtifactResolver artifactResolver;
 
   @Inject
-  ArtifactMapperImpl(RepositorySystem repositorySystem) {
+  ArtifactMapperImpl(
+    RepositorySystem repositorySystem,
+    ArtifactResolver artifactResolver
+  ) {
     this.repositorySystem = repositorySystem;
+    this.artifactResolver = artifactResolver;
   }
 
   @Override
@@ -47,16 +59,26 @@ final class ArtifactMapperImpl implements ArtifactMapper {
     if (artifact instanceof MavenArtifact) {
       return ((MavenArtifact) artifact).getDelegate();
     }
-    if (artifact instanceof MavenDependency) {
-      return ((MavenDependency) artifact).asArtifact();
-    }
     throw new UnsupportedOperationException(
       "Not supported artifact type: " + artifact.getClass()
     );
   }
 
   @Override
-  public Artifact map(Dependency dependency) {
-    return new MavenDependency(repositorySystem, dependency);
+  public Traversable<Artifact> map(ResolvableDependency resolvable) {
+    return resolve(resolvable).map(this::generalize);
+  }
+
+  private Traversable<org.apache.maven.artifact.Artifact> resolve(ResolvableDependency resolvable) {
+    RepositoryRequest repositoryRequest = DefaultRepositoryRequest.getRepositoryRequest(
+      resolvable.mavenSession(), resolvable.mavenProject()
+    );
+    ArtifactResolutionRequest request = new ArtifactResolutionRequest(repositoryRequest);
+    request.setResolveTransitively(true);
+    org.apache.maven.artifact.Artifact artifact =
+      repositorySystem.createDependencyArtifact(resolvable.dependency());
+    request.setArtifact(artifact);
+    ArtifactResolutionResult response = artifactResolver.resolve(request);
+    return HashSet.ofAll(response.getArtifacts());
   }
 }

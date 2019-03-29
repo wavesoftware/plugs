@@ -188,7 +188,7 @@ final class DefaultPackager implements Packager {
     }
   }
 
-  private JarWriter newJarWriter(Path destination) throws RepackageFailed {
+  private static JarWriter newJarWriter(Path destination) throws RepackageFailed {
     return tring(() -> new JarWriter(destination)).or(
       "Can't create a jar at destination: {}",
       destination

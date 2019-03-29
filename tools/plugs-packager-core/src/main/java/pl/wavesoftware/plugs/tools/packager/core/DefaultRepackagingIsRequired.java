@@ -16,8 +16,9 @@
 
 package pl.wavesoftware.plugs.tools.packager.core;
 
-import pl.wavesoftware.plugs.tools.packager.core.jar.FileDigest;
+import pl.wavesoftware.plugs.tools.packager.core.digest.ProjectDigest;
 import pl.wavesoftware.plugs.tools.packager.core.model.PackagerCoordinates;
+import pl.wavesoftware.plugs.tools.packager.core.model.Project;
 import pl.wavesoftware.plugs.tools.packager.core.model.RepackagingIsRequired;
 
 import java.io.File;
@@ -33,18 +34,20 @@ import static pl.wavesoftware.plugs.tools.packager.core.Constants.PLUGS_DIGEST_A
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-final class DefaultRepackagingIsRequired
-  implements RepackagingIsRequired {
+final class DefaultRepackagingIsRequired implements RepackagingIsRequired {
 
   private final PackagerCoordinates coordinates;
-  private final FileDigest fileDigest;
+  private final Project project;
+  private final ProjectDigest projectDigest;
 
   DefaultRepackagingIsRequired(
     PackagerCoordinates coordinates,
-    FileDigest fileDigest
+    Project project,
+    ProjectDigest projectDigest
   ) {
     this.coordinates = coordinates;
-    this.fileDigest = fileDigest;
+    this.project = project;
+    this.projectDigest = projectDigest;
   }
 
   @Override
@@ -60,7 +63,7 @@ final class DefaultRepackagingIsRequired
     }
     try (JarFile jarFile = new JarFile(targetFile)) {
       Manifest manifest = jarFile.getManifest();
-      CharSequence digest = fileDigest.digest(sourcePath);
+      CharSequence digest = projectDigest.digest(project);
       return manifest != null
         && digest.equals(manifest.getMainAttributes().getValue(PLUGS_DIGEST_ATTRIBUTE));
     }

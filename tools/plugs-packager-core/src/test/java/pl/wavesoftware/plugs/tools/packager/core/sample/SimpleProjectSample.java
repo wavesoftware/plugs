@@ -14,29 +14,17 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.tools.packager.core.jar;
+package pl.wavesoftware.plugs.tools.packager.core.sample;
 
-import javax.inject.Named;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.zip.CRC32;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static pl.wavesoftware.eid.utils.EidPreconditions.checkArgument;
+import pl.wavesoftware.plugs.tools.packager.core.model.Project;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-@Named
-final class FileDigestImpl implements FileDigest {
+final class SimpleProjectSample implements Sample<Project> {
   @Override
-  public CharSequence digest(Path path) throws IOException {
-    checkArgument(path.toFile().isFile(), "20190131:221929");
-    CRC32 digest = new CRC32();
-    digest.update(path.toAbsolutePath().toString().getBytes(UTF_8));
-    digest.update(Long.toHexString(Files.size(path)).getBytes(UTF_8));
-    return Long.toHexString(Math.abs(digest.getValue()));
+  public Project get() {
+    throw new UnsupportedOperationException("Not yet implemented");
   }
 }

@@ -14,18 +14,28 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.tools.maven.plugin.mapper;
+package pl.wavesoftware.plugs.tools.packager.core.sample;
 
-import io.vavr.collection.Traversable;
-import pl.wavesoftware.plugs.tools.maven.plugin.model.ResolvableDependency;
-import pl.wavesoftware.plugs.tools.packager.core.model.Artifact;
+import pl.wavesoftware.plugs.tools.packager.core.model.Project;
+
+import java.util.function.Supplier;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public interface ArtifactMapper {
-  Artifact generalize(org.apache.maven.artifact.Artifact artifact);
-  org.apache.maven.artifact.Artifact mavenize(Artifact artifact);
-  Traversable<Artifact> map(ResolvableDependency dependency);
+public enum ProjectSamples implements Sample<Project> {
+
+  SIMPLE_PROJECT(new SimpleProjectSample());
+
+  private final Supplier<Project> project;
+
+  ProjectSamples(Supplier<Project> project) {
+    this.project = project;
+  }
+
+  @Override
+  public Project get() {
+    return project.get();
+  }
 }

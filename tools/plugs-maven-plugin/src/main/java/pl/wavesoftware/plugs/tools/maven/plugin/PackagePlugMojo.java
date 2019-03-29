@@ -16,6 +16,7 @@
 
 package pl.wavesoftware.plugs.tools.maven.plugin;
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -83,6 +84,18 @@ final class PackagePlugMojo extends AbstractMojo {
     readonly = true
   )
   private MavenProject project;
+
+  /**
+   * The Maven session.
+   *
+   * @since 0.1.0
+   */
+  @Parameter(
+    defaultValue = "${session}",
+    required = true,
+    readonly = true
+  )
+  private MavenSession session;
 
   /**
    * Classifier to add to the repackaged archive. If not given, classifier
@@ -233,6 +246,7 @@ final class PackagePlugMojo extends AbstractMojo {
   private PackagerConfiguration createConfiguration() {
     return factories.configuration().create(
       project,
+      session,
       logger,
       classifier,
       attach,

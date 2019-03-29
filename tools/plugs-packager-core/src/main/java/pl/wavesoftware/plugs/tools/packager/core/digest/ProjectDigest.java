@@ -14,18 +14,25 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.tools.maven.plugin.mapper;
+package pl.wavesoftware.plugs.tools.packager.core.digest;
 
-import io.vavr.collection.Traversable;
-import pl.wavesoftware.plugs.tools.maven.plugin.model.ResolvableDependency;
-import pl.wavesoftware.plugs.tools.packager.core.model.Artifact;
+import pl.wavesoftware.plugs.tools.packager.core.model.Project;
+
+import java.io.IOException;
 
 /**
+ * A calculator of a digest of a file
+ *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public interface ArtifactMapper {
-  Artifact generalize(org.apache.maven.artifact.Artifact artifact);
-  org.apache.maven.artifact.Artifact mavenize(Artifact artifact);
-  Traversable<Artifact> map(ResolvableDependency dependency);
+public interface ProjectDigest {
+  /**
+   * Digest a project
+   *
+   * @param project a project to digest
+   * @return a digest
+   * @throws IOException if cant be read
+   */
+  CharSequence digest(Project project) throws IOException;
 }
