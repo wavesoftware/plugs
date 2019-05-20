@@ -18,7 +18,10 @@
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
+@ReturnTypesAreNonnullByDefault
 @ParametersAreNonnullByDefault
 package pl.wavesoftware.plugs.tools.packager.core;
+
+import pl.wavesoftware.eid.api.ReturnTypesAreNonnullByDefault;
 
 import javax.annotation.ParametersAreNonnullByDefault;

@@ -37,7 +37,9 @@
   </properties>
 
   <modules>
+    <module>plugs-packager-api</module>
     <module>plugs-packager-core</module>
+    <module>plugs-packager-samples</module>
     <module>plugs-maven-plugin</module>
   </modules>
 </project>

@@ -16,10 +16,10 @@
 
 package pl.wavesoftware.plugs.tools.packager.core;
 
-import pl.wavesoftware.plugs.tools.packager.core.digest.ProjectDigest;
-import pl.wavesoftware.plugs.tools.packager.core.model.PackagerCoordinates;
-import pl.wavesoftware.plugs.tools.packager.core.model.Project;
-import pl.wavesoftware.plugs.tools.packager.core.model.RepackagingIsRequired;
+import pl.wavesoftware.plugs.tools.packager.api.digest.ProjectDigester;
+import pl.wavesoftware.plugs.tools.packager.api.model.PackagerCoordinates;
+import pl.wavesoftware.plugs.tools.packager.api.model.Project;
+import pl.wavesoftware.plugs.tools.packager.api.model.RepackagingIsRequired;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +28,7 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 import static pl.wavesoftware.eid.utils.EidExecutions.tryToExecute;
-import static pl.wavesoftware.plugs.tools.packager.core.Constants.PLUGS_DIGEST_ATTRIBUTE;
+import static pl.wavesoftware.plugs.tools.packager.api.Constants.PLUGS_DIGEST_ATTRIBUTE;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
@@ -38,16 +38,16 @@ final class DefaultRepackagingIsRequired implements RepackagingIsRequired {
 
   private final PackagerCoordinates coordinates;
   private final Project project;
-  private final ProjectDigest projectDigest;
+  private final ProjectDigester projectDigester;
 
   DefaultRepackagingIsRequired(
     PackagerCoordinates coordinates,
     Project project,
-    ProjectDigest projectDigest
+    ProjectDigester projectDigester
   ) {
     this.coordinates = coordinates;
     this.project = project;
-    this.projectDigest = projectDigest;
+    this.projectDigester = projectDigester;
   }
 
   @Override
@@ -63,7 +63,7 @@ final class DefaultRepackagingIsRequired implements RepackagingIsRequired {
     }
     try (JarFile jarFile = new JarFile(targetFile)) {
       Manifest manifest = jarFile.getManifest();
-      CharSequence digest = projectDigest.digest(project);
+      CharSequence digest = projectDigester.digest(project);
       return manifest != null
         && digest.equals(manifest.getMainAttributes().getValue(PLUGS_DIGEST_ATTRIBUTE));
     }

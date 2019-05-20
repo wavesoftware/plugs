@@ -16,9 +16,9 @@
 
 package pl.wavesoftware.plugs.tools.maven.plugin.mapper;
 
-import com.github.zafarkhaja.semver.Version;
-import pl.wavesoftware.plugs.tools.packager.core.model.Artifact;
-import pl.wavesoftware.plugs.tools.packager.core.model.ArtifactType;
+import com.vdurmont.semver4j.Semver;
+import pl.wavesoftware.plugs.tools.packager.api.model.Artifact;
+import pl.wavesoftware.plugs.tools.packager.api.model.ArtifactType;
 
 import java.nio.file.Path;
 
@@ -43,8 +43,8 @@ final class MavenArtifact implements Artifact {
   }
 
   @Override
-  public Version version() {
-    return Version.valueOf(getDelegate().getVersion());
+  public Semver version() {
+    return new Semver(getDelegate().getVersion());
   }
 
   @Override
@@ -54,7 +54,7 @@ final class MavenArtifact implements Artifact {
 
   @Override
   public ArtifactType type() {
-    return ArtifactType.fromPackging(getDelegate().getType());
+    return ArtifactType.fromPackaging(getDelegate().getType());
   }
 
   @Override

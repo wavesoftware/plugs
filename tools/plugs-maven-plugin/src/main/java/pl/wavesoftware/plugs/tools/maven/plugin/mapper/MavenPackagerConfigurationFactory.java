@@ -19,7 +19,7 @@ package pl.wavesoftware.plugs.tools.maven.plugin.mapper;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
 import org.slf4j.Logger;
-import pl.wavesoftware.plugs.tools.packager.core.model.PackagerConfiguration;
+import pl.wavesoftware.plugs.tools.packager.api.model.PackagerConfiguration;
 
 import javax.inject.Inject;
 import javax.inject.Named;

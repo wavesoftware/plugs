@@ -20,9 +20,9 @@ import io.vavr.Lazy;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
 import org.slf4j.Logger;
-import pl.wavesoftware.plugs.tools.packager.core.model.PackagerConfiguration;
-import pl.wavesoftware.plugs.tools.packager.core.model.PackagerCoordinates;
-import pl.wavesoftware.plugs.tools.packager.core.model.Project;
+import pl.wavesoftware.plugs.tools.packager.api.model.PackagerConfiguration;
+import pl.wavesoftware.plugs.tools.packager.api.model.PackagerCoordinates;
+import pl.wavesoftware.plugs.tools.packager.api.model.Project;
 
 import java.io.File;
 import java.util.function.Supplier;

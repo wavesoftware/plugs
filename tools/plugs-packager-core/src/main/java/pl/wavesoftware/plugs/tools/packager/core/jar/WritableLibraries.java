@@ -16,14 +16,14 @@
 
 package pl.wavesoftware.plugs.tools.packager.core.jar;
 
-import pl.wavesoftware.plugs.tools.packager.core.model.Libraries;
-import pl.wavesoftware.plugs.tools.packager.core.model.Library;
+import pl.wavesoftware.plugs.tools.packager.api.model.Libraries;
+import pl.wavesoftware.plugs.tools.packager.api.model.Library;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static pl.wavesoftware.plugs.tools.packager.core.Constants.LIBRARY_DESTINATION;
+import static pl.wavesoftware.plugs.tools.packager.api.Constants.LIBRARY_DESTINATION;
 import static pl.wavesoftware.plugs.tools.packager.core.jar.FileUtils.isZip;
 
 /**

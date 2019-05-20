@@ -20,7 +20,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.shared.artifact.filter.collection.AbstractArtifactsFilter;
 import org.apache.maven.shared.artifact.filter.collection.ArtifactFilterException;
 import org.apache.maven.shared.artifact.filter.collection.ArtifactsFilter;
-import pl.wavesoftware.plugs.tools.packager.core.model.FilterableDependency;
+import pl.wavesoftware.plugs.tools.packager.api.model.FilterableDependency;
 
 import java.util.ArrayList;
 import java.util.Collections;

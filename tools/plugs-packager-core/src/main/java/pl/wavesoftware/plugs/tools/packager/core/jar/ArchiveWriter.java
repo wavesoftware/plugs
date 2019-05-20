@@ -16,7 +16,10 @@
 
 package pl.wavesoftware.plugs.tools.packager.core.jar;
 
-import pl.wavesoftware.plugs.tools.packager.core.model.Library;
+
+import pl.wavesoftware.plugs.tools.packager.api.jar.ArchiveWriterEvent;
+import pl.wavesoftware.plugs.tools.packager.api.jar.ArchiveWriterListener;
+import pl.wavesoftware.plugs.tools.packager.api.model.Library;
 
 import javax.annotation.WillClose;
 import java.io.IOException;

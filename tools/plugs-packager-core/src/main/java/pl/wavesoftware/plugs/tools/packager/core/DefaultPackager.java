@@ -19,22 +19,23 @@ package pl.wavesoftware.plugs.tools.packager.core;
 import io.vavr.collection.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.wavesoftware.plugs.tools.packager.api.Packager;
+import pl.wavesoftware.plugs.tools.packager.api.manifest.ManifestBuilder;
+import pl.wavesoftware.plugs.tools.packager.api.model.Artifact;
+import pl.wavesoftware.plugs.tools.packager.api.model.ArtifactType;
+import pl.wavesoftware.plugs.tools.packager.api.model.Filter;
+import pl.wavesoftware.plugs.tools.packager.api.model.Libraries;
+import pl.wavesoftware.plugs.tools.packager.api.model.Or;
+import pl.wavesoftware.plugs.tools.packager.api.model.PackagerConfiguration;
+import pl.wavesoftware.plugs.tools.packager.api.model.PackagerCoordinates;
+import pl.wavesoftware.plugs.tools.packager.api.model.Project;
+import pl.wavesoftware.plugs.tools.packager.api.model.RepackageFailed;
+import pl.wavesoftware.plugs.tools.packager.api.model.RepackagingIsRequired;
+import pl.wavesoftware.plugs.tools.packager.api.spi.LibrariesFactory;
 import pl.wavesoftware.plugs.tools.packager.core.jar.JarWriter;
-import pl.wavesoftware.plugs.tools.packager.core.jar.LibrariesCollector;
+import pl.wavesoftware.plugs.tools.packager.api.jar.LibrariesCollector;
 import pl.wavesoftware.plugs.tools.packager.core.jar.LibraryHasBeenWritten;
 import pl.wavesoftware.plugs.tools.packager.core.jar.WritableLibraries;
-import pl.wavesoftware.plugs.tools.packager.core.manifest.ManifestBuilder;
-import pl.wavesoftware.plugs.tools.packager.core.model.Artifact;
-import pl.wavesoftware.plugs.tools.packager.core.model.ArtifactType;
-import pl.wavesoftware.plugs.tools.packager.core.model.Filter;
-import pl.wavesoftware.plugs.tools.packager.core.model.Libraries;
-import pl.wavesoftware.plugs.tools.packager.core.model.Or;
-import pl.wavesoftware.plugs.tools.packager.core.model.PackagerConfiguration;
-import pl.wavesoftware.plugs.tools.packager.core.model.PackagerCoordinates;
-import pl.wavesoftware.plugs.tools.packager.core.model.Project;
-import pl.wavesoftware.plugs.tools.packager.core.model.RepackageFailed;
-import pl.wavesoftware.plugs.tools.packager.core.model.RepackagingIsRequired;
-import pl.wavesoftware.plugs.tools.packager.core.spi.LibrariesFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,8 +44,8 @@ import java.nio.file.Path;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
-import static pl.wavesoftware.plugs.tools.packager.core.model.RepackageFailed.check;
-import static pl.wavesoftware.plugs.tools.packager.core.model.RepackageFailed.tring;
+import static pl.wavesoftware.plugs.tools.packager.api.model.RepackageFailed.check;
+import static pl.wavesoftware.plugs.tools.packager.api.model.RepackageFailed.tring;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>

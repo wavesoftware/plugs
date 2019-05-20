@@ -16,11 +16,14 @@
 
 package pl.wavesoftware.plugs.tools.packager.core;
 
-import pl.wavesoftware.plugs.tools.packager.core.manifest.ManifestBuilder;
-import pl.wavesoftware.plugs.tools.packager.core.model.Filter;
-import pl.wavesoftware.plugs.tools.packager.core.model.PackagerConfiguration;
-import pl.wavesoftware.plugs.tools.packager.core.model.RepackagingIsRequired;
-import pl.wavesoftware.plugs.tools.packager.core.spi.LibrariesFactory;
+import pl.wavesoftware.plugs.tools.packager.api.Packager;
+import pl.wavesoftware.plugs.tools.packager.api.PackagerFactory;
+import pl.wavesoftware.plugs.tools.packager.api.RepackagingIsRequiredFactory;
+import pl.wavesoftware.plugs.tools.packager.api.manifest.ManifestBuilder;
+import pl.wavesoftware.plugs.tools.packager.api.model.Filter;
+import pl.wavesoftware.plugs.tools.packager.api.model.PackagerConfiguration;
+import pl.wavesoftware.plugs.tools.packager.api.model.RepackagingIsRequired;
+import pl.wavesoftware.plugs.tools.packager.api.spi.LibrariesFactory;
 
 import javax.inject.Inject;
 import javax.inject.Named;

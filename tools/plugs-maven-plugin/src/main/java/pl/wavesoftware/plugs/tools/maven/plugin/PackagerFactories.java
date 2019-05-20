@@ -19,7 +19,7 @@ package pl.wavesoftware.plugs.tools.maven.plugin;
 import pl.wavesoftware.plugs.tools.maven.plugin.filter.FilterFactory;
 import pl.wavesoftware.plugs.tools.maven.plugin.io.LoggerFactory;
 import pl.wavesoftware.plugs.tools.maven.plugin.mapper.PackagerConfigurationFactory;
-import pl.wavesoftware.plugs.tools.packager.core.PackagerFactory;
+import pl.wavesoftware.plugs.tools.packager.api.PackagerFactory;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>

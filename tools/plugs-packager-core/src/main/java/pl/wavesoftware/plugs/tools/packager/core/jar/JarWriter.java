@@ -22,7 +22,9 @@ import org.apache.commons.compress.archivers.zip.UnixStat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.MessageFormatter;
-import pl.wavesoftware.plugs.tools.packager.core.model.Library;
+import pl.wavesoftware.plugs.tools.packager.api.jar.ArchiveWriterEvent;
+import pl.wavesoftware.plugs.tools.packager.api.jar.ArchiveWriterListener;
+import pl.wavesoftware.plugs.tools.packager.api.model.Library;
 
 import javax.annotation.Nullable;
 import javax.annotation.WillClose;

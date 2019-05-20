@@ -20,7 +20,7 @@ import org.apache.maven.shared.artifact.filter.collection.FilterArtifacts;
 import pl.wavesoftware.plugs.tools.maven.plugin.mapper.ArtifactMapper;
 import pl.wavesoftware.plugs.tools.maven.plugin.model.Exclude;
 import pl.wavesoftware.plugs.tools.maven.plugin.model.Include;
-import pl.wavesoftware.plugs.tools.packager.core.model.Filter;
+import pl.wavesoftware.plugs.tools.packager.api.model.Filter;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;

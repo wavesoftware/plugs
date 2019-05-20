@@ -19,7 +19,7 @@ package pl.wavesoftware.plugs.tools.maven.plugin.model;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import pl.wavesoftware.plugs.tools.packager.core.model.FilterableDependency;
+import pl.wavesoftware.plugs.tools.packager.api.model.FilterableDependency;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>

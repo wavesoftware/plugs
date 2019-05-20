@@ -18,7 +18,7 @@ package pl.wavesoftware.plugs.tools.maven.plugin.filter;
 
 import org.apache.maven.artifact.Artifact;
 import pl.wavesoftware.plugs.tools.maven.plugin.model.Exclude;
-import pl.wavesoftware.plugs.tools.packager.core.model.FilterableDependency;
+import pl.wavesoftware.plugs.tools.packager.api.model.FilterableDependency;
 
 import java.util.List;
 

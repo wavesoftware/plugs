@@ -16,10 +16,11 @@
 
 package pl.wavesoftware.plugs.tools.packager.core;
 
-import pl.wavesoftware.plugs.tools.packager.core.digest.ProjectDigest;
-import pl.wavesoftware.plugs.tools.packager.core.model.PackagerCoordinates;
-import pl.wavesoftware.plugs.tools.packager.core.model.Project;
-import pl.wavesoftware.plugs.tools.packager.core.model.RepackagingIsRequired;
+import pl.wavesoftware.plugs.tools.packager.api.RepackagingIsRequiredFactory;
+import pl.wavesoftware.plugs.tools.packager.api.digest.ProjectDigester;
+import pl.wavesoftware.plugs.tools.packager.api.model.PackagerCoordinates;
+import pl.wavesoftware.plugs.tools.packager.api.model.Project;
+import pl.wavesoftware.plugs.tools.packager.api.model.RepackagingIsRequired;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -32,10 +33,10 @@ import javax.inject.Named;
 final class DefaultRepackagingIsRequiredFactory
   implements RepackagingIsRequiredFactory {
 
-  private final ProjectDigest digest;
+  private final ProjectDigester digest;
 
   @Inject
-  DefaultRepackagingIsRequiredFactory(ProjectDigest digest) {
+  DefaultRepackagingIsRequiredFactory(ProjectDigester digest) {
     this.digest = digest;
   }
 

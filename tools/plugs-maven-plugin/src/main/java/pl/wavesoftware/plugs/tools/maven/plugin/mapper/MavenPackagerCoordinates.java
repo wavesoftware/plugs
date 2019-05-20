@@ -17,9 +17,9 @@
 package pl.wavesoftware.plugs.tools.maven.plugin.mapper;
 
 import io.vavr.Lazy;
-import pl.wavesoftware.plugs.tools.packager.core.model.Artifact;
-import pl.wavesoftware.plugs.tools.packager.core.model.PackagerCoordinates;
-import pl.wavesoftware.plugs.tools.packager.core.model.Project;
+import pl.wavesoftware.plugs.tools.packager.api.model.Artifact;
+import pl.wavesoftware.plugs.tools.packager.api.model.PackagerCoordinates;
+import pl.wavesoftware.plugs.tools.packager.api.model.Project;
 
 import java.nio.file.Path;
 import java.util.function.Supplier;

@@ -18,7 +18,7 @@ package pl.wavesoftware.plugs.tools.maven.plugin.mapper;
 
 import io.vavr.collection.Traversable;
 import pl.wavesoftware.plugs.tools.maven.plugin.model.ResolvableDependency;
-import pl.wavesoftware.plugs.tools.packager.core.model.Artifact;
+import pl.wavesoftware.plugs.tools.packager.api.model.Artifact;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>

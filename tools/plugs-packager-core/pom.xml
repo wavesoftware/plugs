@@ -36,15 +36,11 @@
   
   <dependencies>
     <dependency>
-      <groupId>pl.wavesoftware.plugs</groupId>
-      <artifactId>plug-api</artifactId>
+      <groupId>pl.wavesoftware.plugs.tools</groupId>
+      <artifactId>plugs-packager-api</artifactId>
       <version>${project.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>pl.wavesoftware</groupId>
-      <artifactId>eid-exceptions</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -54,23 +50,27 @@
       <artifactId>javax.inject</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.vavr</groupId>
-      <artifactId>vavr</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.github.zafarkhaja</groupId>
-      <artifactId>java-semver</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
     </dependency>
 
     <!-- Tests -->
     <dependency>
-      <groupId>pl.wavesoftware.plugs</groupId>
-      <artifactId>testing</artifactId>
+      <groupId>pl.wavesoftware.plugs.tools</groupId>
+      <artifactId>plugs-packager-samples</artifactId>
       <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>pl.wavesoftware.testing</groupId>
+      <artifactId>junit5-starter</artifactId>
+      <version>1.0.0</version>
+      <type>pom</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

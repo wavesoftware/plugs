@@ -23,10 +23,10 @@ import io.vavr.collection.Set;
 import io.vavr.control.Option;
 import org.apache.maven.artifact.Artifact;
 import org.slf4j.Logger;
-import pl.wavesoftware.plugs.tools.packager.core.model.Libraries;
-import pl.wavesoftware.plugs.tools.packager.core.model.Library;
-import pl.wavesoftware.plugs.tools.packager.core.model.LibraryCallback;
-import pl.wavesoftware.plugs.tools.packager.core.model.LibraryScope;
+import pl.wavesoftware.plugs.tools.packager.api.model.Libraries;
+import pl.wavesoftware.plugs.tools.packager.api.model.Library;
+import pl.wavesoftware.plugs.tools.packager.api.model.LibraryCallback;
+import pl.wavesoftware.plugs.tools.packager.api.model.LibraryScope;
 
 import java.io.IOException;
 

@@ -19,9 +19,9 @@ package pl.wavesoftware.plugs.tools.maven.plugin.mapper;
 import io.vavr.collection.Set;
 import org.slf4j.Logger;
 import pl.wavesoftware.plugs.tools.maven.plugin.model.MavenLibraries;
-import pl.wavesoftware.plugs.tools.packager.core.model.Artifact;
-import pl.wavesoftware.plugs.tools.packager.core.model.Libraries;
-import pl.wavesoftware.plugs.tools.packager.core.spi.LibrariesFactory;
+import pl.wavesoftware.plugs.tools.packager.api.model.Artifact;
+import pl.wavesoftware.plugs.tools.packager.api.model.Libraries;
+import pl.wavesoftware.plugs.tools.packager.api.spi.LibrariesFactory;
 
 import javax.inject.Inject;
 import javax.inject.Named;

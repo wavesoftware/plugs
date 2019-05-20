@@ -16,26 +16,26 @@
 
 package pl.wavesoftware.plugs.api;
 
-import com.github.zafarkhaja.semver.Version;
+import com.vdurmont.semver4j.Semver;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PlugsVersionIT {
 
-  private static final Version BASE = Version.forIntegers(0, 0, 0);
+  private static final Semver BASE = new Semver("0.0.0");
 
   @Test
   void getVersion() {
-    Version version = Version.valueOf(PlugsVersion.getVersion());
+    Semver version = new Semver(PlugsVersion.getVersion());
 
-    assertThat(version.greaterThanOrEqualTo(BASE)).isTrue();
+    assertThat(version.isGreaterThanOrEqualTo(BASE)).isTrue();
   }
 
   @Test
   void manually() {
-    Version version = Version.valueOf(PlugsVersion.manuallyRead());
+    Semver version = new Semver(PlugsVersion.manuallyRead());
 
-    assertThat(version.greaterThanOrEqualTo(BASE)).isTrue();
+    assertThat(version.isGreaterThanOrEqualTo(BASE)).isTrue();
   }
 }

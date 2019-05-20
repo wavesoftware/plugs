@@ -19,6 +19,9 @@
  * @since 0.1.0
  */
 @ParametersAreNonnullByDefault
+@ReturnTypesAreNonnullByDefault
 package pl.wavesoftware.plugs.tools.maven.plugin.filter;
+
+import pl.wavesoftware.eid.api.ReturnTypesAreNonnullByDefault;
 
 import javax.annotation.ParametersAreNonnullByDefault;

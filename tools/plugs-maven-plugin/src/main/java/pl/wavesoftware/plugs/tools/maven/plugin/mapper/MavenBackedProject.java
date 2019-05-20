@@ -23,8 +23,8 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import pl.wavesoftware.plugs.tools.maven.plugin.model.ResolvableDependency;
-import pl.wavesoftware.plugs.tools.packager.core.model.Artifact;
-import pl.wavesoftware.plugs.tools.packager.core.model.Project;
+import pl.wavesoftware.plugs.tools.packager.api.model.Artifact;
+import pl.wavesoftware.plugs.tools.packager.api.model.Project;
 
 import java.nio.file.Path;
 

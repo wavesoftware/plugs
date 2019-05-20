@@ -25,7 +25,7 @@ import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.repository.RepositorySystem;
 import pl.wavesoftware.plugs.tools.maven.plugin.model.ResolvableDependency;
-import pl.wavesoftware.plugs.tools.packager.core.model.Artifact;
+import pl.wavesoftware.plugs.tools.packager.api.model.Artifact;
 
 import javax.inject.Inject;
 import javax.inject.Named;

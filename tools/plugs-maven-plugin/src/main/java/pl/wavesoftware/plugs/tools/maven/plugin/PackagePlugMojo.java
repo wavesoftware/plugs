@@ -30,12 +30,12 @@ import org.apiguardian.api.API.Status;
 import org.slf4j.Logger;
 import pl.wavesoftware.plugs.tools.maven.plugin.model.Exclude;
 import pl.wavesoftware.plugs.tools.maven.plugin.model.Include;
-import pl.wavesoftware.plugs.tools.packager.core.Packager;
-import pl.wavesoftware.plugs.tools.packager.core.model.CodeBlock;
-import pl.wavesoftware.plugs.tools.packager.core.model.Filter;
-import pl.wavesoftware.plugs.tools.packager.core.model.PackagerConfiguration;
-import pl.wavesoftware.plugs.tools.packager.core.model.PackagerCoordinates;
-import pl.wavesoftware.plugs.tools.packager.core.model.RepackageFailed;
+import pl.wavesoftware.plugs.tools.packager.api.Packager;
+import pl.wavesoftware.plugs.tools.packager.api.model.Filter;
+import pl.wavesoftware.plugs.tools.packager.api.model.PackagerConfiguration;
+import pl.wavesoftware.plugs.tools.packager.api.model.PackagerCoordinates;
+import pl.wavesoftware.plugs.tools.packager.api.model.RepackageFailed;
+import pl.wavesoftware.plugs.tools.packager.api.model.CodeBlock;
 
 import javax.inject.Inject;
 import java.io.File;

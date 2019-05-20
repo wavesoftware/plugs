@@ -1,7 +1,7 @@
 language: java
 sudo: false
 dist: trusty
-install: mvn install dependency:go-offline -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 script: mvn clean verify --fail-at-end -U -V
 notifications:
   email:

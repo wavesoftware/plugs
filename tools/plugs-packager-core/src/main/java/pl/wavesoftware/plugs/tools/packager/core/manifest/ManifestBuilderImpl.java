@@ -19,9 +19,10 @@ package pl.wavesoftware.plugs.tools.packager.core.manifest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.wavesoftware.plugs.api.PlugsVersion;
-import pl.wavesoftware.plugs.tools.packager.core.digest.ProjectDigest;
-import pl.wavesoftware.plugs.tools.packager.core.model.Project;
-import pl.wavesoftware.plugs.tools.packager.core.model.RepackageFailed;
+import pl.wavesoftware.plugs.tools.packager.api.digest.ProjectDigester;
+import pl.wavesoftware.plugs.tools.packager.api.manifest.ManifestBuilder;
+import pl.wavesoftware.plugs.tools.packager.api.model.Project;
+import pl.wavesoftware.plugs.tools.packager.api.model.RepackageFailed;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -30,9 +31,9 @@ import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
-import static pl.wavesoftware.plugs.tools.packager.core.Constants.PLUGS_DIGEST_ATTRIBUTE;
-import static pl.wavesoftware.plugs.tools.packager.core.Constants.PLUGS_VERSION_ATTRIBUTE;
-import static pl.wavesoftware.plugs.tools.packager.core.model.RepackageFailed.tring;
+import static pl.wavesoftware.plugs.tools.packager.api.model.RepackageFailed.tring;
+import static pl.wavesoftware.plugs.tools.packager.api.Constants.PLUGS_DIGEST_ATTRIBUTE;
+import static pl.wavesoftware.plugs.tools.packager.api.Constants.PLUGS_VERSION_ATTRIBUTE;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
@@ -44,18 +45,17 @@ final class ManifestBuilderImpl implements ManifestBuilder {
   private static final Logger LOGGER =
     LoggerFactory.getLogger(ManifestBuilderImpl.class);
 
-  private final ProjectDigest digest;
+  private final ProjectDigester digest;
 
   @Inject
-  ManifestBuilderImpl(ProjectDigest digest) {
+  ManifestBuilderImpl(ProjectDigester digest) {
     this.digest = digest;
   }
 
   @Override
-  public Manifest buildManifest(
-    Project project,
-    JarFile sourceJar
-  ) throws RepackageFailed {
+  public Manifest buildManifest(Project project, JarFile sourceJar)
+    throws RepackageFailed {
+
     Path sourcePath = project.mainArtifact().path();
     Manifest manifest = tring(sourceJar::getManifest).or(
       "Can't read MANIFEST.MF file from source jar: {}",

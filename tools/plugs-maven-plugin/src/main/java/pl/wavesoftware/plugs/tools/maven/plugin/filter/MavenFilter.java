@@ -21,9 +21,9 @@ import io.vavr.collection.Set;
 import org.apache.maven.shared.artifact.filter.collection.ArtifactFilterException;
 import org.apache.maven.shared.artifact.filter.collection.FilterArtifacts;
 import pl.wavesoftware.plugs.tools.maven.plugin.mapper.ArtifactMapper;
-import pl.wavesoftware.plugs.tools.packager.core.model.Artifact;
-import pl.wavesoftware.plugs.tools.packager.core.model.Filter;
-import pl.wavesoftware.plugs.tools.packager.core.model.RepackageFailed;
+import pl.wavesoftware.plugs.tools.packager.api.model.Artifact;
+import pl.wavesoftware.plugs.tools.packager.api.model.Filter;
+import pl.wavesoftware.plugs.tools.packager.api.model.RepackageFailed;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
