@@ -104,7 +104,7 @@
     <sonar.skip>${skipTests}</sonar.skip>
 
     <!-- Versions -->
-    <spring.boot.version>2.1.1.RELEASE</spring.boot.version>
+    <spring.boot.version>2.1.6.RELEASE</spring.boot.version>
     <felix.version>6.0.1</felix.version>
   </properties>
 
