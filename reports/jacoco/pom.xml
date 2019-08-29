@@ -30,6 +30,10 @@
   <packaging>pom</packaging>
   <name>Plugs :: Reports :: JaCoCo</name>
 
+  <properties>
+    <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>pl.wavesoftware.plugs</groupId>

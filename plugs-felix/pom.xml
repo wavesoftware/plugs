@@ -29,10 +29,6 @@
   <artifactId>plugs-felix</artifactId>
   <name>Plugs :: Felix</name>
 
-  <properties>
-    <unpack-manifestmf.skip>false</unpack-manifestmf.skip>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>pl.wavesoftware.plugs</groupId>

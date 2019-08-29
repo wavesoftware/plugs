@@ -153,7 +153,7 @@ class PlugsOsgiContainerTest {
   }
 
   private static String takeFirst2Lines(LogMessage message) {
-    return List.of(message.text.split("\n"))
+    return List.of(message.text.replace("\r\n", "\n").split("\n"))
       .take(2)
       .intersperse("\n")
       .foldLeft(new StringBuilder(), StringBuilder::append)

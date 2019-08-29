@@ -30,10 +30,6 @@
 
   <name>Plugs :: Plugs Core</name>
 
-  <properties>
-    <unpack-manifestmf.skip>false</unpack-manifestmf.skip>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>pl.wavesoftware</groupId>

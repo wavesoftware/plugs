@@ -14,9 +14,9 @@ install:
   - cmd: SET MAVEN_OPTS=-Xmx1g
   - cmd: SET JAVA_OPTS=-Xmx1g
 build_script:
-  - mvn -V clean package --batch-mode -DskipTest
+  - ./mvnw.cmd package -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 test_script:
-  - mvn -V verify
+  - ./mvnw.cmd verify --fail-at-end -U -V
 cache:
   - C:\maven\
   - C:\Users\appveyor\.m2

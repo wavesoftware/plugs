@@ -30,10 +30,6 @@
   <artifactId>plugs-spring</artifactId>
   <name>Plugs :: Spring Module</name>
 
-  <properties>
-    <unpack-manifestmf.skip>false</unpack-manifestmf.skip>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>pl.wavesoftware.plugs</groupId>

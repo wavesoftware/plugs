@@ -95,6 +95,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <sonar.host.url>https://sonarcloud.io/</sonar.host.url>
+    <sonar.projectKey>wavesoftware_plugs</sonar.projectKey>
+    <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
+    <sonar.jacoco.reportPaths>dont-use-jacoco.exec</sonar.jacoco.reportPaths>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
 
@@ -103,8 +106,8 @@
     <sonar.skip>${skipTests}</sonar.skip>
 
     <!-- Versions -->
-    <spring.boot.version>2.1.6.RELEASE</spring.boot.version>
-    <felix.version>6.0.1</felix.version>
+    <spring.boot.version>2.1.7.RELEASE</spring.boot.version>
+    <felix.version>6.0.3</felix.version>
   </properties>
 
   <dependencyManagement>
@@ -119,7 +122,7 @@
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.framework</artifactId>
-        <version>6.0.1</version>
+        <version>${felix.version}</version>
       </dependency>
       <dependency>
         <groupId>org.osgi</groupId>
@@ -152,11 +155,6 @@
         <version>3.1.6</version>
       </dependency>
       <dependency>
-        <groupId>com.portingle</groupId>
-        <artifactId>slf4jtesting</artifactId>
-        <version>1.1.3</version>
-      </dependency>
-      <dependency>
         <groupId>pl.wavesoftware.testing</groupId>
         <artifactId>junit5-starter</artifactId>
         <version>1.0.0</version>
@@ -173,6 +171,15 @@
           <groupId>org.sonarsource.scanner.maven</groupId>
           <artifactId>sonar-maven-plugin</artifactId>
           <version>3.6.0.1398</version>
+          <executions>
+            <execution>
+              <id>publish</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>sonar</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <groupId>com.manamind.jgitflow</groupId>
@@ -336,6 +343,24 @@
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>sonar</id>
+      <activation>
+        <property>
+          <name>env.SONAR</name>
+          <value>publish</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
           </plugin>
         </plugins>
       </build>
