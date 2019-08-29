@@ -51,26 +51,6 @@
       <artifactId>plugs-spring</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>pl.wavesoftware.plugs.tools</groupId>
-      <artifactId>plugs-maven-plugin</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>pl.wavesoftware.plugs.tools</groupId>
-      <artifactId>plugs-packager-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>pl.wavesoftware.plugs.tools</groupId>
-      <artifactId>plugs-packager-core</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>pl.wavesoftware.plugs.tools</groupId>
-      <artifactId>plugs-packager-samples</artifactId>
-      <version>${project.version}</version>
-    </dependency>
   </dependencies>
 
   <build>
