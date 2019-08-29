@@ -1,8 +1,8 @@
 language: java
 sudo: false
 dist: trusty
-install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-script: mvn clean verify --fail-at-end -U -V
+install: ./mvnw package -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+script: ./mvnw verify --fail-at-end -U -V
 notifications:
   email:
     on_failure: change
@@ -15,7 +15,6 @@ matrix:
         - bash <(curl -s https://codecov.io/bash)
     - jdk: oraclejdk8
       env: JACOCO=true SONAR=publish
-      script: mvn clean verify sonar:sonar --fail-at-end -U -V
     # Performance testing
     - jdk: openjdk8
       env: JACOCO=false
@@ -23,3 +22,6 @@ matrix:
       env: JACOCO=false
     - jdk: oraclejdk11
       env: JACOCO=false
+addons:
+  sonarcloud:
+    organization: wavesoftware
