@@ -32,6 +32,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import pl.wavesoftware.plugs.core.OsgiContainer;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
@@ -72,6 +73,8 @@ class PlugsContextIT {
   @DirtiesContext
   void refreshContext() {
     // when
-    publisher.publishEvent(new ContextClosedEvent(applicationContext));
+    assertThatCode(() ->
+      publisher.publishEvent(new ContextClosedEvent(applicationContext))
+    ).doesNotThrowAnyException();
   }
 }
