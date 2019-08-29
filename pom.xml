@@ -60,7 +60,7 @@
     <module>plugs-spring</module>
     <module>plugs-maven-plugin</module>
     <module>examples</module>
-    <module>testing</module>
+    <module>reports</module>
   </modules>
 
   <scm>
@@ -94,13 +94,11 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <sonar.working.directory>${project.build.directory}/sonar
-    </sonar.working.directory>
-    <sonar.host.url>https://sonar.wavesoftware.pl</sonar.host.url>
-    <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-    <java.source.version>8</java.source.version>
-    <sonar.java.source>${java.source.version}</sonar.java.source>
-    <maven.compiler.source>1.${java.source.version}</maven.compiler.source>
+    <sonar.host.url>https://sonarcloud.io/</sonar.host.url>
+    <sonar.projectKey>wavesoftware_plugs</sonar.projectKey>
+    <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
+    <sonar.jacoco.reportPaths>dont-use-jacoco.exec</sonar.jacoco.reportPaths>
+    <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
 
     <skipTests/>
@@ -108,8 +106,8 @@
     <sonar.skip>${skipTests}</sonar.skip>
 
     <!-- Versions -->
-    <spring.boot.version>2.1.1.RELEASE</spring.boot.version>
-    <felix.version>6.0.1</felix.version>
+    <spring.boot.version>2.1.7.RELEASE</spring.boot.version>
+    <felix.version>6.0.3</felix.version>
   </properties>
 
   <dependencyManagement>
@@ -124,7 +122,7 @@
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.framework</artifactId>
-        <version>6.0.1</version>
+        <version>${felix.version}</version>
       </dependency>
       <dependency>
         <groupId>org.osgi</groupId>
@@ -144,7 +142,7 @@
       <dependency>
         <groupId>io.vavr</groupId>
         <artifactId>vavr</artifactId>
-        <version>0.9.2</version>
+        <version>0.10.2</version>
       </dependency>
       <dependency>
         <groupId>pl.wavesoftware</groupId>
@@ -154,12 +152,14 @@
       <dependency>
         <groupId>org.awaitility</groupId>
         <artifactId>awaitility</artifactId>
-        <version>3.1.5</version>
+        <version>3.1.6</version>
       </dependency>
       <dependency>
-        <groupId>com.portingle</groupId>
-        <artifactId>slf4jtesting</artifactId>
-        <version>1.1.3</version>
+        <groupId>pl.wavesoftware.testing</groupId>
+        <artifactId>junit5-starter</artifactId>
+        <version>1.0.0</version>
+        <type>pom</type>
+        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -170,7 +170,16 @@
         <plugin>
           <groupId>org.sonarsource.scanner.maven</groupId>
           <artifactId>sonar-maven-plugin</artifactId>
-          <version>3.5.0.1254</version>
+          <version>3.6.0.1398</version>
+          <executions>
+            <execution>
+              <id>publish</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>sonar</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <groupId>com.manamind.jgitflow</groupId>
@@ -186,21 +195,18 @@
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.8.2</version>
+          <version>0.8.4</version>
           <executions>
             <execution>
               <id>jacoco-initialize</id>
               <goals>
                 <goal>prepare-agent</goal>
-                <goal>prepare-agent-integration</goal>
               </goals>
             </execution>
             <execution>
-              <id>jacoco-site</id>
-              <phase>post-integration-test</phase>
+              <id>jacoco-initialize-it</id>
               <goals>
-                <goal>report</goal>
-                <goal>report-integration</goal>
+                <goal>prepare-agent-integration</goal>
               </goals>
             </execution>
           </executions>
@@ -346,36 +352,15 @@
       <id>sonar</id>
       <activation>
         <property>
-          <!-- tries to determine is interactive user session -->
-          <name>env.GDMSESSION</name>
+          <name>env.SONAR</name>
+          <value>publish</value>
         </property>
       </activation>
-      <properties>
-        <sonar.analysis.mode>preview</sonar.analysis.mode>
-        <sonar.issuesReport.console.enable>true
-        </sonar.issuesReport.console.enable>
-        <sonar.issuesReport.html.enable>true</sonar.issuesReport.html.enable>
-        <sonar.report.export.path>issues.json</sonar.report.export.path>
-      </properties>
       <build>
         <plugins>
           <plugin>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-          </plugin>
-
-          <plugin>
             <groupId>org.sonarsource.scanner.maven</groupId>
             <artifactId>sonar-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>default</id>
-                <phase>post-integration-test</phase>
-                <goals>
-                  <goal>sonar</goal>
-                </goals>
-              </execution>
-            </executions>
           </plugin>
         </plugins>
       </build>

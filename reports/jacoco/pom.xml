@@ -22,15 +22,24 @@
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>plugs-parent</artifactId>
-    <groupId>pl.wavesoftware.plugs</groupId>
+    <groupId>pl.wavesoftware.plugs.reports</groupId>
+    <artifactId>plugs-reports-parent</artifactId>
     <version>0.1.0-SNAPSHOT</version>
   </parent>
+  <artifactId>plugs-jacoco-report</artifactId>
+  <packaging>pom</packaging>
+  <name>Plugs :: Reports :: JaCoCo</name>
 
-  <artifactId>plugs-spring</artifactId>
-  <name>Plugs :: Spring Module</name>
+  <properties>
+    <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+  </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>pl.wavesoftware.plugs</groupId>
+      <artifactId>plug-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
     <dependency>
       <groupId>pl.wavesoftware.plugs</groupId>
       <artifactId>plugs-core</artifactId>
@@ -40,28 +49,31 @@
       <groupId>pl.wavesoftware.plugs</groupId>
       <artifactId>plugs-felix</artifactId>
       <version>${project.version}</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-autoconfigure</artifactId>
-    </dependency>
-
-    <!-- Test -->
-    <dependency>
-      <groupId>pl.wavesoftware.testing</groupId>
-      <artifactId>junit5-starter</artifactId>
-      <type>pom</type>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-test</artifactId>
-      <scope>test</scope>
+      <groupId>pl.wavesoftware.plugs</groupId>
+      <artifactId>plugs-spring</artifactId>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>jacoco-report</id>
+              <phase>post-integration-test</phase>
+              <goals>
+                <goal>report-aggregate</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>

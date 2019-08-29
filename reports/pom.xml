@@ -26,38 +26,23 @@
     <groupId>pl.wavesoftware.plugs</groupId>
     <version>0.1.0-SNAPSHOT</version>
   </parent>
-  <artifactId>plugs-core</artifactId>
+  <groupId>pl.wavesoftware.plugs.reports</groupId>
+  <artifactId>plugs-reports-parent</artifactId>
+  <packaging>pom</packaging>
+  <name>Plugs :: Reports Parent</name>
 
-  <name>Plugs :: Plugs Core</name>
-
-  <dependencies>
-    <dependency>
-      <groupId>pl.wavesoftware</groupId>
-      <artifactId>eid-exceptions</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>osgi.core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>osgi.annotation</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.vavr</groupId>
-      <artifactId>vavr</artifactId>
-    </dependency>
-
-    <!-- Tests -->
-    <dependency>
-      <groupId>pl.wavesoftware.testing</groupId>
-      <artifactId>junit5-starter</artifactId>
-      <type>pom</type>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+  <profiles>
+    <profile>
+      <id>jacoco</id>
+      <activation>
+        <property>
+          <name>env.JACOCO</name>
+          <value>!false</value>
+        </property>
+      </activation>
+      <modules>
+        <module>jacoco</module>
+      </modules>
+    </profile>
+  </profiles>
 </project>

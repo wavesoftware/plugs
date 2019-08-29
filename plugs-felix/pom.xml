@@ -42,9 +42,9 @@
 
     <!-- Test -->
     <dependency>
-      <groupId>pl.wavesoftware.plugs</groupId>
-      <artifactId>testing</artifactId>
-      <version>${project.version}</version>
+      <groupId>pl.wavesoftware.testing</groupId>
+      <artifactId>junit5-starter</artifactId>
+      <type>pom</type>
       <scope>test</scope>
     </dependency>
   </dependencies>
