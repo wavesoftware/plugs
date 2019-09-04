@@ -14,23 +14,18 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.tools.packager.api.model;
+package pl.wavesoftware.plugs.tools.packager.core.jar;
 
-import io.vavr.collection.Set;
+import org.apache.commons.compress.archivers.jar.JarArchiveEntry;
+
+import javax.annotation.Nullable;
+import java.io.IOException;
 
 /**
- * Filters dependencies according to the rules of a filter.
- *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public interface Filter {
-  /**
-   * Filters given dependencies
-   *
-   * @param dependencies a dependencies to be filtered
-   * @return a filtered dependencies
-   * @throws RepackageFailed if filtering cant be done
-   */
-  Set<Artifact> filterDependencies(Set<Artifact> dependencies);
+interface JarEntryWriter {
+  void writeEntry(JarArchiveEntry entry, @Nullable EntryWriter entryWriter)
+    throws IOException;
 }

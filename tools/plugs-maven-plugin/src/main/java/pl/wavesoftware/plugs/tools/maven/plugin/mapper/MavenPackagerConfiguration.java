@@ -17,8 +17,6 @@
 package pl.wavesoftware.plugs.tools.maven.plugin.mapper;
 
 import io.vavr.Lazy;
-import org.apache.maven.execution.MavenSession;
-import org.apache.maven.project.MavenProject;
 import org.slf4j.Logger;
 import pl.wavesoftware.plugs.tools.packager.api.model.PackagerConfiguration;
 import pl.wavesoftware.plugs.tools.packager.api.model.PackagerCoordinates;
@@ -35,8 +33,7 @@ final class MavenPackagerConfiguration implements PackagerConfiguration {
 
   private final ArtifactMapper artifactMapper;
   private final Logger logger;
-  private final MavenProject mavenProject;
-  private final MavenSession mavenSession;
+  private final MavenInfo mavenInfo;
   private final Supplier<Project> project;
   private final String classifier;
   private final boolean attach;
@@ -47,8 +44,7 @@ final class MavenPackagerConfiguration implements PackagerConfiguration {
   MavenPackagerConfiguration(
     ArtifactMapper artifactMapper,
     Logger logger,
-    MavenProject project,
-    MavenSession session,
+    MavenInfo mavenInfo,
     String classifier,
     boolean attach,
     File outputDirectory,
@@ -56,8 +52,7 @@ final class MavenPackagerConfiguration implements PackagerConfiguration {
   ) {
     this.artifactMapper = artifactMapper;
     this.logger = logger;
-    this.mavenProject = project;
-    this.mavenSession = session;
+    this.mavenInfo = mavenInfo;
     this.classifier = classifier;
     this.attach = attach;
     this.outputDirectory = outputDirectory;
@@ -89,8 +84,8 @@ final class MavenPackagerConfiguration implements PackagerConfiguration {
   private Project calculateProject() {
     return new MavenBackedProject(
       artifactMapper,
-      mavenProject,
-      mavenSession,
+      mavenInfo.getMavenProject(),
+      mavenInfo.getMavenSession(),
       outputDirectory.toPath(),
       finalName,
       classifier

@@ -38,5 +38,5 @@ public interface ManifestBuilder {
    * @return a OSGi manifest for a Plug
    * @throws RepackageFailed if source jar can't be reed
    */
-  Manifest buildManifest(Project project, JarFile sourceJar) throws RepackageFailed;
+  Manifest buildManifest(Project project, JarFile sourceJar);
 }

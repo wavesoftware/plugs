@@ -51,7 +51,7 @@ class RepackageFailedTest {
     }
 
     @Test
-    void tringToGet() throws RepackageFailed {
+    void tringToGet() {
       // when
       String result = RepackageFailed.tring(() -> "result")
         .or(() -> "err");

@@ -14,23 +14,13 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.tools.packager.api.model;
-
-import io.vavr.collection.Set;
-
 /**
- * Filters dependencies according to the rules of a filter.
- *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
- * @since 0.1.0
+ * @since 2019-01-03
  */
-public interface Filter {
-  /**
-   * Filters given dependencies
-   *
-   * @param dependencies a dependencies to be filtered
-   * @return a filtered dependencies
-   * @throws RepackageFailed if filtering cant be done
-   */
-  Set<Artifact> filterDependencies(Set<Artifact> dependencies);
-}
+@ReturnTypesAreNonnullByDefault
+@ParametersAreNonnullByDefault
+package pl.wavesoftware.plugs.api;
+
+import pl.wavesoftware.eid.api.ReturnTypesAreNonnullByDefault;
+import javax.annotation.ParametersAreNonnullByDefault;

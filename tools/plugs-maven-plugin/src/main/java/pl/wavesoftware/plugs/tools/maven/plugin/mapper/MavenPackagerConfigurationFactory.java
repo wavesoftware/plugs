@@ -49,11 +49,11 @@ final class MavenPackagerConfigurationFactory implements PackagerConfigurationFa
     File outputDirectory,
     String finalName
   ) {
+    MavenInfo mavenInfo = new MavenInfo(project, session);
     return new MavenPackagerConfiguration(
       artifactMapper,
       logger,
-      project,
-      session,
+      mavenInfo,
       classifier,
       attach,
       outputDirectory,

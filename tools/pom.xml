@@ -32,10 +32,6 @@
   <packaging>pom</packaging>
   <name>Plugs :: Tools Parent</name>
 
-  <properties>
-    <project.rootdir>${project.basedir}/../..</project.rootdir>
-  </properties>
-
   <modules>
     <module>plugs-packager-api</module>
     <module>plugs-packager-core</module>

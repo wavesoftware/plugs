@@ -219,9 +219,7 @@ final class PackagePlugMojo extends AbstractMojo {
         logger.debug("Building of {} was successful.", coordinates.targetPath());
       } catch (RepackageFailed ex) {
         logger.error(
-          "Building of {} has failed: {}",
-          coordinates.targetPath(),
-          ex.getMessage()
+          "Building of {} has failed.", coordinates.targetPath()
         );
         throw new MojoExecutionException("Repackage FAILURE!", ex);
       }

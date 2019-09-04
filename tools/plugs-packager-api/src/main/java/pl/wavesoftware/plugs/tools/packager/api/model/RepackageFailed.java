@@ -27,8 +27,7 @@ import java.util.function.Supplier;
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-@SuppressWarnings("squid:S1162")
-public final class RepackageFailed extends Exception {
+public final class RepackageFailed extends RuntimeException {
   private static final long serialVersionUID = 20190208231616L;
 
   /**
@@ -81,11 +80,11 @@ public final class RepackageFailed extends Exception {
   }
 
   public interface OrElse<T> {
-    T or(Supplier<String> politeErrorSupplier) throws RepackageFailed;
-    default T or(String politeError) throws RepackageFailed {
+    T or(Supplier<String> politeErrorSupplier);
+    default T or(String politeError) {
       return or(() -> politeError);
     }
-    default T or(String politeErrorTemplate, Object... args) throws RepackageFailed {
+    default T or(String politeErrorTemplate, Object... args) {
       return or(
         () -> MessageFormatter
           .arrayFormat(politeErrorTemplate, args)

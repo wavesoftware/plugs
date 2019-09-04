@@ -31,6 +31,7 @@ import java.util.Arrays;
 final class ZipHeaderPeekInputStream extends FilterInputStream {
 
   private static final byte[] ZIP_HEADER = new byte[]{0x50, 0x4b, 0x03, 0x04};
+  private static final int ZIP_HEADER_SIZE = 4;
 
   private final byte[] header;
   private final int headerLength;
@@ -40,7 +41,7 @@ final class ZipHeaderPeekInputStream extends FilterInputStream {
 
   ZipHeaderPeekInputStream(InputStream in) throws IOException {
     super(in);
-    this.header = new byte[4];
+    this.header = new byte[ZIP_HEADER_SIZE];
     this.headerLength = in.read(this.header);
     this.headerStream = new ByteArrayInputStream(
       this.header,

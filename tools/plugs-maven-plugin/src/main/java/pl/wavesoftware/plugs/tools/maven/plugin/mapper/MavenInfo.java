@@ -14,23 +14,29 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.tools.packager.api.model;
+package pl.wavesoftware.plugs.tools.maven.plugin.mapper;
 
-import io.vavr.collection.Set;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.project.MavenProject;
 
 /**
- * Filters dependencies according to the rules of a filter.
- *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public interface Filter {
-  /**
-   * Filters given dependencies
-   *
-   * @param dependencies a dependencies to be filtered
-   * @return a filtered dependencies
-   * @throws RepackageFailed if filtering cant be done
-   */
-  Set<Artifact> filterDependencies(Set<Artifact> dependencies);
+final class MavenInfo {
+  private final MavenProject mavenProject;
+  private final MavenSession mavenSession;
+
+  MavenInfo(MavenProject mavenProject, MavenSession mavenSession) {
+    this.mavenProject = mavenProject;
+    this.mavenSession = mavenSession;
+  }
+
+  MavenProject getMavenProject() {
+    return mavenProject;
+  }
+
+  MavenSession getMavenSession() {
+    return mavenSession;
+  }
 }

@@ -16,50 +16,45 @@
 
 package pl.wavesoftware.plugs.tools.packager.core.jar;
 
-
 import pl.wavesoftware.plugs.tools.packager.api.jar.ArchiveWriterEvent;
 import pl.wavesoftware.plugs.tools.packager.api.jar.ArchiveWriterListener;
-import pl.wavesoftware.plugs.tools.packager.api.model.Library;
 
-import java.io.IOException;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
 
 /**
- * Writer used to write classes into a repackaged JAR.
- *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
- * @since 0.1.0writeNestedLibrary
+ * @since 0.1.0
  */
-interface ArchiveWriter {
-
-  /**
-   * Write the specified manifest.
-   *
-   * @param manifest the manifest to write
-   * @throws IOException of the manifest cannot be written
-   */
-  void writeManifest(Manifest manifest) throws IOException;
-
-  /**
-   * Write a nested library.
-   *
-   * @param destination the destination of the library
-   * @param library     the library
-   * @throws IOException if the write fails
-   */
-  void writeLibrary(String destination, Library library)
-    throws IOException;
-
-  /**
-   * Write all entries from the specified jar file.
-   *
-   * @param jarFile the source jar file
-   * @throws IOException if the entries cannot be written
-   */
-  void writeEntries(JarFile jarFile) throws IOException;
+final class Listeners {
+  private final Map<Class<? extends ArchiveWriterEvent>,
+    Set<ArchiveWriterListener<?>>> map = new LinkedHashMap<>();
 
   <E extends ArchiveWriterEvent> void addListener(
     Class<E> eventType, ArchiveWriterListener<E> listener
-  );
+  ) {
+    Set<ArchiveWriterListener<?>> values;
+    if (!map.containsKey(eventType)) {
+      values = new LinkedHashSet<>();
+      map.put(eventType, values);
+    } else {
+      values = map.get(eventType);
+    }
+    values.add(listener);
+  }
+
+  @SuppressWarnings("unchecked")
+  public <T extends ArchiveWriterEvent> Stream<ArchiveWriterListener<T>> get(
+    Class<T> eventType
+  ) {
+    Set<ArchiveWriterListener<?>> values = map.get(eventType);
+    Set<ArchiveWriterListener<T>> listeners = new LinkedHashSet<>(values.size());
+    for (ArchiveWriterListener<?> value : values) {
+      listeners.add((ArchiveWriterListener<T>) value);
+    }
+    return listeners.stream();
+  }
 }

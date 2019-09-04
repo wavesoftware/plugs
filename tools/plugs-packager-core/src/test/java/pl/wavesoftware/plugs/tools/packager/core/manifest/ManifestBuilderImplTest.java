@@ -29,7 +29,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import pl.wavesoftware.plugs.tools.packager.api.digest.ProjectDigester;
 import pl.wavesoftware.plugs.tools.packager.api.manifest.ManifestBuilder;
 import pl.wavesoftware.plugs.tools.packager.api.model.Project;
-import pl.wavesoftware.plugs.tools.packager.api.model.RepackageFailed;
 import pl.wavesoftware.plugs.tools.packager.sample.PackagerSamplerContext;
 import pl.wavesoftware.plugs.tools.packager.sample.project.SimpleProject;
 import pl.wavesoftware.sampler.api.SamplerContext;
@@ -70,7 +69,7 @@ class ManifestBuilderImplTest {
   }
 
   @Test
-  void buildManifest() throws RepackageFailed, IOException {
+  void buildManifest() throws IOException {
     // given
     Manifest input = new Manifest();
     String hash = "1q2w3e";

@@ -54,7 +54,7 @@ public final class WritableLibraries {
 
   public void write(JarWriter writer) throws IOException {
     for (Map.Entry<String, Library> entry : this.libraryEntryNames.entrySet()) {
-      writer.writeNestedLibrary(
+      writer.writeLibrary(
         entry.getKey().substring(0, entry.getKey().lastIndexOf('/') + 1),
         entry.getValue()
       );

@@ -16,13 +16,14 @@
 
 package pl.wavesoftware.plugs.tools.packager.sample;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import pl.wavesoftware.sampler.spring.Sample;
+import pl.wavesoftware.sampler.spring.SpringSamplerAutoConfiguration;
 
 @ComponentScan(includeFilters = @Filter(Sample.class))
-@EnableAutoConfiguration
+@ImportAutoConfiguration(SpringSamplerAutoConfiguration.class)
 public class PackagerSamplerContext {
 
 }

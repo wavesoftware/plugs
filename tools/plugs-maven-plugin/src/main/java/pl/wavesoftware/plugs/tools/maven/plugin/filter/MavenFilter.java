@@ -39,8 +39,7 @@ final class MavenFilter implements Filter {
   }
 
   @Override
-  public Set<Artifact> filterDependencies(Set<Artifact> dependencies)
-    throws RepackageFailed {
+  public Set<Artifact> filterDependencies(Set<Artifact> dependencies) {
     try {
       return HashSet.ofAll(
         filters.filter(dependencies.map(artifactMapper::mavenize).toJavaSet())

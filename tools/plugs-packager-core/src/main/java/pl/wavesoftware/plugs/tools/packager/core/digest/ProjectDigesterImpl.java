@@ -34,6 +34,9 @@ import static pl.wavesoftware.eid.utils.EidPreconditions.checkArgument;
  */
 @Named
 final class ProjectDigesterImpl implements ProjectDigester {
+
+  private static final int BASE36 = 36;
+
   @Override
   public CharSequence digest(Project project) throws IOException {
     Path sourcePath = project.mainArtifact().path();
@@ -42,14 +45,16 @@ final class ProjectDigesterImpl implements ProjectDigester {
     CRC32 digester = new CRC32();
     digester.update(sourcePath.toAbsolutePath().toString().getBytes(UTF_8));
     digester.update(Long.toHexString(Files.size(sourcePath)).getBytes(UTF_8));
-    digester.update(Long.toHexString(Files.getLastModifiedTime(sourcePath).toMillis()).getBytes(UTF_8));
+    digester.update(Long.toHexString(Files.getLastModifiedTime(sourcePath).toMillis())
+      .getBytes(UTF_8));
     digester.update(Long.toHexString(Files.size(buildFilePath)).getBytes(UTF_8));
-    digester.update(Long.toHexString(Files.getLastModifiedTime(buildFilePath).toMillis()).getBytes(UTF_8));
+    digester.update(Long.toHexString(Files.getLastModifiedTime(buildFilePath).toMillis())
+      .getBytes(UTF_8));
     return encode(digester.getValue());
   }
 
-  private CharSequence encode(long digest) {
-    return Long.toUnsignedString(digest, 36);
+  private static CharSequence encode(long digest) {
+    return Long.toUnsignedString(digest, BASE36);
   }
 
 }

@@ -14,23 +14,26 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.tools.packager.api.model;
+package pl.wavesoftware.plugs.tools.packager.core.jar;
 
-import io.vavr.collection.Set;
+import pl.wavesoftware.plugs.tools.packager.api.jar.ArchiveWriterEvent;
+import pl.wavesoftware.plugs.tools.packager.api.jar.ArchiveWriterListener;
 
 /**
- * Filters dependencies according to the rules of a filter.
- *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public interface Filter {
-  /**
-   * Filters given dependencies
-   *
-   * @param dependencies a dependencies to be filtered
-   * @return a filtered dependencies
-   * @throws RepackageFailed if filtering cant be done
-   */
-  Set<Artifact> filterDependencies(Set<Artifact> dependencies);
+abstract class ArchiveWriterEventAware implements ArchiveWriter {
+  private final Listeners listeners = new Listeners();
+
+  @Override
+  public <E extends ArchiveWriterEvent> void addListener(
+    Class<E> eventType, ArchiveWriterListener<E> listener
+  ) {
+    listeners.addListener(eventType, listener);
+  }
+
+  Listeners getListeners() {
+    return listeners;
+  }
 }

@@ -27,7 +27,7 @@ public final class StandardLibraries {
   /**
    * Represents no libraries.
    */
-  Libraries NONE = callback -> {};
+  public static final Libraries NONE = callback -> {};
 
   private StandardLibraries() {
     // non reachable

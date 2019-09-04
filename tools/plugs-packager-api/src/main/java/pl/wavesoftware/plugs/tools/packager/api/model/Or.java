@@ -16,17 +16,20 @@
 
 package pl.wavesoftware.plugs.tools.packager.api.model;
 
+import java.util.function.Consumer;
+
 /**
  * This interface represent a block of code that should be execute as a
  * alternative to the basic operation.
  */
-@FunctionalInterface
-public interface Or {
+public interface Or extends Consumer<CodeBlock> {
   /**
    * Consumes a block of code
    *
    * @param block a block of code
    * @throws RepackageFailed if repackaging has failed for a some kind of reason
    */
-  void or(CodeBlock block) throws RepackageFailed;
+  default void or(CodeBlock block) {
+    accept(block);
+  }
 }

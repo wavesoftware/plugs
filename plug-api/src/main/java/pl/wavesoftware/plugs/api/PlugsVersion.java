@@ -48,8 +48,8 @@ public final class PlugsVersion {
 
   static String manuallyRead() {
     List<URL> urls = Collections.list(tryToExecute(
-      () -> PlugsVersion.class
-        .getClassLoader()
+      () -> Thread.currentThread()
+        .getContextClassLoader()
         .getResources("META-INF/MANIFEST.MF"),
       "20190325:205203"
     ));

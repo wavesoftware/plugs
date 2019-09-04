@@ -87,7 +87,7 @@ final class DefaultPackager implements Packager {
     };
   }
 
-  private void doRepackage() throws RepackageFailed {
+  private void doRepackage() {
     PackagerCoordinates coordinates = configuration.coordinates();
     Artifact source = validateSource(coordinates.sourceArtifact());
     Path destination = validateDestination(coordinates.targetPath());
@@ -114,8 +114,7 @@ final class DefaultPackager implements Packager {
     return new JarFile(source.path().toAbsolutePath().toFile());
   }
 
-  private static Path validateDestination(Path destination)
-    throws RepackageFailed {
+  private static Path validateDestination(Path destination) {
     File asFile = destination.toFile();
     if (asFile.exists()) {
       check(asFile.isFile()).or(
@@ -126,7 +125,7 @@ final class DefaultPackager implements Packager {
     return destination;
   }
 
-  private static Artifact validateSource(Artifact source) throws RepackageFailed {
+  private static Artifact validateSource(Artifact source) {
     check(source.type() == ArtifactType.JAR).or(
       "Only jar artifacts are supported at this time"
     );
@@ -140,11 +139,8 @@ final class DefaultPackager implements Packager {
   }
 
   private void repackage(
-    Project project,
-    JarFile sourceJar,
-    Path destination,
-    Libraries libraries
-  ) throws RepackageFailed {
+    Project project, JarFile sourceJar, Path destination, Libraries libraries
+  ) {
     tring(() -> Files.deleteIfExists(destination)).or(
       "Can't remove previously created target file: {}",
       destination
@@ -189,7 +185,7 @@ final class DefaultPackager implements Packager {
     }
   }
 
-  private static JarWriter newJarWriter(Path destination) throws RepackageFailed {
+  private static JarWriter newJarWriter(Path destination) {
     return tring(() -> new JarWriter(destination)).or(
       "Can't create a jar at destination: {}",
       destination

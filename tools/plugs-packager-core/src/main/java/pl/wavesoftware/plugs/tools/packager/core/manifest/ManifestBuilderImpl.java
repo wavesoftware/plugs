@@ -22,7 +22,6 @@ import pl.wavesoftware.plugs.api.PlugsVersion;
 import pl.wavesoftware.plugs.tools.packager.api.digest.ProjectDigester;
 import pl.wavesoftware.plugs.tools.packager.api.manifest.ManifestBuilder;
 import pl.wavesoftware.plugs.tools.packager.api.model.Project;
-import pl.wavesoftware.plugs.tools.packager.api.model.RepackageFailed;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -31,9 +30,9 @@ import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
-import static pl.wavesoftware.plugs.tools.packager.api.model.RepackageFailed.tring;
 import static pl.wavesoftware.plugs.tools.packager.api.Constants.PLUGS_DIGEST_ATTRIBUTE;
 import static pl.wavesoftware.plugs.tools.packager.api.Constants.PLUGS_VERSION_ATTRIBUTE;
+import static pl.wavesoftware.plugs.tools.packager.api.model.RepackageFailed.tring;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
@@ -53,8 +52,7 @@ final class ManifestBuilderImpl implements ManifestBuilder {
   }
 
   @Override
-  public Manifest buildManifest(Project project, JarFile sourceJar)
-    throws RepackageFailed {
+  public Manifest buildManifest(Project project, JarFile sourceJar) {
 
     Path sourcePath = project.mainArtifact().path();
     Manifest manifest = tring(sourceJar::getManifest).or(
