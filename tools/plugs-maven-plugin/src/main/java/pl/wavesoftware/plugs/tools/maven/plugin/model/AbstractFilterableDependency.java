@@ -42,7 +42,7 @@ abstract class AbstractFilterableDependency implements FilterableDependency {
    *
    * @since 0.1.0
    */
-  @Parameter(required = true)
+  @Parameter
   private String artifactId;
 
   /**

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.tools.packager.sample.artifact.impl;
+package pl.wavesoftware.plugs.tools.packager.sample.artifact;
 
 import com.vdurmont.semver4j.Semver;
 import io.vavr.Lazy;
@@ -62,6 +62,11 @@ final class SimpleArtifact implements Artifact {
   @Override
   public String name() {
     return "simple";
+  }
+
+  @Override
+  public String group() {
+    return "org.example";
   }
 
   @Override

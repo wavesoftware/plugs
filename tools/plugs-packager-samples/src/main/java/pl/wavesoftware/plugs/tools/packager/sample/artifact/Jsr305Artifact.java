@@ -16,8 +16,27 @@
 
 package pl.wavesoftware.plugs.tools.packager.sample.artifact;
 
+import com.vdurmont.semver4j.Semver;
 import pl.wavesoftware.plugs.tools.packager.api.model.Artifact;
 import pl.wavesoftware.sampler.api.Sampler;
+import pl.wavesoftware.sampler.api.SamplerContext;
+import pl.wavesoftware.sampler.spring.Sample;
 
-public interface Jsr305Artifact extends Sampler<Artifact> {
+@Sample
+public final class Jsr305Artifact implements Sampler<Artifact> {
+  private final SamplerContext context;
+
+  Jsr305Artifact(SamplerContext context) {
+    this.context = context;
+  }
+
+  @Override
+  public Artifact create() {
+    return new MavenlikeArtifact(
+      context,
+      "jsr305",
+      "com.google.code.findbugs",
+      new Semver("3.0.2")
+    );
+  }
 }

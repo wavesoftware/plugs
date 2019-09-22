@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.tools.packager.sample.artifact.impl;
+package pl.wavesoftware.plugs.tools.packager.sample.artifact;
 
 import com.vdurmont.semver4j.Semver;
 import pl.wavesoftware.plugs.tools.packager.api.model.Artifact;
-import pl.wavesoftware.plugs.tools.packager.sample.artifact.Jsr305Artifact;
+import pl.wavesoftware.sampler.api.Sampler;
 import pl.wavesoftware.sampler.api.SamplerContext;
 import pl.wavesoftware.sampler.spring.Sample;
 
+/**
+ * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
+ * @since 0.1.0
+ */
 @Sample
-final class Jsr305ArtifactImpl implements Jsr305Artifact {
+public final class SpringCoreArtifact implements Sampler<Artifact> {
   private final SamplerContext context;
 
-  Jsr305ArtifactImpl(SamplerContext context) {
+  SpringCoreArtifact(SamplerContext context) {
     this.context = context;
   }
 
@@ -34,9 +38,9 @@ final class Jsr305ArtifactImpl implements Jsr305Artifact {
   public Artifact create() {
     return new MavenlikeArtifact(
       context,
-      "jsr305",
-      "com.google.code.findbugs",
-      new Semver("3.0.2")
+      "spring-core",
+      "org.springframework",
+      new Semver("5.1.9.RELEASE")
     );
   }
 }

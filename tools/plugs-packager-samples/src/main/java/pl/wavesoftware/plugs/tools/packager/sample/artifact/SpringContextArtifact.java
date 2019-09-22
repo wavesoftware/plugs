@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.tools.packager.sample.artifact.impl;
+package pl.wavesoftware.plugs.tools.packager.sample.artifact;
 
 import com.vdurmont.semver4j.Semver;
 import pl.wavesoftware.plugs.tools.packager.api.model.Artifact;
-import pl.wavesoftware.plugs.tools.packager.sample.artifact.OsgiCoreArtifact;
+import pl.wavesoftware.sampler.api.Sampler;
 import pl.wavesoftware.sampler.api.SamplerContext;
 import pl.wavesoftware.sampler.spring.Sample;
 
+/**
+ * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
+ * @since 0.1.0
+ */
 @Sample
-final class OsgiCoreArtifactImpl implements OsgiCoreArtifact {
+public final class SpringContextArtifact implements Sampler<Artifact> {
   private final SamplerContext context;
 
-  OsgiCoreArtifactImpl(SamplerContext context) {
+  SpringContextArtifact(SamplerContext context) {
     this.context = context;
   }
 
@@ -34,9 +38,9 @@ final class OsgiCoreArtifactImpl implements OsgiCoreArtifact {
   public Artifact create() {
     return new MavenlikeArtifact(
       context,
-      "osgi.core",
-      "org.osgi",
-      new Semver("7.0.0")
+      "spring-context",
+      "org.springframework",
+      new Semver("5.1.9.RELEASE")
     );
   }
 }

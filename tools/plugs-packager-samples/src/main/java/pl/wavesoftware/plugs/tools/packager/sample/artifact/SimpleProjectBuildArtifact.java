@@ -18,6 +18,21 @@ package pl.wavesoftware.plugs.tools.packager.sample.artifact;
 
 import pl.wavesoftware.plugs.tools.packager.api.model.Artifact;
 import pl.wavesoftware.sampler.api.Sampler;
+import pl.wavesoftware.sampler.api.SamplerContext;
+import pl.wavesoftware.sampler.spring.Sample;
 
-public interface SimpleProjectBuildArtifact extends Sampler<Artifact> {
+@Sample
+public final class SimpleProjectBuildArtifact implements Sampler<Artifact> {
+
+  private final SamplerContext context;
+
+  SimpleProjectBuildArtifact(SamplerContext context) {
+    this.context = context;
+  }
+
+  @Override
+  public Artifact create() {
+    return new SimpleArtifact(context);
+  }
+
 }

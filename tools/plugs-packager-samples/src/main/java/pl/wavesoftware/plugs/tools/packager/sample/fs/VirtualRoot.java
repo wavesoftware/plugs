@@ -16,11 +16,26 @@
 
 package pl.wavesoftware.plugs.tools.packager.sample.fs;
 
+import com.google.common.jimfs.Configuration;
+import com.google.common.jimfs.Jimfs;
+import org.springframework.beans.factory.DisposableBean;
 import pl.wavesoftware.sampler.api.Sampler;
+import pl.wavesoftware.sampler.spring.Sample;
 
+import java.nio.file.FileSystem;
 import java.nio.file.Path;
 
+@Sample
+public final class VirtualRoot implements Sampler<Path>, DisposableBean {
+  private final FileSystem fs = Jimfs.newFileSystem(Configuration.unix());
 
-public interface VirtualRoot extends Sampler<Path> {
+  @Override
+  public Path create() {
+    return fs.getPath("/");
+  }
 
+  @Override
+  public void destroy() throws Exception {
+    fs.close();
+  }
 }

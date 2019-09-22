@@ -14,51 +14,33 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.tools.packager.api.model;
+package pl.wavesoftware.plugs.tools.packager.sample.artifact;
 
 import com.vdurmont.semver4j.Semver;
-
-import java.nio.file.Path;
+import pl.wavesoftware.plugs.tools.packager.api.model.Artifact;
+import pl.wavesoftware.sampler.api.Sampler;
+import pl.wavesoftware.sampler.api.SamplerContext;
+import pl.wavesoftware.sampler.spring.Sample;
 
 /**
- * Represents a artifact of a project
- *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-public interface Artifact {
+@Sample
+public final class SpringJclArtifact implements Sampler<Artifact> {
+  private final SamplerContext context;
 
-  /**
-   * A name
-   *
-   * @return a name
-   */
-  String name();
+  SpringJclArtifact(SamplerContext context) {
+    this.context = context;
+  }
 
-  /**
-   * A group of a artifact
-   *
-   * @return a group
-   */
-  String group();
-
-  /**
-   * A version
-   *
-   * @return a version
-   */
-  Semver version();
-
-  /**
-   * A path to a file that this artifact represents
-   *
-   * @return a path to a file of the artifact
-   */
-  Path path();
-
-  /**
-   * A type of this artifact
-   * @return a type of this artifact
-   */
-  ArtifactType type();
+  @Override
+  public Artifact create() {
+    return new MavenlikeArtifact(
+      context,
+      "spring-jcl",
+      "org.springframework",
+      new Semver("5.1.9.RELEASE")
+    );
+  }
 }

@@ -22,6 +22,7 @@ import org.apache.maven.shared.artifact.filter.collection.ArtifactFilterExceptio
 import org.apache.maven.shared.artifact.filter.collection.ArtifactsFilter;
 import pl.wavesoftware.plugs.tools.packager.api.model.FilterableDependency;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -78,13 +79,15 @@ abstract class AbstractDependencyFilter extends AbstractArtifactsFilter {
     if (!dependency.groupId().equals(artifact.getGroupId())) {
       return false;
     }
-    if (!dependency.artifactId().equals(artifact.getArtifactId())) {
+    @Nullable String dependencyArtifactId = dependency.artifactId();
+    if (dependencyArtifactId != null && !dependencyArtifactId.equals(artifact.getArtifactId())) {
       return false;
     }
-    return (dependency.classifier() == null
+    @Nullable String dependencyClassifier = dependency.classifier();
+    return (dependencyClassifier == null
       || (
       artifact.getClassifier() != null
-        && dependency.classifier().equals(artifact.getClassifier())
+        && dependencyClassifier.equals(artifact.getClassifier())
     )
     );
   }

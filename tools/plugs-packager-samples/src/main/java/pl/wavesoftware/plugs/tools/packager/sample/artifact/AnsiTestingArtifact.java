@@ -14,25 +14,33 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.tools.packager.sample.artifact.impl;
+package pl.wavesoftware.plugs.tools.packager.sample.artifact;
 
+import com.vdurmont.semver4j.Semver;
 import pl.wavesoftware.plugs.tools.packager.api.model.Artifact;
-import pl.wavesoftware.plugs.tools.packager.sample.artifact.SimpleProjectBuildArtifact;
+import pl.wavesoftware.sampler.api.Sampler;
 import pl.wavesoftware.sampler.api.SamplerContext;
 import pl.wavesoftware.sampler.spring.Sample;
 
+/**
+ * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
+ * @since 0.1.0
+ */
 @Sample
-final class SimpleProjectBuildArtifactImpl implements SimpleProjectBuildArtifact {
-
+public final class AnsiTestingArtifact implements Sampler<Artifact> {
   private final SamplerContext context;
 
-  SimpleProjectBuildArtifactImpl(SamplerContext context) {
+  AnsiTestingArtifact(SamplerContext context) {
     this.context = context;
   }
 
   @Override
   public Artifact create() {
-    return new SimpleArtifact(context);
+    return new MavenlikeArtifact(
+      context,
+      "ansi",
+      "pl.wavesoftware.testing",
+      new Semver("1.0.0")
+    );
   }
-
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.tools.packager.sample.artifact.impl;
+package pl.wavesoftware.plugs.tools.packager.sample.artifact;
 
 import com.vdurmont.semver4j.Semver;
 import pl.wavesoftware.plugs.tools.packager.api.model.Artifact;
@@ -49,6 +49,11 @@ final class MavenlikeArtifact implements Artifact {
   }
 
   @Override
+  public String group() {
+    return group;
+  }
+
+  @Override
   public Semver version() {
     return version;
   }
@@ -80,5 +85,14 @@ final class MavenlikeArtifact implements Artifact {
       "%s-%s.%s",
       name(), version(), type().extension()
     );
+  }
+
+  @Override
+  public String toString() {
+    return "MavenlikeArtifact{" +
+      "name='" + name + '\'' +
+      ", group='" + group + '\'' +
+      ", version=" + version +
+      '}';
   }
 }

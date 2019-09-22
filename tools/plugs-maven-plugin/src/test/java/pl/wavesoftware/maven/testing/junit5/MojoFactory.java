@@ -17,6 +17,7 @@
 package pl.wavesoftware.maven.testing.junit5;
 
 import org.apache.maven.plugin.AbstractMojo;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
@@ -26,4 +27,5 @@ public interface MojoFactory {
   MojoFactory configurator(MojoConfigurator configurator);
   MojoFactory customizer(MavenProjectCustomizer customizer);
   <T extends AbstractMojo> MojoBuilder<T> builder(Class<T> mojoType);
+  <T> T lookup(Class<T> role) throws ComponentLookupException;
 }

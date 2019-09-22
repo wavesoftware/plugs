@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-package pl.wavesoftware.plugs.tools.packager.sample.artifact.impl;
+package pl.wavesoftware.plugs.tools.packager.sample.artifact;
 
 import com.vdurmont.semver4j.Semver;
 import pl.wavesoftware.plugs.tools.packager.api.model.Artifact;
-import pl.wavesoftware.plugs.tools.packager.sample.artifact.HibernateArtifact;
+import pl.wavesoftware.sampler.api.Sampler;
 import pl.wavesoftware.sampler.api.SamplerContext;
 import pl.wavesoftware.sampler.spring.Sample;
 
+/**
+ * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
+ * @since 0.1.0
+ */
 @Sample
-final class HibernateArtifactImpl implements HibernateArtifact {
+public final class EidArtifact implements Sampler<Artifact> {
   private final SamplerContext context;
 
-  HibernateArtifactImpl(SamplerContext context) {
+  EidArtifact(SamplerContext context) {
     this.context = context;
   }
 
@@ -34,9 +38,9 @@ final class HibernateArtifactImpl implements HibernateArtifact {
   public Artifact create() {
     return new MavenlikeArtifact(
       context,
-      "hibernate-core",
-      "org.hibernate",
-      new Semver("5.4.2.Final")
+      "eid-exceptions",
+      "pl.wavesoftware",
+      new Semver("2.0.0")
     );
   }
 }

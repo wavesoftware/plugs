@@ -16,9 +16,27 @@
 
 package pl.wavesoftware.plugs.tools.packager.sample.artifact;
 
+import com.vdurmont.semver4j.Semver;
 import pl.wavesoftware.plugs.tools.packager.api.model.Artifact;
 import pl.wavesoftware.sampler.api.Sampler;
+import pl.wavesoftware.sampler.api.SamplerContext;
+import pl.wavesoftware.sampler.spring.Sample;
 
-public interface HibernateArtifact extends Sampler<Artifact> {
+@Sample
+public final class HibernateArtifact implements Sampler<Artifact> {
+  private final SamplerContext context;
 
+  HibernateArtifact(SamplerContext context) {
+    this.context = context;
+  }
+
+  @Override
+  public Artifact create() {
+    return new MavenlikeArtifact(
+      context,
+      "hibernate-core",
+      "org.hibernate",
+      new Semver("5.4.2.Final")
+    );
+  }
 }

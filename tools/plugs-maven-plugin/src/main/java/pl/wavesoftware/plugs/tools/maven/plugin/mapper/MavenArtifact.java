@@ -43,6 +43,11 @@ final class MavenArtifact implements Artifact {
   }
 
   @Override
+  public String group() {
+    return getDelegate().getGroupId();
+  }
+
+  @Override
   public Semver version() {
     return new Semver(getDelegate().getVersion());
   }

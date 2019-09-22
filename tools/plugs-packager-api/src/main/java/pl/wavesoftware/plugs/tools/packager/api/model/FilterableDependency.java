@@ -16,12 +16,16 @@
 
 package pl.wavesoftware.plugs.tools.packager.api.model;
 
+import javax.annotation.Nullable;
+
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
 public interface FilterableDependency {
   String groupId();
+  @Nullable
   String artifactId();
+  @Nullable
   String classifier();
 }

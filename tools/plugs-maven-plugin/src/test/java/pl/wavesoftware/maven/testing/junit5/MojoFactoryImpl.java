@@ -18,6 +18,7 @@ package pl.wavesoftware.maven.testing.junit5;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.testing.MojoRule;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -55,5 +56,10 @@ final class MojoFactoryImpl implements MojoFactory {
   @Override
   public <T extends AbstractMojo> MojoBuilder<T> builder(Class<T> mojoType) {
     return new MojoBuilderImpl<>(rule, mojoType, configurator);
+  }
+
+  @Override
+  public <T> T lookup(Class<T> role) throws ComponentLookupException {
+    return rule.lookup(role);
   }
 }
