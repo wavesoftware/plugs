@@ -31,7 +31,7 @@ import java.util.Arrays;
 final class ZipHeaderPeekInputStream extends FilterInputStream {
 
   private static final byte[] ZIP_HEADER = new byte[]{0x50, 0x4b, 0x03, 0x04};
-  private static final int ZIP_HEADER_SIZE = 4;
+  private static final int ZIP_HEADER_SIZE = ZIP_HEADER.length;
 
   private final byte[] header;
   private final int headerLength;

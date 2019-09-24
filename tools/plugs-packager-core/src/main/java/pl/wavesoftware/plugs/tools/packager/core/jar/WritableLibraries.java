@@ -24,7 +24,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static pl.wavesoftware.plugs.tools.packager.api.Constants.LIBRARY_DESTINATION;
-import static pl.wavesoftware.plugs.tools.packager.core.jar.FileUtils.isZip;
 
 /**
  * A libraries that can be written
@@ -38,7 +37,8 @@ public final class WritableLibraries {
 
   public WritableLibraries(Libraries libraries) throws IOException {
     libraries.doWithLibraries(library -> {
-      if (isZip(library.getFile())) {
+      IsZipFile isZipFile = new IsZipFile(library.getFile().toPath());
+      if (isZipFile.getAsBoolean()) {
         Library existing = this.libraryEntryNames.putIfAbsent(
           LIBRARY_DESTINATION + library.getName(),
           library

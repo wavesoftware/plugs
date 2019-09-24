@@ -19,36 +19,44 @@ package pl.wavesoftware.plugs.tools.packager.core.jar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.function.BooleanSupplier;
 
 /**
  * Utilities for manipulating files and directories in Spring Boot tooling.
  *
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
- * @author Dave Syer (Spring Boot project)
- * @author Phillip Webb (Spring Boot project)
  * @since 0.1.0
  */
-final class FileUtils {
+final class IsZipFile implements BooleanSupplier {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(FileUtils.class);
+  private static final Logger DEFAULT_LOGGER = LoggerFactory.getLogger(IsZipFile.class);
   private static final byte[] ZIP_FILE_HEADER = new byte[] { 'P', 'K', 3, 4 };
 
-  private FileUtils() {
-    // non reachable
+  private final Path path;
+  private final Logger logger;
+
+  IsZipFile(Path path) {
+    this(path, DEFAULT_LOGGER);
   }
 
-  static boolean isZip(File file) {
+  IsZipFile(Path path, Logger logger) {
+    this.path = path;
+    this.logger = logger;
+  }
+
+  @Override
+  public boolean getAsBoolean() {
     try {
-      try (FileInputStream fileInputStream = new FileInputStream(file)) {
-        return isZip(fileInputStream);
+      try (InputStream inputStream = Files.newInputStream(path)) {
+        return isZip(inputStream);
       }
     } catch (IOException ex) {
-      if (LOGGER.isTraceEnabled()) {
-        LOGGER.trace("Can't read file: " + file, ex);
+      if (logger.isTraceEnabled()) {
+        logger.trace("Can't read file: " + path, ex);
       }
       return false;
     }
@@ -62,5 +70,4 @@ final class FileUtils {
     }
     return true;
   }
-
 }

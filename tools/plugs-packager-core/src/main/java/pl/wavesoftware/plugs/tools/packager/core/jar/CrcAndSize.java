@@ -18,6 +18,7 @@ package pl.wavesoftware.plugs.tools.packager.core.jar;
 
 import org.apache.commons.compress.archivers.jar.JarArchiveEntry;
 
+import javax.annotation.WillNotClose;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -44,7 +45,7 @@ final class CrcAndSize {
     }
   }
 
-  CrcAndSize(InputStream inputStream) throws IOException {
+  CrcAndSize(@WillNotClose InputStream inputStream) throws IOException {
     load(inputStream);
   }
 
@@ -55,7 +56,7 @@ final class CrcAndSize {
     entry.setMethod(ZipEntry.STORED);
   }
 
-  private void load(InputStream inputStream) throws IOException {
+  private void load(@WillNotClose InputStream inputStream) throws IOException {
     byte[] buffer = new byte[BUFFER_SIZE];
     int bytesRead;
     while ((bytesRead = inputStream.read(buffer)) != -1) {
