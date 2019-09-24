@@ -56,7 +56,7 @@ class LibrariesJarWriterTest {
   }
 
   @Test
-  void writeLibrary() throws IOException {
+  void writeLibrary() {
     // given
     when(logger.isTraceEnabled()).thenReturn(true);
     LibrariesJarWriter jarWriter = new LibrariesJarWriter(
@@ -71,11 +71,31 @@ class LibrariesJarWriterTest {
     // then
     assertThatCode(throwingCallable)
       .hasCauseInstanceOf(IOException.class)
-      .hasMessageContaining("/path/to/guava.jar")
+      .hasMessageContaining("guava.jar")
       .hasMessageContaining("20190924:230826");
     verify(logger).isTraceEnabled();
     verify(logger).trace(
       matches("^Can't read a supposed JAR file.+"), any(IOException.class)
     );
+  }
+
+  @Test
+  void withoutTrace() {
+    // given
+    LibrariesJarWriter jarWriter = new LibrariesJarWriter(
+      logger, () -> listeners, entryWriter
+    );
+    Library library = new Library(Paths.get("/path/to/guava.jar"), LibraryScope.RUNTIME);
+    String destination = "PLUGS-INF";
+
+    // when
+    ThrowingCallable throwingCallable = () -> jarWriter.writeLibrary(destination, library);
+
+    // then
+    assertThatCode(throwingCallable)
+      .hasCauseInstanceOf(IOException.class)
+      .hasMessageContaining("guava.jar")
+      .hasMessageContaining("20190924:230826");
+    verify(logger).isTraceEnabled();
   }
 }

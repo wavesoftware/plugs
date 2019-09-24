@@ -59,10 +59,8 @@ final class MavenPackagerCoordinates implements PackagerCoordinates {
     if (!classifier.isEmpty() && !classifier.startsWith("-")) {
       classifier = "-" + classifier;
     }
-    //noinspection RedundantIfStatement
-    if (!project.outputPath().toFile().exists()) {
-      assert project.outputPath().toFile().mkdirs();
-    }
+    //noinspection ResultOfMethodCallIgnored
+    project.outputPath().toFile().mkdirs();
     return project.outputPath().resolve(plugFileNameFor(project, classifier));
   }
 

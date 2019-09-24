@@ -156,6 +156,11 @@ class PackagePlugMojoIT {
     @Test
     @DisplayName("Execute mojo on code-with-deps project")
     void execute(MojoFactory factory) {
+      assertThatCode(() -> perform(factory)).doesNotThrowAnyException();
+      assertThatCode(() -> perform(factory)).doesNotThrowAnyException();
+    }
+
+    private void perform(MojoFactory factory) {
       // given
       PackagePlugMojo mojo = factory
         .customizer(getCustomizer())
