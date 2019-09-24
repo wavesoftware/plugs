@@ -37,7 +37,7 @@ public final class WritableLibraries {
 
   public WritableLibraries(Libraries libraries) throws IOException {
     libraries.doWithLibraries(library -> {
-      IsZipFile isZipFile = new IsZipFile(library.getFile().toPath());
+      IsZipFile isZipFile = new IsZipFile(library.getPath());
       if (isZipFile.getAsBoolean()) {
         Library existing = this.libraryEntryNames.putIfAbsent(
           LIBRARY_DESTINATION + library.getName(),

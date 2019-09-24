@@ -23,41 +23,51 @@ import org.slf4j.helpers.MessageFormatter;
 import pl.wavesoftware.plugs.tools.packager.api.model.Library;
 
 import javax.annotation.Nullable;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Enumeration;
 import java.util.function.Supplier;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+
+import static pl.wavesoftware.eid.utils.EidExecutions.tryToExecute;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
 final class LibrariesJarWriter {
-  private static final Logger LOGGER =
+  private static final Logger DEFAULT_LOGGER =
     LoggerFactory.getLogger(LibrariesJarWriter.class);
 
+  private final Logger logger;
   private final Supplier<Listeners> listenersSupplier;
   private final JarEntryWriter entryWriter;
 
   LibrariesJarWriter(
+    Supplier<Listeners> listenersSupplier, JarEntryWriter entryWriter
+  ) {
+    this(DEFAULT_LOGGER, listenersSupplier, entryWriter);
+  }
+
+  LibrariesJarWriter(
+    Logger logger,
     Supplier<Listeners> listenersSupplier,
     JarEntryWriter entryWriter
   ) {
+    this.logger = logger;
     this.listenersSupplier = listenersSupplier;
     this.entryWriter = entryWriter;
   }
 
   void writeLibrary(String destination, Library library) throws IOException {
-    File file = library.getFile();
+    Path path = library.getPath();
     JarArchiveEntry entry = new JarArchiveEntry(destination + library.getName());
-    entry.setTime(getNestedLibraryTime(file));
-    new CrcAndSize(file).setupStoredEntry(entry);
+    entry.setTime(getNestedLibraryTime(path));
+    new CrcAndSize(path).setupStoredEntry(entry);
     entryWriter.writeEntry(
-      entry,
-      new InputStreamEntryWriter(new FileInputStream(file), true)
+      entry, new InputStreamEntryWriter(Files.newInputStream(path), true)
     );
     LibraryHasBeenWritten event = new LibraryHasBeenWritten(library);
     Listeners listeners = listenersSupplier.get();
@@ -66,9 +76,9 @@ final class LibrariesJarWriter {
     );
   }
 
-  private static long getNestedLibraryTime(File file) {
+  private long getNestedLibraryTime(Path path) throws IOException {
     try {
-      try (JarFile jarFile = new JarFile(file)) {
+      try (JarFile jarFile = new JarFile(path.toFile())) {
         Enumeration<JarEntry> entries = jarFile.entries();
         Long entry = findTimeOfJarEntries(entries);
         if (entry != null) {
@@ -77,16 +87,16 @@ final class LibrariesJarWriter {
       }
     } catch (IOException ex) {
       // Ignore and just use the source file timestamp
-      if (LOGGER.isTraceEnabled()) {
-        LOGGER.trace(
+      if (logger.isTraceEnabled()) {
+        logger.trace(
           MessageFormatter.format(
-            "Can't read a supposed JAR file: {}", file
-          ).toString(),
+            "Can't read a supposed JAR file: {}", path
+          ).getMessage(),
           ex
         );
       }
     }
-    return file.lastModified();
+    return tryToExecute(() -> Files.getLastModifiedTime(path).toMillis(), "20190924:230826");
   }
 
   @Nullable

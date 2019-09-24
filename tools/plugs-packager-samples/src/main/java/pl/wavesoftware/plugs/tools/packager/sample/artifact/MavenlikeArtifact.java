@@ -86,13 +86,4 @@ final class MavenlikeArtifact implements Artifact {
       name(), version(), type().extension()
     );
   }
-
-  @Override
-  public String toString() {
-    return "MavenlikeArtifact{" +
-      "name='" + name + '\'' +
-      ", group='" + group + '\'' +
-      ", version=" + version +
-      '}';
-  }
 }

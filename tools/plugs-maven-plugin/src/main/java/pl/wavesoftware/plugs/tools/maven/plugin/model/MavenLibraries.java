@@ -74,7 +74,7 @@ public final class MavenLibraries implements Libraries {
         }
         callback.library(new Library(
           name.toString(),
-          artifact.getFile(),
+          artifact.getFile().toPath(),
           scopeOption.get()
         ));
       }

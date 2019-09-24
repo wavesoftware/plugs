@@ -19,6 +19,7 @@ package pl.wavesoftware.plugs.tools.maven.plugin.io;
 import org.apache.maven.plugin.logging.Log;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -61,418 +62,497 @@ class MavenLoggerTest {
     Mockito.verifyNoMoreInteractions(log);
   }
 
-  @Test
-  void isTraceEnabled() {
-    // given
-    when(log.isDebugEnabled()).thenReturn(true);
-
-    // when
-    boolean result = logger.isTraceEnabled();
-
-    // then
-    assertThat(result).isTrue();
-    verify(log).isDebugEnabled();
+  @Nested
+  class LevelEnabled extends Cases {
+    @Override
+    boolean isEnabled() {
+      return true;
+    }
   }
 
-  @Test
-  void trace() {
-    // given
-    when(log.isDebugEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.trace(MESSAGE);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isDebugEnabled();
-    verify(log).debug(anyString());
+  @Nested
+  class LevelDisabled extends Cases {
+    @Override
+    boolean isEnabled() {
+      return false;
+    }
   }
 
-  @Test
-  void testTrace() {
-    // given
-    when(log.isDebugEnabled()).thenReturn(true);
+  abstract class Cases {
+    abstract boolean isEnabled();
 
-    // when
-    ThrowingCallable throwingCallable = () -> logger.trace(FORMAT_ONE, ARG_ONE);
+    @Test
+    void isTraceEnabled() {
+      // given
+      when(log.isDebugEnabled()).thenReturn(isEnabled());
 
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isDebugEnabled();
-    verify(log).debug(anyString());
+      // when
+      boolean result = logger.isTraceEnabled();
+
+      // then
+      assertThat(result).isEqualTo(isEnabled());
+      verify(log).isDebugEnabled();
+    }
+
+    @Test
+    void trace() {
+      // given
+      when(log.isDebugEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.trace(MESSAGE);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isDebugEnabled();
+      if (isEnabled()) {
+        verify(log).debug(anyString());
+      }
+    }
+
+    @Test
+    void testTrace() {
+      // given
+      when(log.isDebugEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.trace(FORMAT_ONE, ARG_ONE);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isDebugEnabled();
+      if (isEnabled()) {
+        verify(log).debug(anyString());
+      }
+    }
+
+    @Test
+    void testTrace1() {
+      // given
+      when(log.isDebugEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.trace(FORMAT_TWO, ARG_ONE, ARG_TWO);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isDebugEnabled();
+      if (isEnabled()) {
+        verify(log).debug(anyString());
+      }
+    }
+
+    @Test
+    void testTrace2() {
+      // given
+      when(log.isDebugEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.trace(
+        FORMAT_THREE, ARG_ONE, ARG_TWO, ARG_THREE
+      );
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isDebugEnabled();
+      if (isEnabled()) {
+        verify(log).debug(anyString());
+      }
+    }
+
+    @Test
+    void testTrace3() {
+      // given
+      when(log.isDebugEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.trace(MESSAGE, THROW);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isDebugEnabled();
+      if (isEnabled()) {
+        verify(log).debug(anyString(), any());
+      }
+    }
+
+    @Test
+    void isDebugEnabled() {
+      // given
+      when(log.isDebugEnabled()).thenReturn(isEnabled());
+
+      // when
+      boolean result = logger.isDebugEnabled();
+
+      // then
+      assertThat(result).isEqualTo(isEnabled());
+      verify(log).isDebugEnabled();
+    }
+
+    @Test
+    void debug() {
+      // given
+      when(log.isDebugEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.debug(MESSAGE);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isDebugEnabled();
+      if (isEnabled()) {
+        verify(log).debug(anyString());
+      }
+    }
+
+    @Test
+    void testDebug() {
+      // given
+      when(log.isDebugEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.debug(FORMAT_ONE, ARG_ONE);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isDebugEnabled();
+      if (isEnabled()) {
+        verify(log).debug(anyString());
+      }
+    }
+
+    @Test
+    void testDebug1() {
+      // given
+      when(log.isDebugEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.debug(FORMAT_TWO, ARG_ONE, ARG_TWO);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isDebugEnabled();
+      if (isEnabled()) {
+        verify(log).debug(anyString());
+      }
+    }
+
+    @Test
+    void testDebug2() {
+      // given
+      when(log.isDebugEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.debug(
+        FORMAT_THREE, ARG_ONE, ARG_TWO, ARG_THREE
+      );
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isDebugEnabled();
+      if (isEnabled()) {
+        verify(log).debug(anyString());
+      }
+    }
+
+    @Test
+    void testDebug3() {
+      // given
+      when(log.isDebugEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.debug(MESSAGE, THROW);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isDebugEnabled();
+      if (isEnabled()) {
+        verify(log).debug(anyString(), any());
+      }
+    }
+
+    @Test
+    void isInfoEnabled() {
+      // given
+      when(log.isInfoEnabled()).thenReturn(isEnabled());
+
+      // when
+      boolean result = logger.isInfoEnabled();
+
+      // then
+      assertThat(result).isEqualTo(isEnabled());
+      verify(log).isInfoEnabled();
+    }
+
+    @Test
+    void info() {
+      // given
+      when(log.isInfoEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.info(MESSAGE);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isInfoEnabled();
+      if (isEnabled()) {
+        verify(log).info(anyString());
+      }
+    }
+
+    @Test
+    void testInfo() {
+      // given
+      when(log.isInfoEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.info(FORMAT_ONE, ARG_ONE);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isInfoEnabled();
+      if (isEnabled()) {
+        verify(log).info(anyString());
+      }
+    }
+
+    @Test
+    void testInfo1() {
+      // given
+      when(log.isInfoEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.info(FORMAT_TWO, ARG_ONE, ARG_TWO);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isInfoEnabled();
+      if (isEnabled()) {
+        verify(log).info(anyString());
+      }
+    }
+
+    @Test
+    void testInfo2() {
+      // given
+      when(log.isInfoEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.info(
+        FORMAT_THREE, ARG_ONE, ARG_TWO, ARG_THREE
+      );
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isInfoEnabled();
+      if (isEnabled()) {
+        verify(log).info(anyString());
+      }
+    }
+
+    @Test
+    void testInfo3() {
+      // given
+      when(log.isInfoEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.info(MESSAGE, THROW);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isInfoEnabled();
+      if (isEnabled()) {
+        verify(log).info(anyString(), any());
+      }
+    }
+
+    @Test
+    void isWarnEnabled() {
+      // given
+      when(log.isWarnEnabled()).thenReturn(isEnabled());
+
+      // when
+      boolean result = logger.isWarnEnabled();
+
+      // then
+      assertThat(result).isEqualTo(isEnabled());
+      verify(log).isWarnEnabled();
+    }
+
+    @Test
+    void warn() {
+      // given
+      when(log.isWarnEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.warn(MESSAGE);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isWarnEnabled();
+      if (isEnabled()) {
+        verify(log).warn(anyString());
+      }
+    }
+
+    @Test
+    void testWarn() {
+      // given
+      when(log.isWarnEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.warn(FORMAT_ONE, ARG_ONE);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isWarnEnabled();
+      if (isEnabled()) {
+        verify(log).warn(anyString());
+      }
+    }
+
+    @Test
+    void testWarn1() {
+      // given
+      when(log.isWarnEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.warn(FORMAT_TWO, ARG_ONE, ARG_TWO);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isWarnEnabled();
+      if (isEnabled()) {
+        verify(log).warn(anyString());
+      }
+    }
+
+    @Test
+    void testWarn2() {
+      // given
+      when(log.isWarnEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.warn(
+        FORMAT_THREE, ARG_ONE, ARG_TWO, ARG_THREE
+      );
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isWarnEnabled();
+      if (isEnabled()) {
+        verify(log).warn(anyString());
+      }
+    }
+
+    @Test
+    void testWarn3() {
+      // given
+      when(log.isWarnEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.warn(MESSAGE, THROW);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isWarnEnabled();
+      if (isEnabled()) {
+        verify(log).warn(anyString(), any());
+      }
+    }
+
+    @Test
+    void isErrorEnabled() {
+      // given
+      when(log.isErrorEnabled()).thenReturn(isEnabled());
+
+      // when
+      boolean result = logger.isErrorEnabled();
+
+      // then
+      assertThat(result).isEqualTo(isEnabled());
+      verify(log).isErrorEnabled();
+    }
+
+    @Test
+    void error() {
+      // given
+      when(log.isErrorEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.error(MESSAGE);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isErrorEnabled();
+      if (isEnabled()) {
+        verify(log).error(anyString());
+      }
+    }
+
+    @Test
+    void testError() {
+      // given
+      when(log.isErrorEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.error(FORMAT_ONE, ARG_ONE);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isErrorEnabled();
+      if (isEnabled()) {
+        verify(log).error(anyString());
+      }
+    }
+
+    @Test
+    void testError1() {
+      // given
+      when(log.isErrorEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.error(FORMAT_TWO, ARG_ONE, ARG_TWO);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isErrorEnabled();
+      if (isEnabled()) {
+        verify(log).error(anyString());
+      }
+    }
+
+    @Test
+    void testError2() {
+      // given
+      when(log.isErrorEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.error(FORMAT_THREE, ARG_ONE, ARG_TWO, ARG_THREE);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isErrorEnabled();
+      if (isEnabled()) {
+        verify(log).error(anyString());
+      }
+    }
+
+    @Test
+    void testError3() {
+      // given
+      when(log.isErrorEnabled()).thenReturn(isEnabled());
+
+      // when
+      ThrowingCallable throwingCallable = () -> logger.error(MESSAGE, THROW);
+
+      // then
+      assertThatCode(throwingCallable).doesNotThrowAnyException();
+      verify(log).isErrorEnabled();
+      if (isEnabled()) {
+        verify(log).error(anyString(), any());
+      }
+    }
   }
 
-  @Test
-  void testTrace1() {
-    // given
-    when(log.isDebugEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.trace(FORMAT_TWO, ARG_ONE, ARG_TWO);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isDebugEnabled();
-    verify(log).debug(anyString());
-  }
-
-  @Test
-  void testTrace2() {
-    // given
-    when(log.isDebugEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.trace(FORMAT_THREE, ARG_ONE, ARG_TWO, ARG_THREE);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isDebugEnabled();
-    verify(log).debug(anyString());
-  }
-
-  @Test
-  void testTrace3() {
-    // given
-    when(log.isDebugEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.trace(MESSAGE, THROW);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isDebugEnabled();
-    verify(log).debug(anyString(), any());
-  }
-
-  @Test
-  void isDebugEnabled() {
-    // given
-    when(log.isDebugEnabled()).thenReturn(true);
-
-    // when
-    boolean result = logger.isDebugEnabled();
-
-    // then
-    assertThat(result).isTrue();
-    verify(log).isDebugEnabled();
-  }
-
-  @Test
-  void debug() {
-    // given
-    when(log.isDebugEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.debug(MESSAGE);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isDebugEnabled();
-    verify(log).debug(anyString());
-  }
-
-  @Test
-  void testDebug() {
-    // given
-    when(log.isDebugEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.debug(FORMAT_ONE, ARG_ONE);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isDebugEnabled();
-    verify(log).debug(anyString());
-  }
-
-  @Test
-  void testDebug1() {
-    // given
-    when(log.isDebugEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.debug(FORMAT_TWO, ARG_ONE, ARG_TWO);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isDebugEnabled();
-    verify(log).debug(anyString());
-  }
-
-  @Test
-  void testDebug2() {
-    // given
-    when(log.isDebugEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.debug(FORMAT_THREE, ARG_ONE, ARG_TWO, ARG_THREE);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isDebugEnabled();
-    verify(log).debug(anyString());
-  }
-
-  @Test
-  void testDebug3() {
-    // given
-    when(log.isDebugEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.debug(MESSAGE, THROW);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isDebugEnabled();
-    verify(log).debug(anyString(), any());
-  }
-
-  @Test
-  void isInfoEnabled() {
-    // given
-    when(log.isInfoEnabled()).thenReturn(true);
-
-    // when
-    boolean result = logger.isInfoEnabled();
-
-    // then
-    assertThat(result).isTrue();
-    verify(log).isInfoEnabled();
-  }
-
-  @Test
-  void info() {
-    // given
-    when(log.isInfoEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.info(MESSAGE);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isInfoEnabled();
-    verify(log).info(anyString());
-  }
-
-  @Test
-  void testInfo() {
-    // given
-    when(log.isInfoEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.info(FORMAT_ONE, ARG_ONE);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isInfoEnabled();
-    verify(log).info(anyString());
-  }
-
-  @Test
-  void testInfo1() {
-    // given
-    when(log.isInfoEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.info(FORMAT_TWO, ARG_ONE, ARG_TWO);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isInfoEnabled();
-    verify(log).info(anyString());
-  }
-
-  @Test
-  void testInfo2() {
-    // given
-    when(log.isInfoEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.info(FORMAT_THREE, ARG_ONE, ARG_TWO, ARG_THREE);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isInfoEnabled();
-    verify(log).info(anyString());
-  }
-
-  @Test
-  void testInfo3() {
-    // given
-    when(log.isInfoEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.info(MESSAGE, THROW);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isInfoEnabled();
-    verify(log).info(anyString(), any());
-  }
-
-  @Test
-  void isWarnEnabled() {
-    // given
-    when(log.isWarnEnabled()).thenReturn(true);
-
-    // when
-    boolean result = logger.isWarnEnabled();
-
-    // then
-    assertThat(result).isTrue();
-    verify(log).isWarnEnabled();
-  }
-
-  @Test
-  void warn() {
-    // given
-    when(log.isWarnEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.warn(MESSAGE);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isWarnEnabled();
-    verify(log).warn(anyString());
-  }
-
-  @Test
-  void testWarn() {
-    // given
-    when(log.isWarnEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.warn(FORMAT_ONE, ARG_ONE);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isWarnEnabled();
-    verify(log).warn(anyString());
-  }
-
-  @Test
-  void testWarn1() {
-    // given
-    when(log.isWarnEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.warn(FORMAT_TWO, ARG_ONE, ARG_TWO);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isWarnEnabled();
-    verify(log).warn(anyString());
-  }
-
-  @Test
-  void testWarn2() {
-    // given
-    when(log.isWarnEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.warn(FORMAT_THREE, ARG_ONE, ARG_TWO, ARG_THREE);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isWarnEnabled();
-    verify(log).warn(anyString());
-  }
-
-  @Test
-  void testWarn3() {
-    // given
-    when(log.isWarnEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.warn(MESSAGE, THROW);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isWarnEnabled();
-    verify(log).warn(anyString(), any());
-  }
-
-  @Test
-  void isErrorEnabled() {
-    // given
-    when(log.isErrorEnabled()).thenReturn(true);
-
-    // when
-    boolean result = logger.isErrorEnabled();
-
-    // then
-    assertThat(result).isTrue();
-    verify(log).isErrorEnabled();
-  }
-
-  @Test
-  void error() {
-    // given
-    when(log.isErrorEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.error(MESSAGE);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isErrorEnabled();
-    verify(log).error(anyString());
-  }
-
-  @Test
-  void testError() {
-    // given
-    when(log.isErrorEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.error(FORMAT_ONE, ARG_ONE);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isErrorEnabled();
-    verify(log).error(anyString());
-  }
-
-  @Test
-  void testError1() {
-    // given
-    when(log.isErrorEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.error(FORMAT_TWO, ARG_ONE, ARG_TWO);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isErrorEnabled();
-    verify(log).error(anyString());
-  }
-
-  @Test
-  void testError2() {
-    // given
-    when(log.isErrorEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.error(FORMAT_THREE, ARG_ONE, ARG_TWO, ARG_THREE);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isErrorEnabled();
-    verify(log).error(anyString());
-  }
-
-  @Test
-  void testError3() {
-    // given
-    when(log.isErrorEnabled()).thenReturn(true);
-
-    // when
-    ThrowingCallable throwingCallable = () -> logger.error(MESSAGE, THROW);
-
-    // then
-    assertThatCode(throwingCallable).doesNotThrowAnyException();
-    verify(log).isErrorEnabled();
-    verify(log).error(anyString(), any());
-  }
 }

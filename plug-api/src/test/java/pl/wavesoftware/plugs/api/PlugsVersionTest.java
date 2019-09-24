@@ -16,26 +16,23 @@
 
 package pl.wavesoftware.plugs.api;
 
-import com.vdurmont.semver4j.Semver;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.net.URL;
+import java.net.URLClassLoader;
 
-class PlugsVersionIT {
+import static org.assertj.core.api.Assertions.assertThatCode;
 
-  private static final Semver BASE = new Semver("0.0.0");
+/**
+ * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
+ * @since 0.1.0
+ */
+final class PlugsVersionTest {
+  private ClassLoader classLoader = new URLClassLoader(new URL[0], null);
 
   @Test
   void getVersion() {
-    Semver version = new Semver(PlugsVersion.get().getVersion());
-
-    assertThat(version.isGreaterThanOrEqualTo(BASE)).isTrue();
-  }
-
-  @Test
-  void manually() {
-    Semver version = new Semver(PlugsVersion.get().manuallyRead());
-
-    assertThat(version.isGreaterThanOrEqualTo(BASE)).isTrue();
+    assertThatCode(() -> new PlugsVersion(classLoader).getVersion())
+      .hasMessageContaining("20190325:205648");
   }
 }

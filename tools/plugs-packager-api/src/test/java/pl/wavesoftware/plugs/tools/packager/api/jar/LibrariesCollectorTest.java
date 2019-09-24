@@ -20,9 +20,10 @@ import org.junit.jupiter.api.Test;
 import pl.wavesoftware.plugs.tools.packager.api.model.Library;
 import pl.wavesoftware.plugs.tools.packager.api.model.LibraryScope;
 
-import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
@@ -34,9 +35,9 @@ class LibrariesCollectorTest {
   void getCollected() {
     // given
     LibrariesCollector collector = new LibrariesCollector();
-    File acmeFile = new File("acme");
+    Path acmePath = Paths.get("acme");
     LibraryScope scope = LibraryScope.PROVIDED;
-    Library library = new Library(acmeFile, scope);
+    Library library = new Library(acmePath, scope);
 
     // when
     collector.collect(library);
@@ -44,9 +45,9 @@ class LibrariesCollectorTest {
     // then
     assertThat(collector.getCollected()).hasSize(1);
     assertThat(collector.getCollected().head()).extracting(
-      Library::getFile, Library::getScope, Library::getName
+      Library::getPath, Library::getScope, Library::getName
     ).containsOnly(
-      acmeFile, scope, "acme"
+      acmePath, scope, "acme"
     );
     assertThat(scope.toString()).isEqualTo("provided");
   }

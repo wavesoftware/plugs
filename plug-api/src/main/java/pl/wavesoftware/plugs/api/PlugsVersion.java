@@ -27,33 +27,40 @@ import java.util.jar.Manifest;
 
 import static pl.wavesoftware.eid.utils.EidExecutions.tryToExecute;
 import static pl.wavesoftware.eid.utils.EidPreconditions.checkNotNull;
-import static pl.wavesoftware.eid.utils.EidPreconditions.checkState;
 
 public final class PlugsVersion {
 
+  private final ClassLoader classLoader;
+
   private PlugsVersion() {
-    // not reachable
+    this(Thread.currentThread().getContextClassLoader());
   }
 
-  public static String getVersion() {
+  PlugsVersion(ClassLoader classLoader) {
+    this.classLoader = classLoader;
+  }
+
+  public static PlugsVersion get() {
+    return new PlugsVersion();
+  }
+
+  public String getVersion() {
     Optional<String> maybeVersion =
       Optional.ofNullable(
         PlugsVersion.class.getPackage().getImplementationVersion()
       );
     return checkNotNull(
-      maybeVersion.orElseGet(PlugsVersion::manuallyRead),
+      maybeVersion.orElseGet(this::manuallyRead),
       "20190325:202509"
     );
   }
 
-  static String manuallyRead() {
+  String manuallyRead() {
     List<URL> urls = Collections.list(tryToExecute(
-      () -> Thread.currentThread()
-        .getContextClassLoader()
+      () -> classLoader
         .getResources("META-INF/MANIFEST.MF"),
       "20190325:205203"
     ));
-    checkState(!urls.isEmpty(), "20190325:205809");
     URL location = PlugsVersion.class.getProtectionDomain().getCodeSource().getLocation();
     URL resource = urls.stream()
       .filter(url -> url.toString().contains(location.toString()))

@@ -66,7 +66,7 @@ final class ManifestBuilderImpl implements ManifestBuilder {
     }
     manifest = new Manifest(manifest);
     Attributes attributes = manifest.getMainAttributes();
-    String plugsVersion = PlugsVersion.getVersion();
+    String plugsVersion = PlugsVersion.get().getVersion();
     CharSequence hash = tring(() -> digest.digest(project)).or(
       "Can't calculate digest from source jar: {}",
       sourcePath

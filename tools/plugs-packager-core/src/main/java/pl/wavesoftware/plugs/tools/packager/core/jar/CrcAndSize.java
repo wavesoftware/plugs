@@ -19,10 +19,10 @@ package pl.wavesoftware.plugs.tools.packager.core.jar;
 import org.apache.commons.compress.archivers.jar.JarArchiveEntry;
 
 import javax.annotation.WillNotClose;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 
@@ -39,8 +39,8 @@ final class CrcAndSize {
 
   private long size;
 
-  CrcAndSize(File file) throws IOException {
-    try (FileInputStream inputStream = new FileInputStream(file)) {
+  CrcAndSize(Path path) throws IOException {
+    try (InputStream inputStream = Files.newInputStream(path)) {
       load(inputStream);
     }
   }

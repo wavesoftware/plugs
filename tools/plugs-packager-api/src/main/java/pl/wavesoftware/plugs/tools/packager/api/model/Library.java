@@ -17,7 +17,7 @@
 package pl.wavesoftware.plugs.tools.packager.api.model;
 
 import javax.annotation.Nullable;
-import java.io.File;
+import java.nio.file.Path;
 
 /**
  * Encapsulates information about a single library that may be packed into
@@ -30,32 +30,32 @@ import java.io.File;
  */
 public final class Library {
   private final String name;
-  private final File file;
+  private final Path path;
   private final LibraryScope scope;
 
   /**
    * Create a new {@link Library}.
-   * @param file the source file
+   * @param path the source file
    * @param scope the scope of the library
    */
-  public Library(File file, LibraryScope scope) {
-    this(null, file, scope);
+  public Library(Path path, LibraryScope scope) {
+    this(null, path, scope);
   }
 
   /**
    * Create a new {@link Library}.
    * @param name the name of the library as it should be written or {@code null} to use
    * the file name
-   * @param file the source file
+   * @param path the source file
    * @param scope the scope of the library
    */
   public Library(
     @Nullable String name,
-    File file,
+    Path path,
     LibraryScope scope
   ) {
-    this.name = (name != null) ? name : file.getName();
-    this.file = file;
+    this.name = (name != null) ? name : path.getFileName().toString();
+    this.path = path;
     this.scope = scope;
   }
 
@@ -71,8 +71,8 @@ public final class Library {
    * Return the library file.
    * @return the file
    */
-  public File getFile() {
-    return this.file;
+  public Path getPath() {
+    return this.path;
   }
 
   /**
