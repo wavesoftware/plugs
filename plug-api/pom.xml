@@ -29,4 +29,29 @@
   <artifactId>plug-api</artifactId>
 
   <name>Plugs :: Plug API</name>
+
+  <properties>
+    <unpack-manifestmf.skip>false</unpack-manifestmf.skip>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>pl.wavesoftware</groupId>
+      <artifactId>eid-exceptions</artifactId>
+    </dependency>
+
+    <!-- Tests -->
+    <dependency>
+      <groupId>pl.wavesoftware.testing</groupId>
+      <artifactId>junit5-starter</artifactId>
+      <version>1.0.0</version>
+      <type>pom</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.vdurmont</groupId>
+      <artifactId>semver4j</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>

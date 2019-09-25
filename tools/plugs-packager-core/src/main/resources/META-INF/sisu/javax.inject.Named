@@ -1,0 +1,4 @@
+pl.wavesoftware.plugs.tools.packager.core.digest.ProjectDigesterImpl
+pl.wavesoftware.plugs.tools.packager.core.manifest.ManifestBuilderImpl
+pl.wavesoftware.plugs.tools.packager.core.DefaultPackagerFactory
+pl.wavesoftware.plugs.tools.packager.core.DefaultRepackagingIsRequiredFactory

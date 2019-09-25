@@ -30,7 +30,15 @@
 
   <name>Plugs :: Plugs Core</name>
 
+  <properties>
+    <unpack-manifestmf.skip>false</unpack-manifestmf.skip>
+  </properties>
+
   <dependencies>
+    <dependency>
+      <groupId>org.apiguardian</groupId>
+      <artifactId>apiguardian-api</artifactId>
+    </dependency>
     <dependency>
       <groupId>pl.wavesoftware</groupId>
       <artifactId>eid-exceptions</artifactId>
