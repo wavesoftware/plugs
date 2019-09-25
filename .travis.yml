@@ -11,8 +11,6 @@ matrix:
     # Quality testing
     - jdk: oraclejdk8
       env: JACOCO=true RELEASE_CHECKS=true
-      after_success:
-        - bash <(curl -s https://codecov.io/bash)
     - jdk: oraclejdk8
       env: JACOCO=true SONAR=publish
     # Performance testing
