@@ -1,8 +1,8 @@
 language: java
 sudo: false
-dist: trusty
-install: ./mvnw package -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-script: ./mvnw verify --fail-at-end -U -V
+dist: xenial
+install: ./mvnw package -DskipTests=true -Dmaven.javadoc.skip=true -B -U -V
+script: ./mvnw verify --fail-at-end -V
 notifications:
   email:
     on_failure: change
@@ -10,20 +10,27 @@ branches:
   only:
    - master
    - develop
+git:
+  depth: false
 matrix:
   include:
     # Quality testing
-    - jdk: oraclejdk8
+    - jdk: openjdk8
       env: JACOCO=true RELEASE_CHECKS=true
-    - jdk: oraclejdk8
+    - jdk: openjdk8
       env: JACOCO=true SONAR=publish
     # Performance testing
     - jdk: openjdk8
       env: JACOCO=false
-    - jdk: oraclejdk9
-      env: JACOCO=false
-    - jdk: oraclejdk11
+    - jdk: openjdk11
       env: JACOCO=false
 addons:
   sonarcloud:
     organization: wavesoftware
+    token:
+      secure: "PAbU/w3c6jrinb0pS2S4ol2cA9X4usDIJE8e+AYuyhjx2WVQHQg6IYL/VG4C+uGsjP2NVKid69ViVWxGkxlpA2nn7oP+n1yBiW8fB2fT0zqQIjnIjUiatzUBLamsGC0PQe2mI6fupAPVMKgRzUOildE7ZjBMFSdeDRmivuwvA4dA6Zg9jdZdZu89opgphrWZHHmTYV9CtJeEg0PEoFPBNd/K/x0mTPNXBV0iAtVEcewSry6EYB7BwvUzQtLEEV62kPiX9zjfPqYehLOuy4tw4GmpmC0X0yQR8JWNcvIO+Kr4TFWGwk0lQYhkIM430hrZMH07Upu2kTe4dT1ta5toX+WF6PHnHQzu8n+mmqbh2UXThk8yABrVh95scGXE2U5+22bRrLQ4KRZE5OIvo41RqSDeGFc82Sh1kgzzbasnNwyvEWVCZdVBXNoHLe9F0R6ixKHML3W+0Y5cdCNALbqE15pKZ0sAj/LF5bU18UdLHoUnZH7K/balhajMXmA7oTUByTbo2tuyH6aIiyBktv+mSsUB5f8cQ1oYeVNI/DVloLRkRIzJvDAsU04vPtp+6LTymo4kxpyhBBhX/6t1WwSe3HwU1ACxi99rYXHDRNjcpkk0V6r5NSRsPvfgKWw0Wd9ACnygJjWq2BgLs5DRn3fSjm25KTiIvwDwThsFiPcSLeo="
+before_cache:
+  - rm -fr $HOME/.m2/repository
+cache:
+  directories:
+    - $HOME/.m2/repository
