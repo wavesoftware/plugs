@@ -6,6 +6,10 @@ script: ./mvnw verify --fail-at-end -U -V
 notifications:
   email:
     on_failure: change
+branches:
+  only:
+   - master
+   - develop
 matrix:
   include:
     # Quality testing
