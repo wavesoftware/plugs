@@ -29,7 +29,7 @@ import java.util.function.Supplier;
 @Named
 final class MavenLoggerFactory implements LoggerFactory {
   @Override
-  public Logger create(Supplier<Log> log) {
-    return new MavenLogger(log);
+  public Logger create(Supplier<Log> log, Class<?> caller) {
+    return new MavenLogger(log, caller);
   }
 }

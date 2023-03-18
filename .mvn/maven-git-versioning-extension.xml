@@ -1,0 +1,22 @@
+<configuration xmlns="https://github.com/qoomon/maven-git-versioning-extension"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="https://github.com/qoomon/maven-git-versioning-extension https://qoomon.github.io/maven-git-versioning-extension/configuration-9.4.0.xsd">
+
+  <refs considerTagsOnBranches="true">
+    <ref type="tag">
+      <pattern><![CDATA[v(?<version>.*)]]></pattern>
+      <version>${ref.version}</version>
+      <properties>
+        <project.build.outputTimestamp>${commit.timestamp}</project.build.outputTimestamp>
+      </properties>
+    </ref>
+  </refs>
+
+  <rev>
+    <version>${describe.tag.version}-${describe.distance}-g${commit.short}</version>
+    <properties>
+      <project.build.outputTimestamp>${commit.timestamp}</project.build.outputTimestamp>
+    </properties>
+  </rev>
+
+</configuration>

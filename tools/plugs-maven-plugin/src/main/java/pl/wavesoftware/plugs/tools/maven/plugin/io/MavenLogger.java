@@ -18,24 +18,29 @@ package pl.wavesoftware.plugs.tools.maven.plugin.io;
 
 import io.vavr.Lazy;
 import org.apache.maven.plugin.logging.Log;
-import org.slf4j.helpers.MarkerIgnoringBase;
+import org.slf4j.Marker;
+import org.slf4j.event.Level;
+import org.slf4j.helpers.AbstractLogger;
+import org.slf4j.helpers.FormattingTuple;
 
+import javax.annotation.Nullable;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static org.slf4j.helpers.MessageFormatter.arrayFormat;
-import static org.slf4j.helpers.MessageFormatter.format;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
-final class MavenLogger extends MarkerIgnoringBase {
+final class MavenLogger extends AbstractLogger {
   private static final long serialVersionUID = 20190207213304L;
   private final Lazy<Log> log;
 
-  MavenLogger(Supplier<Log> logSupplier) {
+  MavenLogger(Supplier<Log> logSupplier, Class<?> caller) {
     this.log = Lazy.of(logSupplier);
-    name = Log.class.getName();
+    name = caller.getName();
   }
 
   @Override
@@ -44,28 +49,8 @@ final class MavenLogger extends MarkerIgnoringBase {
   }
 
   @Override
-  public void trace(String msg) {
-    debug(msg);
-  }
-
-  @Override
-  public void trace(String format, Object arg) {
-    debug(format, arg);
-  }
-
-  @Override
-  public void trace(String format, Object arg1, Object arg2) {
-    debug(format, arg1, arg2);
-  }
-
-  @Override
-  public void trace(String format, Object... arguments) {
-    debug(format, arguments);
-  }
-
-  @Override
-  public void trace(String msg, Throwable throwable) {
-    debug(msg, throwable);
+  public boolean isTraceEnabled(Marker marker) {
+    return isTraceEnabled();
   }
 
   @Override
@@ -74,38 +59,8 @@ final class MavenLogger extends MarkerIgnoringBase {
   }
 
   @Override
-  public void debug(String msg) {
-    if (isDebugEnabled()) {
-      log.get().debug(msg);
-    }
-  }
-
-  @Override
-  public void debug(String format, Object arg) {
-    if (isDebugEnabled()) {
-      log.get().debug(format(format, arg).getMessage());
-    }
-  }
-
-  @Override
-  public void debug(String format, Object arg1, Object arg2) {
-    if (isDebugEnabled()) {
-      log.get().debug(format(format, arg1, arg2).getMessage());
-    }
-  }
-
-  @Override
-  public void debug(String format, Object... arguments) {
-    if (isDebugEnabled()) {
-      log.get().debug(arrayFormat(format, arguments).getMessage());
-    }
-  }
-
-  @Override
-  public void debug(String msg, Throwable throwable) {
-    if (isDebugEnabled()) {
-      log.get().debug(msg, throwable);
-    }
+  public boolean isDebugEnabled(Marker marker) {
+    return isDebugEnabled();
   }
 
   @Override
@@ -114,38 +69,8 @@ final class MavenLogger extends MarkerIgnoringBase {
   }
 
   @Override
-  public void info(String msg) {
-    if (isInfoEnabled()) {
-      log.get().info(msg);
-    }
-  }
-
-  @Override
-  public void info(String format, Object arg) {
-    if (isInfoEnabled()) {
-      log.get().info(format(format, arg).getMessage());
-    }
-  }
-
-  @Override
-  public void info(String format, Object arg1, Object arg2) {
-    if (isInfoEnabled()) {
-      log.get().info(format(format, arg1, arg2).getMessage());
-    }
-  }
-
-  @Override
-  public void info(String format, Object... arguments) {
-    if (isInfoEnabled()) {
-      log.get().info(arrayFormat(format, arguments).getMessage());
-    }
-  }
-
-  @Override
-  public void info(String msg, Throwable throwable) {
-    if (isInfoEnabled()) {
-      log.get().info(msg, throwable);
-    }
+  public boolean isInfoEnabled(Marker marker) {
+    return isInfoEnabled();
   }
 
   @Override
@@ -154,38 +79,8 @@ final class MavenLogger extends MarkerIgnoringBase {
   }
 
   @Override
-  public void warn(String msg) {
-    if (isWarnEnabled()) {
-      log.get().warn(msg);
-    }
-  }
-
-  @Override
-  public void warn(String format, Object arg) {
-    if (isWarnEnabled()) {
-      log.get().warn(format(format, arg).getMessage());
-    }
-  }
-
-  @Override
-  public void warn(String format, Object... arguments) {
-    if (isWarnEnabled()) {
-      log.get().warn(arrayFormat(format, arguments).getMessage());
-    }
-  }
-
-  @Override
-  public void warn(String format, Object arg1, Object arg2) {
-    if (isWarnEnabled()) {
-      log.get().warn(format(format, arg1, arg2).getMessage());
-    }
-  }
-
-  @Override
-  public void warn(String msg, Throwable throwable) {
-    if (isWarnEnabled()) {
-      log.get().warn(msg, throwable);
-    }
+  public boolean isWarnEnabled(Marker marker) {
+    return isWarnEnabled();
   }
 
   @Override
@@ -194,37 +89,63 @@ final class MavenLogger extends MarkerIgnoringBase {
   }
 
   @Override
-  public void error(String msg) {
-    if (isErrorEnabled()) {
-      log.get().error(msg);
-    }
+  public boolean isErrorEnabled(Marker marker) {
+    return isErrorEnabled();
   }
 
   @Override
-  public void error(String format, Object arg) {
-    if (isErrorEnabled()) {
-      log.get().error(format(format, arg).getMessage());
-    }
+  protected String getFullyQualifiedCallerName() {
+    return name;
   }
 
   @Override
-  public void error(String format, Object arg1, Object arg2) {
-    if (isErrorEnabled()) {
-      log.get().error(format(format, arg1, arg2).getMessage());
+  protected void handleNormalizedLoggingCall(
+    Level level,
+    @Nullable Marker marker,
+    String messagePattern,
+    Object[] arguments,
+    @Nullable Throwable throwable
+  ) {
+    CharSequence msg = message(marker, messagePattern, arguments);
+    BiConsumer<CharSequence, Throwable> lfn2 = null;
+    Consumer<CharSequence> lfn = null;
+    switch (level) {
+      case TRACE:
+      case DEBUG:
+        lfn = log.get()::debug;
+        lfn2 = log.get()::debug;
+        break;
+      case INFO:
+        lfn = log.get()::info;
+        lfn2 = log.get()::info;
+        break;
+      case WARN:
+        lfn = log.get()::warn;
+        lfn2 = log.get()::warn;
+        break;
+      case ERROR:
+        lfn = log.get()::error;
+        lfn2 = log.get()::error;
+        break;
+      default:
+        throw new IllegalStateException("Unknown level: " + level);
+    }
+    if (throwable != null) {
+      lfn2.accept(msg, throwable);
+    } else {
+      lfn.accept(msg);
     }
   }
 
-  @Override
-  public void error(String format, Object... arguments) {
-    if (isErrorEnabled()) {
-      log.get().error(arrayFormat(format, arguments).getMessage());
+  private static CharSequence message(
+    @Nullable Marker marker,
+    String messagePattern,
+    Object[] arguments
+  ) {
+    FormattingTuple ft = arrayFormat(messagePattern, arguments);
+    if (marker != null) {
+      return marker + " " + ft.getMessage();
     }
-  }
-
-  @Override
-  public void error(String msg, Throwable throwable) {
-    if (isErrorEnabled()) {
-      log.get().error(msg, throwable);
-    }
+    return ft.getMessage();
   }
 }

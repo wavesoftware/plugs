@@ -75,7 +75,7 @@ class FelixFrameworkProducerTest {
 
     // then
     assertThat(framework).isNotNull();
-    await().atMost(org.awaitility.Duration.FIVE_MINUTES)
+    await().atMost(Duration.ofMinutes(5))
       .until(() -> framework.getState() == Bundle.ACTIVE);
     assertThat(framework.getState()).isEqualTo(Bundle.ACTIVE);
   }
