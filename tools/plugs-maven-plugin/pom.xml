@@ -32,7 +32,7 @@
   <name>Plugs :: Tools :: Plugs Maven Plugin</name>
 
   <prerequisites>
-    <maven>3.3</maven>
+    <maven>3.8.8</maven>
   </prerequisites>
 
   <properties>
