@@ -24,7 +24,7 @@
   <parent>
     <artifactId>plugs-tools-parent</artifactId>
     <groupId>pl.wavesoftware.plugs.tools</groupId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>main</version>
   </parent>
 
   <artifactId>plugs-packager-samples</artifactId>
@@ -33,7 +33,7 @@
   <properties>
     <unpack-manifestmf.skip>false</unpack-manifestmf.skip>
   </properties>
-  
+
   <dependencies>
     <dependency>
       <groupId>pl.wavesoftware.plugs.tools</groupId>
@@ -55,7 +55,6 @@
     <dependency>
       <groupId>pl.wavesoftware.testing</groupId>
       <artifactId>junit5-starter</artifactId>
-      <version>1.0.0</version>
       <type>pom</type>
       <scope>test</scope>
     </dependency>

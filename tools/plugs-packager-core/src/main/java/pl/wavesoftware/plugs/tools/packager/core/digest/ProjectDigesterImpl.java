@@ -42,19 +42,26 @@ final class ProjectDigesterImpl implements ProjectDigester {
     Path sourcePath = project.mainArtifact().path();
     Path buildFilePath = project.buildFilePath();
     checkArgument(Files.isRegularFile(sourcePath), "20190131:221929");
-    CRC32 digester = new CRC32();
-    digester.update(sourcePath.toAbsolutePath().toString().getBytes(UTF_8));
-    digester.update(Long.toHexString(Files.size(sourcePath)).getBytes(UTF_8));
-    digester.update(Long.toHexString(Files.getLastModifiedTime(sourcePath).toMillis())
-      .getBytes(UTF_8));
-    digester.update(Long.toHexString(Files.size(buildFilePath)).getBytes(UTF_8));
-    digester.update(Long.toHexString(Files.getLastModifiedTime(buildFilePath).toMillis())
-      .getBytes(UTF_8));
-    return encode(digester.getValue());
+    return encode(digest(
+      sourcePath.toAbsolutePath().toString(),
+      Long.toHexString(Files.size(sourcePath)),
+      Long.toHexString(Files.getLastModifiedTime(sourcePath).toMillis()),
+      Long.toHexString(Files.size(buildFilePath)),
+      Long.toHexString(Files.getLastModifiedTime(buildFilePath).toMillis())
+    ));
   }
 
   private static CharSequence encode(long digest) {
     return Long.toUnsignedString(digest, BASE36);
+  }
+
+  private static long digest(String... strings) {
+    CRC32 digester = new CRC32();
+    for (String s : strings) {
+      byte[] bytes = s.getBytes(UTF_8);
+      digester.update(bytes, 0, bytes.length);
+    }
+    return digester.getValue();
   }
 
 }

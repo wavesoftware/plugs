@@ -24,7 +24,7 @@
   <parent>
     <artifactId>plugs-parent</artifactId>
     <groupId>pl.wavesoftware.plugs</groupId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>main</version>
   </parent>
   <groupId>pl.wavesoftware.plugs.reports</groupId>
   <artifactId>plugs-reports-parent</artifactId>

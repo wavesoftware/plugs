@@ -23,19 +23,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class PlugsVersionIT {
 
-  private static final Semver BASE = new Semver("0.0.0");
+  private static final Semver BASE = new Semver("0.0.0-0");
 
   @Test
   void getVersion() {
-    Semver version = new Semver(PlugsVersion.get().getVersion());
+    String v = PlugsVersion.get().getVersion();
+    Semver sv = new Semver(v);
 
-    assertThat(version.isGreaterThanOrEqualTo(BASE)).isTrue();
+    assertThat(sv.isGreaterThanOrEqualTo(BASE)).isTrue();
   }
 
   @Test
   void manually() {
-    Semver version = new Semver(PlugsVersion.get().manuallyRead());
+    String v = PlugsVersion.get().manuallyRead();
+    Semver sv = new Semver(v);
 
-    assertThat(version.isGreaterThanOrEqualTo(BASE)).isTrue();
+    assertThat(sv.isGreaterThanOrEqualTo(BASE)).isTrue();
   }
 }

@@ -172,7 +172,8 @@ final class PackagePlugMojo extends AbstractMojo {
     MavenProjectHelper projectHelper
   ) {
     this.factories = factories;
-    this.logger = factories.logger().create(this::getLog);
+    this.logger = factories.logger()
+      .create(this::getLog, PackagePlugMojo.class);
     this.projectHelper = projectHelper;
   }
 

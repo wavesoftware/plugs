@@ -54,7 +54,7 @@ class MavenLoggerTest {
 
   @Mock
   private Log log;
-  private Logger logger = new MavenLogger(() -> log);
+  private final Logger logger = new MavenLogger(() -> log, MavenLoggerTest.class);
 
   @AfterEach
   void after() {

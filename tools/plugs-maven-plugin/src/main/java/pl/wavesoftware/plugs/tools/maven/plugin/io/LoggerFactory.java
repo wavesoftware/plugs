@@ -32,7 +32,8 @@ public interface LoggerFactory {
    * Creates a logger from Maven log.
    *
    * @param log a maven log supplier
+   * @param caller a caller class
    * @return a SLF4J compatible logger
    */
-  Logger create(Supplier<Log> log);
+  Logger create(Supplier<Log> log, Class<?> caller);
 }

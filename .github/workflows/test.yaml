@@ -1,0 +1,73 @@
+---
+
+name: Tests
+
+on:
+  push:
+    branches:
+      - '**'
+    tags:
+      - 'v*.*.*'
+  pull_request:
+    branches:
+      - '**'
+
+env:
+  JDK_VERSION: 17
+  JDK_DISTRO: adopt
+  FORCE_COLOR: 1
+
+jobs:
+
+  linux:
+    name: Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # fetch all branches and tags
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: ${{ env.JDK_DISTRO }}
+          java-version: ${{ env.JDK_VERSION }}
+          cache: maven
+
+      - name: Download dependencies
+        run:
+          ./mvnw -V --no-transfer-progress
+            clean install -DskipTests
+            -Dmaven.artifact.threads=50
+            -Dstyle.color=always
+
+      - name: Run Tests
+        run:
+          ./mvnw -V verify
+            -Dstyle.color=always
+
+  windows:
+    name: Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # fetch all branches and tags
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: ${{ env.JDK_DISTRO }}
+          java-version: ${{ env.JDK_VERSION }}
+          cache: maven
+
+      - name: Download dependencies
+        run:
+          ./mvnw.cmd -V --no-transfer-progress
+          clean install -DskipTests
+          "-Dmaven.artifact.threads=50"
+          "-Dstyle.color=always"
+
+      - name: Run Tests
+        run:
+          ./mvnw.cmd -V verify
+            "-Dmaven.artifact.threads=50"
+            "-Dstyle.color=always"

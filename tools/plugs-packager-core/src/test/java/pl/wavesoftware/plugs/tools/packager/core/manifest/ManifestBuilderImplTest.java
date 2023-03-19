@@ -86,14 +86,14 @@ class ManifestBuilderImplTest {
     Attributes attributes = manifest1.getMainAttributes();
     assertThat(attributes).isNotNull();
     assertThat(new Semver(attributes.getValue(PLUGS_VERSION_ATTRIBUTE)))
-      .isGreaterThan(new Semver("0.0.0"));
+      .isGreaterThan(new Semver("0.0.0-0"));
     assertThat(attributes.getValue(PLUGS_DIGEST_ATTRIBUTE))
       .isEqualTo(hash);
 
     attributes = manifest2.getMainAttributes();
     assertThat(attributes).isNotNull();
     assertThat(new Semver(attributes.getValue(PLUGS_VERSION_ATTRIBUTE)))
-      .isGreaterThan(new Semver("0.0.0"));
+      .isGreaterThan(new Semver("0.0.0-0"));
     assertThat(attributes.getValue(PLUGS_DIGEST_ATTRIBUTE))
       .isEqualTo(hash);
   }
