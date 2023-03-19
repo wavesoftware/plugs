@@ -43,7 +43,7 @@
     <dependency>
       <groupId>pl.wavesoftware.sampler</groupId>
       <artifactId>sampler-spring</artifactId>
-      <version>1.0.0</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.google.jimfs</groupId>

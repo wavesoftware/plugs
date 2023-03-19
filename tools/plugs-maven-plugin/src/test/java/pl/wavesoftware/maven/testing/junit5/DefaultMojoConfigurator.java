@@ -29,15 +29,19 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuilder;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
-import org.apache.maven.settings.MavenSettingsBuilder;
 import org.apache.maven.settings.Settings;
+import org.apache.maven.settings.building.DefaultSettingsBuildingRequest;
+import org.apache.maven.settings.building.SettingsBuilder;
+import org.apache.maven.settings.building.SettingsBuildingException;
+import org.apache.maven.settings.building.SettingsBuildingResult;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import pl.wavesoftware.eid.utils.EidPreconditions;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Optional;
@@ -50,6 +54,8 @@ import static pl.wavesoftware.eid.utils.EidPreconditions.checkNotNull;
  * @since 0.1.0
  */
 final class DefaultMojoConfigurator implements MojoConfigurator {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultMojoConfigurator.class);
 
   private final Supplier<Optional<MavenProjectCustomizer>> customizer;
 
@@ -80,15 +86,22 @@ final class DefaultMojoConfigurator implements MojoConfigurator {
   }
 
   private MavenExecutionRequest createMavenExecutionRequest(MojoRule rule)
-    throws ComponentLookupException, IOException,
-    XmlPullParserException, MavenExecutionRequestPopulationException {
+    throws ComponentLookupException, MavenExecutionRequestPopulationException,
+    SettingsBuildingException {
 
     PlexusContainer container = rule.getContainer();
     MavenExecutionRequest request = new DefaultMavenExecutionRequest();
     MavenExecutionRequestPopulator requestPopulator =
       container.lookup(MavenExecutionRequestPopulator.class);
-    MavenSettingsBuilder settingsBuilder = container.lookup(MavenSettingsBuilder.class);
-    Settings settings = settingsBuilder.buildSettings();
+    SettingsBuilder settingsBuilder = container.lookup(SettingsBuilder.class);
+    SettingsBuildingResult sbr = settingsBuilder.build(
+      new DefaultSettingsBuildingRequest()
+    );
+    sbr.getProblems().forEach(problem ->
+      LOGGER.error(problem.getMessage(), problem.getException())
+    );
+    EidPreconditions.checkState(sbr.getProblems().isEmpty(), "20230320:004212");
+    Settings settings = sbr.getEffectiveSettings();
     requestPopulator.populateFromSettings(request, settings);
     requestPopulator.populateDefaults(request);
     return request;

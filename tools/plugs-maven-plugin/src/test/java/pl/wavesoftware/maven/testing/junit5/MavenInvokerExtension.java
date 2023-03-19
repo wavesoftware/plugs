@@ -21,12 +21,16 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author <a href="mailto:krzysztof.suszynski@wavesoftware.pl">Krzysztof Suszynski</a>
  * @since 0.1.0
  */
 public final class MavenInvokerExtension implements ParameterResolver {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(MavenInvokerExtension.class);
 
   @Override
   public boolean supportsParameter(
@@ -45,6 +49,7 @@ public final class MavenInvokerExtension implements ParameterResolver {
   ) throws ParameterResolutionException {
     return (MavenInvoker) pomDirectory -> goals -> {
       MavenCli cli = new MavenCli();
+      LOGGER.info("Invoking Maven {} in {}", goals, pomDirectory);
       System.setProperty(
         MavenCli.MULTIMODULE_PROJECT_DIRECTORY, pomDirectory.toString()
       );

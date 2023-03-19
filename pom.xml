@@ -172,6 +172,12 @@
         <type>pom</type>
         <scope>test</scope>
       </dependency>
+      <dependency>
+        <groupId>pl.wavesoftware.sampler</groupId>
+        <artifactId>sampler-spring</artifactId>
+        <version>1.1.0</version>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -291,7 +297,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.0.1</version>
+          <version>3.5.0</version>
           <executions>
             <execution>
               <id>attach-javadocs</id>
@@ -303,7 +309,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-gpg-plugin</artifactId>
-          <version>1.6</version>
+          <version>3.0.1</version>
           <executions>
             <execution>
               <id>sign-artifacts</id>
@@ -316,28 +322,52 @@
         </plugin>
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.2.0</version>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
-          <version>2.5.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-resources-plugin</artifactId>
           <version>3.1.0</version>
         </plugin>
         <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.3.0</version>
+        </plugin>
+        <plugin>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.7.1</version>
+          <version>3.12.1</version>
         </plugin>
         <plugin>
           <artifactId>maven-plugin-plugin</artifactId>
-          <version>3.6.0</version>
+          <version>3.8.1</version>
         </plugin>
         <plugin>
-          <groupId>org.codehaus.gmaven</groupId>
-          <artifactId>groovy-maven-plugin</artifactId>
-          <version>2.1</version>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>3.2.1</version>
+          <executions>
+            <execution>
+              <id>enforce-maven</id>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <configuration>
+                <rules>
+                  <requireMavenVersion>
+                    <version>${maven.version}</version>
+                  </requireMavenVersion>
+                </rules>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>versions-maven-plugin</artifactId>
+          <version>2.15.0</version>
+        </plugin>
+        <plugin>
+          <groupId>me.qoomon</groupId>
+          <artifactId>maven-git-versioning-extension</artifactId>
+          <version>9.6.5</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -345,6 +375,10 @@
     <plugins>
       <plugin>
         <artifactId>maven-failsafe-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-enforcer-plugin</artifactId>
       </plugin>
 
       <plugin>
